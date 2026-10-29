@@ -38,15 +38,6 @@
   }
 }
 
-@keyframes nv-shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
-}
-
 @keyframes nv-bar-grow {
   from {
     width: 0;
@@ -97,17 +88,6 @@
   animation: nv-toast-in 0.3s ease-out;
 }
 
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    rgba(148, 163, 184, 0.15) 25%,
-    rgba(148, 163, 184, 0.35) 50%,
-    rgba(148, 163, 184, 0.15) 75%
-  );
-  background-size: 400px 100%;
-  animation: nv-shimmer 1.4s linear infinite;
-}
-
 .bar-grow {
   animation: nv-bar-grow 0.9s ease-out forwards;
 }
@@ -116,7 +96,6 @@
   .anim-fade-up,
   .anim-pop,
   .anim-pulse-soft,
-  .skeleton,
   .bar-grow,
   .anim-spin,
   .anim-toast-in {
