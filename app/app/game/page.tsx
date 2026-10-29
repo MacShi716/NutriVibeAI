@@ -72,7 +72,6 @@ export default function GamePage() {
         </Link>
       </div>
 
-      {/* 레벨 카드 */}
       <div className="mb-5 rounded-2xl border border-brand-200 bg-gradient-to-r from-brand-50 to-amber-50 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -107,7 +106,6 @@ export default function GamePage() {
         </div>
       </div>
 
-      {/* 오늘의 미션 */}
       <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
           오늘의 미션 <span className="text-xs font-normal text-gray-400">(매일 3개 새로 나옵니다)</span>
@@ -139,7 +137,6 @@ export default function GamePage() {
         </div>
       </section>
 
-      {/* 레시피 룰렛 */}
       <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
           오늘 뭐 먹지? <span className="text-xs font-normal text-gray-400">레시피 룰렛</span>
@@ -176,7 +173,6 @@ export default function GamePage() {
         </div>
       </section>
 
-      {/* 업적 */}
       <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
           업적 <span className="text-xs font-normal text-gray-400">
@@ -208,7 +204,6 @@ export default function GamePage() {
         </div>
       </section>
 
-      {/* 식재료 도감 */}
       <section className="rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
           내 식재료 도감{" "}

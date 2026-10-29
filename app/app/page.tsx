@@ -22,8 +22,7 @@ export default function HomePage() {
   // SSR/CSR 일치를 위해 localStorage는 mount 이후에만 읽는다
   const [form, setForm] = useState<UserConditions>(EMPTY);
   const [mounted, setMounted] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [phase, setPhase] = useState<"form" | "generating" | "done">("form");
+  const [phase, setPhase] = useState<"form" | "generating">("form");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -69,7 +68,6 @@ export default function HomePage() {
       return;
     }
     storage.saveConditions(form);
-    setLoading(true);
     setPhase("generating");
     try {
       const res = await fetch("/api/recipes", {
@@ -84,23 +82,18 @@ export default function HomePage() {
         return;
       }
       storage.saveLastResult(data);
-      // 게이미피케이션: 식재료 도감 기록 + 레시피 생성 포인트
       const count = form.ingredients
         .split(/[,，、\n]/)
         .map((x) => x.trim())
         .filter(Boolean).length;
       collectIngredients(form.ingredients);
       trackEvent({ type: "recipe", ingredientCount: count, cookMinutes: form.cookMinutes });
-      setPhase("done");
-      // 애니메이션 완료 후 결과 페이지로 이동
       setTimeout(() => {
         router.push("/recipes");
       }, 500);
     } catch {
       setError("서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.");
       setPhase("form");
-    } finally {
-      setLoading(false);
     }
   }
 
@@ -242,10 +235,9 @@ export default function HomePage() {
 
         <button
           type="submit"
-          disabled={loading}
-          className="w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
         >
-          {loading ? "레시피 생성 중..." : "AI 레시피 생성하기"}
+          AI 레시피 생성하기
         </button>
       </form>
     </div>
