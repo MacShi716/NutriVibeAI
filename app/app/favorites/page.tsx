@@ -124,12 +124,6 @@ export default function FavoritesPage() {
                     {regeneratingId === i ? "생성 중..." : "다시 생성"}
                   </button>
                 )}
-                <Link
-                  href="/recipes"
-                  className="text-xs text-brand-600 hover:underline"
-                >
-                  결과 보기
-                </Link>
               </div>
             </li>
           ))}
