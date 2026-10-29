@@ -3,6 +3,9 @@
 // 포인트·레벨·업적·일일 미션·식재료 도감 — localStorage 기반
 // ============================================================
 
+import { translateToKorean } from "./alias";
+import { lookupNutrition } from "./nutrition";
+
 const KEY = "nutrivibe:game";
 
 export type TodayCounts = {
@@ -318,13 +321,17 @@ export function getGameState(): GameStats {
   return load();
 }
 
-/** 식재료 도감에 사용자가 입력한 식재료를 기록한다 (recipe 이벤트에서 호출) */
+/** 식재료 도감에 사용자가 입력한 식재료를 기록한다 */
 export function collectIngredients(raw: string): void {
   if (typeof window === "undefined") return;
   const names = raw
     .split(/[,，、\n]/)
-    .map((x) => x.trim().replace(/\s+/g, "").toLowerCase())
-    .filter(Boolean);
+    .map((x) => x.trim())
+    .filter(Boolean)
+    .map((x) => {
+      const ko = translateToKorean(x);
+      return lookupNutrition(ko)?.name ?? ko;
+    });
   if (names.length === 0) return;
   const s = load();
   for (const n of names) {
