@@ -1,0 +1,126 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ UX 애니메이션 ============ */
+@keyframes nv-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nv-pop {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes nv-pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes nv-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes nv-bar-grow {
+  from {
+    width: 0;
+  }
+  to {
+    width: var(--bar-w);
+  }
+}
+
+@keyframes nv-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nv-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.anim-fade-up {
+  opacity: 0;
+  animation: nv-fade-up 0.45s ease-out forwards;
+}
+
+.anim-pop {
+  animation: nv-pop 0.35s ease-out;
+}
+
+.anim-pulse-soft {
+  animation: nv-pulse-soft 1.4s ease-in-out infinite;
+}
+
+.anim-spin {
+  animation: nv-spin 0.7s linear infinite;
+}
+
+.anim-toast-in {
+  animation: nv-toast-in 0.3s ease-out;
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(148, 163, 184, 0.15) 25%,
+    rgba(148, 163, 184, 0.35) 50%,
+    rgba(148, 163, 184, 0.15) 75%
+  );
+  background-size: 400px 100%;
+  animation: nv-shimmer 1.4s linear infinite;
+}
+
+.bar-grow {
+  animation: nv-bar-grow 0.9s ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anim-fade-up,
+  .anim-pop,
+  .anim-pulse-soft,
+  .skeleton,
+  .bar-grow,
+  .anim-spin,
+  .anim-toast-in {
+    animation: none;
+    opacity: 1;
+  }
+}

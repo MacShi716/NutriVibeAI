@@ -1,0 +1,64 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import GameToast from "@/components/GameToast";
+import VisitTracker from "@/components/VisitTracker";
+
+export const metadata: Metadata = {
+  title: "NutriVibe AI",
+  description:
+    "생성형 AI 기반 개인 맞춤 식단 기획 및 쇼핑리스트 웹 애플리케이션",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="ko" suppressHydrationWarning>
+      <body className="min-h-screen bg-gray-50 text-gray-900 antialiased">
+        <VisitTracker />
+        <GameToast />
+        <header className="border-b border-gray-200 bg-white">
+          <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
+            <a href="/" className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+                NV
+              </span>
+              <span className="text-lg font-bold text-brand-700">NutriVibe AI</span>
+            </a>
+            <nav className="flex items-center gap-4 text-sm font-medium text-gray-600">
+              <a href="/recipes" className="hover:text-brand-600">
+                레시피
+              </a>
+              <a href="/shopping-list" className="hover:text-brand-600">
+                쇼핑리스트
+              </a>
+              <a href="/favorites" className="hover:text-brand-600">
+                즐겨찾기·기록
+              </a>
+              <a href="/profile" className="hover:text-brand-600">
+                내 프로필
+              </a>
+              <a
+                href="/game"
+                className="rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-700 hover:bg-amber-200"
+              >
+                놀이터 🎮
+              </a>
+            </nav>
+          </div>
+        </header>
+        <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>
+        <footer className="border-t border-gray-200 bg-white py-6 text-center text-xs text-gray-400">
+          <p>
+            NutriVibe AI · 생성형 AI 기반 개인 맞춤 식단 및 쇼핑리스트 · MVP 데모
+          </p>
+          <p className="mt-1">
+            영양 정보는 참고용이며, 알레르기·질환에 관한 판단은 의사 또는 영양사와 상담하세요.
+          </p>
+        </footer>
+      </body>
+    </html>
+  );
+}
