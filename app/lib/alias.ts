@@ -1,8 +1,7 @@
 // 중·한 식재료 별칭 매핑: 사용자가 한글이 아닌 이름(중국어 등)으로 입력해도
-// 내장 라이브러리(한글 재료명)와 매칭될 수 있도록 정규화한다. (긴 단어 우선)
+// 내장 라이브러리(한글 재료명)와 매칭될 수 있도록 정규화한다.
 
 export const ALIASES: [string, string][] = [
-  ["닭가슴살", "닭가슴살"],
   ["鸡胸肉", "닭가슴살"],
   ["鸡腿肉", "닭고기"],
   ["鸡肉", "닭고기"],
@@ -129,10 +128,12 @@ export function normalize(s: string): string {
   return s.replace(/\s+/g, "").toLowerCase();
 }
 
+const ALIASES_BY_LENGTH = [...ALIASES].sort((a, b) => b[0].length - a[0].length);
+
 /** 사용자 입력을 한국어 재료명으로 변환한 뒤 정규화한다 */
 export function translateToKorean(s: string): string {
   let t = normalize(s);
-  for (const [zh, kr] of ALIASES) {
+  for (const [zh, kr] of ALIASES_BY_LENGTH) {
     if (t.includes(zh)) t = t.replace(zh, kr);
   }
   return t;
