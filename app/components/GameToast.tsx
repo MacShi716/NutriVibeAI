@@ -78,7 +78,7 @@ export default function GameToast() {
       {toasts.map((t) => (
         <div
           key={t.id}
-          className="anim-toast-in rounded-xl border border-brand-200 bg-white px-4 py-3 shadow-lg"
+          className="anim-toast-in rounded-xl border border-brand-100 bg-white px-4 py-3 shadow-lg"
         >
           <div className="flex items-center gap-2">
             <span className="text-xl">{t.icon}</span>
