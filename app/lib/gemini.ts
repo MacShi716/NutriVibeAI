@@ -216,9 +216,6 @@ async function callGroq(prompt: string, apiKey: string, model = process.env.GROQ
   return text;
 }
 
-// ============================================================ Mock (데모 모드)
-// 데모 모드 레시피는 사용자 입력 식재료와 매칭되는 규칙 엔진(lib/mock.ts)이 생성한다.
-
 // ============================================================ 메인 진입점
 
 export type LLMProvider = "groq" | "gemini" | "mock";
@@ -309,9 +306,6 @@ export async function generateRecipes(c: UserConditions): Promise<{
   if (recipes.length === 0) {
     usedMock = true;
     provider = "mock";
-  }
-
-  if (recipes.length === 0) {
     const mock = mockRecipes(c);
     recipes = mock.recipes;
     if (mock.uncovered.length > 0) {

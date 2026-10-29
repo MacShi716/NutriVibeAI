@@ -7,7 +7,6 @@ export type NutritionRow = {
   proteinPer: number;
   carbsPer: number;
   fatPer: number;
-  unit: string;
 };
 
 type RawNutritionRow = {
@@ -25,7 +24,6 @@ type RawNutritionRow = {
 
 const DATA: NutritionRow[] = (nutritionData as RawNutritionRow[]).map((row) => ({
   name: row.name,
-  unit: row.unit,
   caloriesPer: row.calories_per_100g ?? row.calories_per_100ml ?? 0,
   proteinPer: row.protein_per_100g ?? row.protein_per_100ml ?? 0,
   carbsPer: row.carbs_per_100g ?? row.carbs_per_100ml ?? 0,
@@ -35,7 +33,7 @@ const DATA: NutritionRow[] = (nutritionData as RawNutritionRow[]).map((row) => (
 /** 내장 영양 참고 데이터에 등록된 총 식재료 수 (도감 진행률 표시용) */
 export const TOTAL_INGREDIENTS = DATA.length;
 
-/** 재료명과 사용량 문자열에서 수량(숫자)을 추출한다. 예: "닭가슴살 200g" -> { name: "닭가슴살", amount: 200 } */
+/** 재료명과 사용량 문자열에서 수량(숫자)을 추출한다. */
 export function parseIngredient(raw: string): { name: string; grams: number | null } {
   const match = raw.match(/^([^\d]+?)\s*(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+))?\s*(kg|g|ml|l|그램|밀리리터|리터|컵|개|알|모|대|쪽|마리|공기|큰술|작은술|tbsp|tsp)?/i);
   if (!match) {
