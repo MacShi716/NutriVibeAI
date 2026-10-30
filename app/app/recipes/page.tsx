@@ -112,7 +112,7 @@ export default function RecipesPage() {
 
       {result.usedMock && (
         <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-          ⚠️ 데모 모드: API 키(GROQ_API_KEY 또는 GEMINI_API_KEY)가 설정되지 않았거나
+          ⚠️ 데모 모드: API 키(GEMINI_API_KEY)가 설정되지 않았거나
           AI 호출에 실패하여 내장 데모 레시피가 표시됩니다. 서버 환경 변수에 키를 설정하면 실제 AI 생성 결과를
           받을 수 있습니다.
         </div>
@@ -150,7 +150,7 @@ export default function RecipesPage() {
           <div className="mb-3 flex items-baseline justify-between">
             <h2 className="text-sm font-bold text-gray-900">오늘의 식단 열량 요약</h2>
             <span className="text-xs text-gray-500">
-              3개 합계 약 {summary.total} kcal · 평균 약 {summary.avg} kcal
+              {result.recipes.length}개 합계 약 {summary.total} kcal · 평균 약 {summary.avg} kcal
             </span>
           </div>
           <div className="space-y-3">
