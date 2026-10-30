@@ -1,7 +1,7 @@
 import type { Recipe, RecipeIngredient } from "./types";
 import nutritionData from "@/data/nutrition-data.json";
 
-export type NutritionRow = {
+type NutritionRow = {
   name: string;
   caloriesPer: number;
   proteinPer: number;
@@ -86,7 +86,7 @@ export function lookupNutrition(name: string): NutritionRow | undefined {
   return best;
 }
 
-export function calcNutrition(ingredients: RecipeIngredient[]) {
+function calcNutrition(ingredients: RecipeIngredient[]) {
   return calcNutritionDetail(ingredients).totals;
 }
 
@@ -101,7 +101,7 @@ export function estimateNutrition(recipe: Recipe): Recipe["nutrition"] {
   };
 }
 
-export type NutritionDetailRow = {
+type NutritionDetailRow = {
   name: string;
   amount: string;
   grams: number | null;

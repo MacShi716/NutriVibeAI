@@ -3,7 +3,7 @@ export type RecipeIngredient = {
   amount: string;
 };
 
-export type RecipeStep = string;
+type RecipeStep = string;
 
 export type Recipe = {
   id: string;

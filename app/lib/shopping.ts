@@ -66,7 +66,7 @@ const CATEGORY_RULES: { key: string; label: string; words: string[] }[] = [
   { key: "grain", label: "곡물·건조식품", words: ["쌀", "밥", "면", "국수", "파스타", "밀가루", "빵", "두부", "콩", "견과", "땅콩", "아몬드", "김", "미역", "다시마"] },
 ];
 
-export function categorizeItem(name: string): { key: string; label: string } {
+function categorizeItem(name: string): { key: string; label: string } {
   const n = normalize(name);
   for (const rule of CATEGORY_RULES) {
     if (rule.words.some((w) => n.includes(w) || w.includes(n))) {

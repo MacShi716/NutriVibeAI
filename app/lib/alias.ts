@@ -125,7 +125,7 @@ export const ALIASES: [string, string][] = [
   ["酸奶", "요거트"],
 ];
 
-export function normalize(s: string): string {
+function normalize(s: string): string {
   return s.replace(/\s+/g, "").toLowerCase();
 }
 

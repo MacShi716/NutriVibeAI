@@ -15,7 +15,7 @@ export function bmiCategory(bmi: number): string {
   return "비만";
 }
 
-export type DailyCalorieEstimate = {
+type DailyCalorieEstimate = {
   bmr: number; // 기초대사량 (Mifflin-St Jeor)
   tdee: number; // 일일 총 에너지 소비량(추정)
   dailyCalories: number; // 일일 권장 열량(참고)
