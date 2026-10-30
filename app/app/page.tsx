@@ -22,7 +22,7 @@ export default function HomePage() {
   // SSR/CSR 일치를 위해 localStorage는 mount 이후에만 읽는다
   const [form, setForm] = useState<UserConditions>(EMPTY);
   const [mounted, setMounted] = useState(false);
-  const [phase, setPhase] = useState<"form" | "generating">("form");
+  const [phase, setPhase] = useState<"form" | "generating" | "done">("form");
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -88,6 +88,7 @@ export default function HomePage() {
         .filter(Boolean).length;
       collectIngredients(form.ingredients);
       trackEvent({ type: "recipe", ingredientCount: count, cookMinutes: form.cookMinutes });
+      setPhase("done");
       setTimeout(() => {
         router.push("/recipes");
       }, 500);
@@ -104,7 +105,7 @@ export default function HomePage() {
   if (phase !== "form") {
     return (
       <div className="mx-auto max-w-xl">
-        <GenerationSteps />
+        <GenerationSteps done={phase === "done"} />
         <p className="mt-3 text-center text-xs text-gray-400">
           레시피 생성에는 일반적으로 10~20초가 소요됩니다.
         </p>
