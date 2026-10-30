@@ -87,6 +87,9 @@ export const storage = {
   saveProfile(p: UserProfile): void {
     write(KEY_PROFILE, p);
   },
+  clearProfile(): void {
+    window.localStorage.removeItem(KEY_PROFILE);
+  },
 };
 
 export type HistoryEntry = {
