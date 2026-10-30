@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import "./globals.css";
 import GameToast from "@/components/GameToast";
 import VisitTracker from "@/components/VisitTracker";
@@ -21,31 +22,31 @@ export default function RootLayout({
         <GameToast />
         <header className="border-b border-gray-200 bg-white">
           <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-            <a href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
                 NV
               </span>
               <span className="text-lg font-bold text-brand-700">NutriVibe AI</span>
-            </a>
+            </Link>
             <nav className="flex items-center gap-4 text-sm font-medium text-gray-600">
-              <a href="/recipes" className="hover:text-brand-600">
+              <Link href="/recipes" className="hover:text-brand-600">
                 레시피
-              </a>
-              <a href="/shopping-list" className="hover:text-brand-600">
+              </Link>
+              <Link href="/shopping-list" className="hover:text-brand-600">
                 쇼핑리스트
-              </a>
-              <a href="/favorites" className="hover:text-brand-600">
+              </Link>
+              <Link href="/favorites" className="hover:text-brand-600">
                 즐겨찾기·기록
-              </a>
-              <a href="/profile" className="hover:text-brand-600">
+              </Link>
+              <Link href="/profile" className="hover:text-brand-600">
                 내 프로필
-              </a>
-              <a
+              </Link>
+              <Link
                 href="/game"
                 className="rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-700 hover:bg-amber-200"
               >
                 놀이터 🎮
-              </a>
+              </Link>
             </nav>
           </div>
         </header>

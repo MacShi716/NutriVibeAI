@@ -74,7 +74,7 @@ export default function GamePage() {
         </Link>
       </div>
 
-      <div className="mb-5 rounded-2xl border border-brand-200 bg-gradient-to-r from-brand-50 to-amber-50 p-6">
+      <div className="mb-5 rounded-2xl border border-brand-100 bg-gradient-to-r from-brand-50 to-amber-50 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="text-xs font-semibold text-brand-600">

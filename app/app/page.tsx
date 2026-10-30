@@ -130,7 +130,7 @@ export default function HomePage() {
         className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
       >
         {mounted && goalCal && (
-          <div className="flex items-center justify-between rounded-lg border border-brand-200 bg-brand-50 px-4 py-3 text-sm">
+          <div className="flex items-center justify-between rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-sm">
             <span className="text-gray-700">
               <b className="text-brand-700">내 프로필 연동</b> · 목표 열량{" "}
               <b>{goalCal} kcal</b>이 반영됩니다.
