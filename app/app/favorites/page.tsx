@@ -25,7 +25,6 @@ export default function FavoritesPage() {
     setFavs(storage.getFavorites());
   }
 
-  /** 기록의 저장 조건으로 레시피를 다시 생성한다 (연동 기능) */
   async function regenerate(idx: number, conditions?: UserConditions | null) {
     if (!conditions || regeneratingId !== null) return;
     setRegeneratingId(idx);

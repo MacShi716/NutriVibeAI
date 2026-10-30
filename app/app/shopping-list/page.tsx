@@ -31,7 +31,6 @@ export default function ShoppingListPage() {
     setLoaded(true);
   }, []);
 
-  /** 즐겨찾기 레시피 재료를 쇼핑리스트에 통합한다 (연동 기능) */
   function addFavoritesToShopping() {
     const favs = storage.getFavorites();
     if (favs.length === 0) {
