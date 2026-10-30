@@ -6,6 +6,7 @@ import {
   ACHIEVEMENTS,
   getGameState,
   levelForXp,
+  MAX_LEVEL,
   titleForLevel,
   todaysMissions,
   trackEvent,
@@ -34,7 +35,8 @@ export default function GamePage() {
   const level = state ? levelForXp(state.xp) : 1;
   const curXp = state ? state.xp - xpForLevel(level) : 0;
   const needXp = 100;
-  const pct = Math.min(100, Math.round((curXp / needXp) * 100));
+  const isMax = level === MAX_LEVEL;
+  const pct = isMax ? 100 : Math.min(100, Math.round((curXp / needXp) * 100));
   const title = state ? titleForLevel(level) : titleForLevel(1);
 
   const missions = useMemo(() => todaysMissions(), []);
@@ -83,7 +85,7 @@ export default function GamePage() {
               {state.xp} 포인트
             </div>
             <div className="mt-1 text-xs text-gray-500">
-              레벨업까지 {Math.max(0, needXp - curXp)} 포인트 남음
+              {isMax ? "최고 레벨입니다" : `레벨업까지 ${needXp - curXp} 포인트 남음`}
             </div>
           </div>
           <div className="text-right">
@@ -103,7 +105,7 @@ export default function GamePage() {
         </div>
         <div className="mt-1 flex justify-between text-[11px] text-gray-400">
           <span>Lv.{level}</span>
-          <span>Lv.{Math.min(level + 1, 10)}</span>
+          <span>Lv.{Math.min(level + 1, MAX_LEVEL)}</span>
         </div>
       </div>
 
