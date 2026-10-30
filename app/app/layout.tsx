@@ -21,29 +21,29 @@ export default function RootLayout({
         <VisitTracker />
         <GameToast />
         <header className="border-b border-gray-200 bg-white">
-          <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-3">
-            <Link href="/" className="flex items-center gap-2">
+          <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
+            <Link href="/" className="flex shrink-0 items-center gap-2">
               <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
                 NV
               </span>
               <span className="text-lg font-bold text-brand-700">NutriVibe AI</span>
             </Link>
-            <nav className="flex items-center gap-4 text-sm font-medium text-gray-600">
-              <Link href="/recipes" className="hover:text-brand-600">
+            <nav className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1 text-xs font-medium text-gray-600 sm:gap-x-4 sm:text-sm">
+              <Link href="/recipes" className="whitespace-nowrap hover:text-brand-600">
                 레시피
               </Link>
-              <Link href="/shopping-list" className="hover:text-brand-600">
+              <Link href="/shopping-list" className="whitespace-nowrap hover:text-brand-600">
                 쇼핑리스트
               </Link>
-              <Link href="/favorites" className="hover:text-brand-600">
+              <Link href="/favorites" className="whitespace-nowrap hover:text-brand-600">
                 즐겨찾기·기록
               </Link>
-              <Link href="/profile" className="hover:text-brand-600">
+              <Link href="/profile" className="whitespace-nowrap hover:text-brand-600">
                 내 프로필
               </Link>
               <Link
                 href="/game"
-                className="rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-700 hover:bg-amber-200"
+                className="whitespace-nowrap rounded-full bg-amber-100 px-3 py-1 font-bold text-amber-700 hover:bg-amber-200"
               >
                 놀이터 🎮
               </Link>
