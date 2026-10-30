@@ -53,6 +53,7 @@ export const storage = {
       conditions: r.conditions,
     });
     write(KEY_HISTORY, history.slice(0, 20));
+    window.localStorage.removeItem(KEY_SHOPPING);
   },
   getFavorites(): Recipe[] {
     return read<Recipe[]>(KEY_FAVORITES) ?? [];
