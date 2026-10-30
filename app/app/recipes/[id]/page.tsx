@@ -78,7 +78,7 @@ export default function RecipeDetailPage() {
     setIsFav(storage.isFavorite(recipe.id));
     setPopFav(true);
     setTimeout(() => setPopFav(false), 350);
-    if (adding) trackEvent({ type: "favorite" });
+    if (adding) trackEvent({ type: "favorite", recipeId: recipe.id });
   }
 
   const perServing = {

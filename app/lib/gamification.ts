@@ -21,6 +21,7 @@ export type GameStats = {
   totalRecipes: number;
   totalMultiRecipes: number;
   favorites: number;
+  favoritedIds: string[];
   shoppingChecks: number;
   profileSaved: boolean;
   rolls: number;
@@ -34,7 +35,7 @@ export type GameStats = {
 
 export type GameEvent =
   | { type: "recipe"; ingredientCount: number; cookMinutes: number }
-  | { type: "favorite" }
+  | { type: "favorite"; recipeId: string }
   | { type: "shoppingCheck" }
   | { type: "profile" }
   | { type: "roll" }
@@ -86,6 +87,7 @@ function defaultStats(): GameStats {
     totalRecipes: 0,
     totalMultiRecipes: 0,
     favorites: 0,
+    favoritedIds: [],
     shoppingChecks: 0,
     profileSaved: false,
     rolls: 0,
@@ -224,6 +226,8 @@ export function trackEvent(evt: GameEvent): TrackResult {
       break;
     }
     case "favorite": {
+      if (s.favoritedIds.includes(evt.recipeId)) break;
+      s.favoritedIds.push(evt.recipeId);
       s.favorites += 1;
       s.today.favorites += 1;
       xpGained += 5;
@@ -236,9 +240,9 @@ export function trackEvent(evt: GameEvent): TrackResult {
       break;
     }
     case "profile": {
+      if (!s.profileSaved) xpGained += 20;
       s.profileSaved = true;
       s.today.profile = true;
-      xpGained += 20;
       break;
     }
     case "roll": {
