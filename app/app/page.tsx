@@ -47,10 +47,9 @@ export default function HomePage() {
   }, [mounted]);
 
   useEffect(() => {
-    if (goalCal && form.goalCalories === null) {
+    if (goalCal && !storage.getConditions()) {
       setForm((prev) => ({ ...prev, goalCalories: goalCal }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goalCal]);
 
   function update<K extends keyof UserConditions>(key: K, value: UserConditions[K]) {
