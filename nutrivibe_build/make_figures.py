@@ -7,22 +7,23 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyBboxPatch, FancyArrowPatch
 
-BASE = os.path.dirname(os.path.abspath(__file__))
+BASE = r"D:\cxdownload\LOT\NutriVibeAI\nutrivibe_build"
 OUT1 = os.path.join(BASE, "fig1_flow.png")
 OUT2 = os.path.join(BASE, "fig2_arch.png")
 
 # Register Korean fonts
-_FONT_DIR = os.environ.get("NV_FONT_DIR", os.path.join(os.environ.get("WINDIR", ""), "Fonts"))
-for f in [os.path.join(_FONT_DIR, "malgun.ttf"), os.path.join(_FONT_DIR, "malgunbd.ttf")]:
+for f in [r"C:\Windows\Fonts\malgun.ttf", r"C:\Windows\Fonts\malgunbd.ttf"]:
     font_manager.fontManager.addfont(f)
 plt.rcParams["font.family"] = "Malgun Gothic"
 plt.rcParams["axes.unicode_minus"] = False
 
 BLUE_BG = "#DCE9F7"; BLUE_ED = "#2F5597"
 ORANGE_BG = "#FDEBD0"; ORANGE_ED = "#B45F06"
+GREEN_BG = "#E2F2E7"; GREEN_ED = "#3E7D52"
+PURPLE_BG = "#E9E6F5"; PURPLE_ED = "#6C5CA8"
 GRAY_TXT = "#404040"
 
-# ---------------------------------------------------------------- Figure 1
+
 def draw_box(ax, cx, cy, w, h, text, fc, ec, fs=9.0, weight="bold", sub=None):
     box = FancyBboxPatch((cx - w / 2, cy - h / 2), w, h,
                          boxstyle="round,pad=0.25,rounding_size=0.7",
@@ -44,12 +45,13 @@ def arrow(ax, x1, y1, x2, y2, color="#555555", lw=1.6, style="-|>", ls="-"):
     ax.add_patch(a)
 
 
+# ---------------------------------------------------------------- Figure 1
 steps = [
     ("웹사이트 접속", True),
     ("보유 식재료 및 식습관 조건 입력", True),
     ("식사 인원과 조리 시간 설정", True),
     ("레시피 생성 요청", True),
-    ("Gemini API 호출", False),
+    ("서버 입력 검증 후 AI API 호출", False),
     ("AI 레시피 2~3개 생성", False),
     ("JSON 및 제한 조건 검증", False),
     ("레시피 상세 정보 확인", True),
@@ -65,7 +67,6 @@ BW = 86.0; BH = 6.4
 top = 97.5; step = 8.25
 cx = 50.0
 n = len(steps)
-# fit: 11 boxes, total height = (n-1)*step + BH ; top - bottom = 10*8.25+6.4 = 88.9 -> bottom at ~8.6 ok
 for i, (text, is_user) in enumerate(steps):
     cy = top - i * step
     fc = BLUE_BG if is_user else ORANGE_BG
@@ -74,8 +75,6 @@ for i, (text, is_user) in enumerate(steps):
     if i < n - 1:
         arrow(ax, cx, cy - BH / 2 - 0.25, cx, cy - step + BH / 2 + 0.25)
 
-# legend
-lx = 4.5
 draw_box(ax, 12.0, 2.2, 16.5, 3.4, "사용자 동작", BLUE_BG, BLUE_ED, fs=6.4, weight="bold")
 draw_box(ax, 32.0, 2.2, 16.5, 3.4, "시스템 처리", ORANGE_BG, ORANGE_ED, fs=6.4, weight="bold")
 
@@ -85,48 +84,68 @@ plt.close()
 print("fig1 saved:", OUT1)
 
 # ---------------------------------------------------------------- Figure 2
-fig2, ax2 = plt.subplots(figsize=(9.0, 6.4), dpi=200)
+fig2, ax2 = plt.subplots(figsize=(9.2, 6.6), dpi=210)
 ax2.set_xlim(0, 100); ax2.set_ylim(0, 100); ax2.axis("off")
 
-def region(ax, x0, y0, x1, y1, label, fc="#F5F6F8", ec="#B7BCC4"):
+
+def region(ax, x0, y0, x1, y1, label, fc="#F5F6F8", ec="#B7BCC4", label_bottom=False):
     r = FancyBboxPatch((x0, y0), x1 - x0, y1 - y0,
                        boxstyle="round,pad=0.5,rounding_size=1.2",
                        linewidth=1.0, edgecolor=ec, facecolor=fc, zorder=0,
                        linestyle=(0, (4, 3)))
     ax.add_patch(r)
-    ax.text(x0 + 1.6, y1 - 3.2, label, ha="left", va="center", fontsize=8.6,
+    ly = y0 + 3.0 if label_bottom else y1 - 3.0
+    ax.text(x0 + 1.8, ly, label, ha="left", va="center", fontsize=8.4,
             fontweight="bold", color="#6A6F78", zorder=1)
 
-# Regions
-region(ax2, 3, 74, 97, 98, "사용자 브라우저 (클라이언트)")
-region(ax2, 3, 44, 55, 68, "프론트엔드 영역")
-region(ax2, 3, 6, 97, 40, "백엔드 영역 (Next.js 서버)")
-region(ax2, 60, 44, 97, 68, "외부 AI 서비스", fc="#FBF4E4", ec="#C9B37E")
 
-# Boxes
-draw_box(ax2, 50, 92, 40, 9, "사용자 브라우저", BLUE_BG, BLUE_ED, fs=10, sub="PC / 모바일 웹")
-draw_box(ax2, 50, 71, 58, 11, "Next.js Frontend", BLUE_BG, BLUE_ED, fs=10.5, sub="React + TypeScript + Tailwind CSS")
-draw_box(ax2, 50, 49, 60, 11, "Next.js API Route", BLUE_BG, BLUE_ED, fs=10.5, sub="입력 검증 / AI 호출 / 데이터 처리")
-draw_box(ax2, 80, 55, 30, 11, "Gemini API", ORANGE_BG, ORANGE_ED, fs=10.5, sub="구조화된 JSON 레시피 생성")
-draw_box(ax2, 26, 24, 40, 10.5, "nutrition-data.json", "#E9E6F5", "#6C5CA8", fs=9.6, sub="기본 영양 참고 데이터")
-draw_box(ax2, 72, 24, 44, 10.5, "localStorage", "#E2F2E7", "#3E7D52", fs=9.6, sub="즐겨찾기 / 생성 기록 / 쇼핑리스트 저장")
+# Regions: browser (left) / server (right upper) / external AI (right lower)
+region(ax2, 2, 6, 51, 98, "사용자 브라우저 (클라이언트)")
+region(ax2, 55, 58, 98, 98, "Next.js 서버 영역", fc="#EFEFF6", ec="#9A9ABC")
+region(ax2, 55, 6, 98, 50, "외부 AI 서비스", fc="#FBF4E4", ec="#C9B37E", label_bottom=True)
 
-# Main arrows
-arrow(ax2, 50, 87.3, 50, 76.8, lw=1.8)
-arrow(ax2, 50, 65.3, 50, 54.8, lw=1.8)
-arrow(ax2, 80, 48.9, 80, 60.5, lw=1.8, ls="-")
-# Gemini return
-arrow(ax2, 77.2, 58.0, 64.0, 51.5, lw=1.5, ls=(0, (4, 3)))
-# data arrows
-arrow(ax2, 38, 43.2, 26, 30.0, lw=1.5, ls=(0, (4, 3)))
-arrow(ax2, 62, 43.2, 72, 30.0, lw=1.5, ls=(0, (4, 3)))
+# Browser-side boxes
+draw_box(ax2, 26.5, 88, 42, 9.5, "Next.js Frontend", BLUE_BG, BLUE_ED, fs=10,
+         sub="React + TypeScript + Tailwind CSS")
+draw_box(ax2, 26.5, 72, 42, 9.0, "화면 표시 · 입력 수집", BLUE_BG, BLUE_ED, fs=9.4,
+         sub="영양 계산 · 쇼핑리스트 계산")
+draw_box(ax2, 26.5, 55, 42, 9.5, "localStorage", GREEN_BG, GREEN_ED, fs=9.6,
+         sub="조건 / 즐겨찾기 / 기록 / 장보기 / 프로필")
+draw_box(ax2, 26.5, 38, 42, 9.0, "nutrition-data.json", PURPLE_BG, PURPLE_ED, fs=9.2,
+         sub="내장 영양 참고 데이터 68종")
 
-# arrow labels
-ax2.text(51.2, 80.0, "요청 / 응답", fontsize=7.2, color=GRAY_TXT, rotation=90, ha="left", va="center")
-ax2.text(81.2, 55.0, "프롬프트 + 사용자 조건", fontsize=7.2, color=GRAY_TXT, ha="left", va="center")
-ax2.text(62.5, 54.0, "JSON 레시피 반환", fontsize=7.2, color=GRAY_TXT, ha="right", va="center")
-ax2.text(27.5, 35.5, "영양 참고 데이터 조회", fontsize=7.0, color=GRAY_TXT, ha="left", va="center", rotation=58)
-ax2.text(70.0, 35.5, "저장 / 조회", fontsize=7.0, color=GRAY_TXT, ha="right", va="center", rotation=-58)
+# Server box
+draw_box(ax2, 76.5, 84, 38, 11.5, "Next.js API Route", "#E3E1F3", "#4B4B9B", fs=10,
+         sub="입력 검증 → 프롬프트 구성\nAI 호출 → JSON 검증 → 필터링")
+
+# External AI boxes
+draw_box(ax2, 76.5, 39, 38, 9.5, "Groq API (기본)", ORANGE_BG, ORANGE_ED, fs=10,
+         sub="구조화된 JSON 레시피 생성")
+draw_box(ax2, 76.5, 22, 38, 9.5, "Gemini API (대체)", "#F7E7CE", "#A9752F", fs=10,
+         sub="기본 제공방 실패 시 1회 시도")
+
+# Arrows: browser <-> server
+arrow(ax2, 47.8, 88, 57.2, 88, lw=1.8)
+arrow(ax2, 57.2, 82.5, 47.8, 82.5, lw=1.6, ls=(0, (4, 3)))
+ax2.text(52.5, 89.2, "요청", fontsize=6.8, color=GRAY_TXT, ha="center", va="bottom")
+ax2.text(52.5, 81.3, "결과", fontsize=6.8, color=GRAY_TXT, ha="center", va="top")
+
+# Arrows: server -> AI providers
+arrow(ax2, 68, 78.2, 68, 44.3, lw=1.8)
+arrow(ax2, 88, 44.3, 88, 78.2, lw=1.6, ls=(0, (4, 3)))
+ax2.text(69.4, 70.0, "프롬프트 + 사용자 조건", fontsize=6.6, color=GRAY_TXT,
+         ha="left", va="center")
+ax2.text(86.6, 63.0, "JSON 레시피 응답", fontsize=6.6, color=GRAY_TXT,
+         ha="right", va="center")
+arrow(ax2, 76.5, 34.0, 76.5, 27.0, lw=1.4, ls=(0, (3, 3)))
+ax2.text(78.0, 30.4, "실패 시 대체", fontsize=6.4, color=GRAY_TXT, ha="left", va="center")
+
+# Arrows inside browser region
+arrow(ax2, 26.5, 83.2, 26.5, 76.8, lw=1.5)
+arrow(ax2, 26.5, 67.3, 26.5, 60.0, lw=1.5)
+arrow(ax2, 26.5, 50.0, 26.5, 42.7, lw=1.5, ls=(0, (4, 3)))
+ax2.text(28.2, 46.2, "참고값 조회", fontsize=6.4, color=GRAY_TXT, ha="left", va="center")
+ax2.text(28.2, 63.6, "저장 / 조회", fontsize=6.4, color=GRAY_TXT, ha="left", va="center")
 
 plt.tight_layout(pad=0.3)
 plt.savefig(OUT2, bbox_inches="tight", facecolor="white")
