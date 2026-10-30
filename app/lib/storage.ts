@@ -100,7 +100,7 @@ export type HistoryEntry = {
   conditions?: UserConditions | null; // 다시 생성용 조건 (선택)
 };
 
-export type ShoppingStored = {
+type ShoppingStored = {
   items: { name: string; amount: string; checked: boolean }[];
   updatedAt: string | null;
 };

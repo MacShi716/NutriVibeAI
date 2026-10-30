@@ -6,7 +6,7 @@ import { mockRecipes } from "./mock";
 
 // ============================================================ 프롬프트
 
-export function buildPrompt(c: UserConditions): string {
+function buildPrompt(c: UserConditions): string {
   const goalLine =
     c.goalCalories && c.goalCalories > 0
       ? `- 목표 일일 열량: ${c.goalCalories} kcal (이 끼니는 하루 권장 열량의 약 30% 수준으로 조정)`
@@ -64,7 +64,7 @@ function isRecipeLike(x: unknown): x is Recipe {
   );
 }
 
-export function parseRecipes(jsonText: string): Recipe[] {
+function parseRecipes(jsonText: string): Recipe[] {
   const data = JSON.parse(cleanJsonText(jsonText)) as unknown;
   // {"recipes":[...]}, 최상위 배열 [...], 단일 레시피 객체 {...} 를 모두 허용한다
   let list: unknown[];
@@ -104,7 +104,7 @@ function normalizeName(s: string): string {
   return s.replace(/\s+/g, "").toLowerCase();
 }
 
-export function filterByRestrictions(recipes: Recipe[], restrictionsRaw: string): {
+function filterByRestrictions(recipes: Recipe[], restrictionsRaw: string): {
   recipes: Recipe[];
   warnings: string[];
 } {
@@ -221,7 +221,7 @@ async function callGroq(prompt: string, apiKey: string, model = process.env.GROQ
 
 // ============================================================ 메인 진입점
 
-export type LLMProvider = "groq" | "gemini" | "mock";
+type LLMProvider = "groq" | "gemini" | "mock";
 
 /** 사용할 제공방 결정: LLM_PROVIDER 지정 우선, 없으면 GROQ → GEMINI → mock 순 자동 선택 */
 function resolveProvider(groqKey: string, geminiKey: string): LLMProvider {

@@ -8,7 +8,7 @@ import { lookupNutrition } from "./nutrition";
 
 const KEY = "nutrivibe:game";
 
-export type TodayCounts = {
+type TodayCounts = {
   date: string;
   recipes: number;
   multiRecipes: number;
@@ -36,7 +36,7 @@ export type GameStats = {
   today: TodayCounts;
 };
 
-export type GameEvent =
+type GameEvent =
   | { type: "recipe"; ingredientCount: number; cookMinutes: number }
   | { type: "favorite"; recipeId: string }
   | { type: "shoppingCheck" }
@@ -44,7 +44,7 @@ export type GameEvent =
   | { type: "roll" }
   | { type: "visit" };
 
-export type AchievementDef = {
+type AchievementDef = {
   id: string;
   icon: string;
   title: string;
@@ -52,7 +52,7 @@ export type AchievementDef = {
   check: (s: GameStats) => boolean;
 };
 
-export type MissionDef = {
+type MissionDef = {
   id: string;
   icon: string;
   title: string;
@@ -103,7 +103,7 @@ function defaultStats(): GameStats {
   };
 }
 
-export function todayKey(d: Date = new Date()): string {
+function todayKey(d: Date = new Date()): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
@@ -148,7 +148,7 @@ export function xpForLevel(level: number): number {
   return (level - 1) * 100;
 }
 
-export const TITLES: Record<number, string> = {
+const TITLES: Record<number, string> = {
   1: "냉장고 견습생",
   2: "밥솥 초보",
   3: "집밥 요리사",
