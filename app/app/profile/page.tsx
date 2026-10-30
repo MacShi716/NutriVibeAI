@@ -70,6 +70,7 @@ export default function ProfilePage() {
   }
 
   function reset() {
+    storage.clearProfile();
     setForm({ ...EMPTY });
     setSaved(false);
   }
