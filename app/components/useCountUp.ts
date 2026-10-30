@@ -1,18 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /** 숫자가 목표값까지 올라가는 카운트업 애니메이션 (UX 강조용) */
 export function useCountUp(target: number, duration = 700): number {
   const [value, setValue] = useState(0);
-  const started = useRef(false);
 
   useEffect(() => {
-    if (started.current) {
-      setValue(target);
-      return;
-    }
-    started.current = true;
     if (target <= 0) {
       setValue(0);
       return;
