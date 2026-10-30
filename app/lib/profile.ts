@@ -66,7 +66,6 @@ export function estimateDailyCalories(
   };
 }
 
-/** 식단 목표별 일일 열량 조정값 (참고용: 유지 ±10~20% 수준) */
 export function targetCalories(
   estimate: DailyCalorieEstimate,
   goal: "maintain" | "lose" | "gain"
