@@ -33,8 +33,12 @@ python verify_report.py                 # 쪽수·필수 문구·고아 제목 �
 - `make_figures.py` — 사용자 흐름도(그림 1)와 시스템 구성도(그림 2)를 그린다.
 - `convert.ps1` — Word 로 DOCX 를 PDF 로 내보내 미리보기를 만든다.
 - `verify_report.py` — 두 PDF 의 쪽수, 필수 문구 존재, 제목만 남은 페이지(고아) 여부를 검사한다.
+- `verify_llm_key.ps1` — 실행 중인 dev 서버에 생성 요청을 보내 실제 모델이 응답했는지 확인한다. 키 값은 출력하지 않고 `app\.env.local` 에 채워져 있는지 여부만 본다.
 
 ## 알려진 동작
 
 - `convert.ps1` 은 Word 기동 직후 첫 실행에서 COMException 을 낼 때가 있다. 이때는 한 번 더 실행하면 `EXPORT_OK` 가 나온다. `docx_preview.pdf` 의 수정 시각으로 성공 여부를 확인할 수 있다.
 - `build_report.py` 는 표의 행이 페이지 경계에서 잘리지 않도록 `cantSplit` 을 적용하고, 그림 1 은 6.4cm, 그림 2 는 15.2cm 폭으로 배치한다.
+- `app\.env.local` 이 없거나 키가 비어 있으면 앱은 데모(mock) 모드로 동작한다. 실제 모델을 쓰려면 `app\.env.local` 의 `GROQ_API_KEY` 를 채우고 dev 서버를 다시 시작한 뒤 `verify_llm_key.ps1` 로 `판정: REAL` 을 확인한다.
+- 키가 잘못된 경우: 첫 제공방 호출이 실패하면 다음 제공방을 1회 시도하고, 둘 다 실패하면 데모로 전환한다(응답 200, `usedMock:true`). 2026-10-31 로컬 실측에서 2.8초가 걸렸다.
+- `.ps1` 파일은 UTF-8 BOM 으로 저장해야 Windows PowerShell 5.1 에서 한글이 깨지지 않는다.
