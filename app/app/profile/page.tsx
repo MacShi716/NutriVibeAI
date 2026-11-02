@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { storage } from "@/lib/storage";
+import DataBackup from "@/components/DataBackup";
 import {
   bmiCategory,
   calcBMI,
@@ -301,6 +302,7 @@ export default function ProfilePage() {
       <p className="mt-5 text-xs text-gray-400">
         프로필 정보는 이 기기(브라우저)에만 저장되며 서버로 전송되지 않습니다.
       </p>
+      <DataBackup />
     </div>
   );
 }
