@@ -128,6 +128,7 @@ export default function HomePage() {
 
       <form
         onSubmit={handleSubmit}
+        noValidate
         className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
       >
         {mounted && goalCal && (
