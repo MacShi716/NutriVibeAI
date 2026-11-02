@@ -10,22 +10,18 @@ const STEPS = [
   { label: "화면 표시", desc: "추천 레시피 로드 완료" },
 ];
 
-export default function GenerationSteps({ onDone }: { onDone?: () => void }) {
-  const [step, setStep] = useState(0);
+export default function GenerationSteps({ done }: { done: boolean }) {
+  const [timerStep, setTimerStep] = useState(0);
+  const step = done ? STEPS.length : timerStep;
 
   useEffect(() => {
-    const total = STEPS.length;
+    // 마지막 단계는 응답이 도착한 뒤(done)에만 완료로 표시한다
     const timers: ReturnType<typeof setTimeout>[] = [];
-    for (let i = 1; i <= total; i++) {
-      timers.push(
-        setTimeout(() => {
-          setStep(i);
-          if (i === total && onDone) onDone();
-        }, i * 650)
-      );
+    for (let i = 1; i < STEPS.length; i++) {
+      timers.push(setTimeout(() => setTimerStep(i), i * 650));
     }
     return () => timers.forEach(clearTimeout);
-  }, [onDone]);
+  }, []);
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white p-6">
