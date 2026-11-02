@@ -6,6 +6,7 @@ import { storage } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
 import { collectIngredients, trackEvent } from "@/lib/gamification";
 import GenerationSteps from "@/components/GenerationSteps";
+import PhotoIngredients from "@/components/PhotoIngredients";
 import type { UserConditions } from "@/lib/types";
 
 const EMPTY: UserConditions = {
@@ -53,6 +54,14 @@ export default function HomePage() {
 
   function update<K extends keyof UserConditions>(key: K, value: UserConditions[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function addIngredients(names: string[]) {
+    setForm((prev) => {
+      const cur = prev.ingredients.split(/[,，、\n]/).map((x) => x.trim()).filter(Boolean);
+      const merged = Array.from(new Set([...cur, ...names]));
+      return { ...prev, ingredients: merged.join(", ") };
+    });
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -161,6 +170,9 @@ export default function HomePage() {
             value={form.ingredients}
             onChange={(e) => update("ingredients", e.target.value)}
           />
+          <div className="mt-2">
+            <PhotoIngredients onAdd={addIngredients} />
+          </div>
         </div>
 
         <div>
