@@ -9,6 +9,7 @@ import { calcOwnedUsage } from "@/lib/shopping";
 import { estimateDailyCalories } from "@/lib/profile";
 import { useCountUp } from "@/components/useCountUp";
 import { trackEvent } from "@/lib/gamification";
+import { isLoggedToday, notifyDaily, toggleDailyLog } from "@/lib/daily";
 import type { Recipe } from "@/lib/types";
 
 export default function RecipeDetailPage() {
@@ -18,6 +19,7 @@ export default function RecipeDetailPage() {
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [ownedRaw, setOwnedRaw] = useState("");
   const [isFav, setIsFav] = useState(false);
+  const [logged, setLogged] = useState(false);
   const [dailyCal, setDailyCal] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -27,6 +29,7 @@ export default function RecipeDetailPage() {
     setRecipe(found);
     setOwnedRaw(result?.conditions.ingredients ?? "");
     setIsFav(found ? storage.isFavorite(found.id) : false);
+    setLogged(found ? isLoggedToday(found.id) : false);
     const profile = storage.getProfile();
     const est =
       profile &&
@@ -108,16 +111,29 @@ export default function RecipeDetailPage() {
             <h1 className="text-2xl font-bold text-gray-900">{recipe.title}</h1>
             <p className="mt-1 text-sm text-gray-600">{recipe.description}</p>
           </div>
-          <button
-            onClick={toggleFav}
-            className={`shrink-0 rounded-lg border px-3 py-2 text-sm font-medium transition ${
-              isFav
-                ? "border-amber-300 bg-amber-50 text-amber-700"
-                : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
-            } ${popFav ? "anim-pop" : ""}`}
-          >
-            {isFav ? "★ 즐겨찾기됨" : "☆ 즐겨찾기"}
-          </button>
+          <div className="flex shrink-0 flex-col gap-2">
+            <button
+              onClick={toggleFav}
+              className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+                isFav
+                  ? "border-amber-300 bg-amber-50 text-amber-700"
+                  : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+              } ${popFav ? "anim-pop" : ""}`}
+            >
+              {isFav ? "★ 즐겨찾기됨" : "☆ 즐겨찾기"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                const on = toggleDailyLog(recipe);
+                setLogged(on);
+                notifyDaily();
+              }}
+              className="rounded-lg border border-brand-600 bg-white px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
+            >
+              {logged ? "오늘 식단에서 빼기" : "오늘 식단에 담기"}
+            </button>
+          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2 text-xs">

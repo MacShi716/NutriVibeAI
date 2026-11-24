@@ -11,12 +11,21 @@ function buildPrompt(c: UserConditions): string {
     c.goalCalories && c.goalCalories > 0
       ? `- 목표 일일 열량: ${c.goalCalories} kcal (이 끼니는 하루 권장 열량의 약 30% 수준으로 조정)`
       : "";
+  const proteinLine =
+    c.goalProtein && c.goalProtein > 0
+      ? `- 목표 일일 단백질: ${c.goalProtein} g (이 끼니는 하루 목표의 약 30% 수준으로 맞출 것)`
+      : "";
+  const expiryLine = c.prioritizeExpiring
+    ? "- 목록 앞쪽의 식재료는 유통기한이 가까우므로 그 재료를 우선 사용할 것"
+    : "";
   return [
     "당신은 가정식 레시피 전문가입니다. 아래 조건을 바탕으로 2~3개의 레시피를 JSON 형식으로 생성하세요.",
     `- 보유 식재료: ${c.ingredients || "없음"}`,
     `- 식사 인원: ${c.servings}명`,
     `- 조리 시간: ${c.cookMinutes}분 이내`,
     goalLine,
+    proteinLine,
+    expiryLine,
     `- 식습관 및 선호: ${c.preferences || "제한 없음"}`,
     `- 기피 및 알레르기: ${c.restrictions || "없음"}`,
     "- 보유 식재료를 최우선으로 활용할 것",
@@ -218,7 +227,7 @@ async function callGroq(prompt: string, apiKey: string, model = process.env.GROQ
 
 // ============================================================ 메인 진입점
 
-type LLMProvider = "groq" | "gemini" | "mock";
+export type LLMProvider = "groq" | "gemini" | "mock";
 
 /** 사용할 제공방 결정: LLM_PROVIDER 지정 우선, 없으면 GROQ → GEMINI → mock 순 자동 선택 */
 function resolveProvider(groqKey: string, geminiKey: string): LLMProvider {
@@ -262,6 +271,64 @@ async function tryProvider(
   }
   if (best.length === 0) throw lastErr;
   return best;
+}
+
+/** 키 없이 mock, 있으면 Groq를 먼저 쓰고 Gemini는 보조로 호출해 JSON 텍스트를 받는다. */
+export async function generateJsonText(prompt: string): Promise<{
+  text: string | null;
+  provider: LLMProvider;
+  usedMock: boolean;
+}> {
+  const groqKey = (process.env.GROQ_API_KEY ?? "").trim();
+  const geminiKey = (process.env.GEMINI_API_KEY ?? "").trim();
+  const primary = resolveProvider(groqKey, geminiKey);
+  const order: ("groq" | "gemini")[] =
+    primary === "mock" ? [] : primary === "groq" ? ["groq", "gemini"] : ["gemini", "groq"];
+  const keyOf = { groq: groqKey, gemini: geminiKey };
+  const allKeys = [groqKey, geminiKey];
+  for (const p of order) {
+    const key = keyOf[p];
+    if (!key) continue;
+    try {
+      const text = p === "groq" ? await callGroq(prompt, key) : await callGemini(prompt, key);
+      return { text, provider: p, usedMock: false };
+    } catch (err) {
+      console.error(`[nutrivibe] ${p} JSON 호출 실패:`, safeErrorMessage(err, allKeys));
+    }
+  }
+  return { text: null, provider: "mock", usedMock: true };
+}
+
+/** 제한 재료 제외 후 내부 영양 데이터로 탄수화물·단백질·지방을 다시 계산한다. */
+export function finalizeRecipes(recipes: Recipe[], c: UserConditions): {
+  recipes: Recipe[];
+  warnings: string[];
+} {
+  const filtered = filterByRestrictions(recipes, c.restrictions);
+  let next = filtered.recipes.map((recipe) => ({
+    ...recipe,
+    nutrition: estimateNutrition(recipe),
+  }));
+  const warnings = [...filtered.warnings];
+  const goal = c.goalCalories;
+  if (goal && goal > 0) {
+    next = next.map((recipe) => ({
+      ...recipe,
+      nutrition: {
+        ...recipe.nutrition,
+        goalPct: Math.round((recipe.nutrition.calories / goal) * 100),
+      },
+    }));
+    const high = next.filter((recipe) => (recipe.nutrition.goalPct ?? 0) > 115);
+    if (high.length > 0) {
+      warnings.push(
+        `목표 열량(${goal} kcal) 대비 높은 레시피가 있습니다: ${high
+          .map((recipe) => `${recipe.title}(${recipe.nutrition.goalPct}%)`)
+          .join(", ")}. 참고용 안내이며 필요 시 다른 레시피를 선택하세요.`
+      );
+    }
+  }
+  return { recipes: next, warnings };
 }
 
 export async function generateRecipes(c: UserConditions): Promise<{
@@ -315,35 +382,9 @@ export async function generateRecipes(c: UserConditions): Promise<{
     }
   }
 
-  const filtered = filterByRestrictions(recipes, c.restrictions);
-  recipes = filtered.recipes;
-  warnings = [...warnings, ...filtered.warnings];
-
-  // 내부 영양 참고 데이터로 재계산 (AI 영양 수치는 최종 근거로 사용하지 않음)
-  recipes = recipes.map((r) => {
-    const est = estimateNutrition(r);
-    return { ...r, nutrition: est };
-  });
-
-  // 목표 열량 대비 비율 계산 및 안내 (프로필 연동, 참고용)
-  const goal = c.goalCalories;
-  if (goal && goal > 0) {
-    recipes = recipes.map((r) => ({
-      ...r,
-      nutrition: {
-        ...r.nutrition,
-        goalPct: Math.round((r.nutrition.calories / goal) * 100),
-      },
-    }));
-    const high = recipes.filter((r) => (r.nutrition.goalPct ?? 0) > 115);
-    if (high.length > 0) {
-      warnings.push(
-        `목표 열량(${goal} kcal) 대비 높은 레시피가 있습니다: ${high
-          .map((r) => `${r.title}(${r.nutrition.goalPct}%)`)
-          .join(", ")}. 참고용 안내이며 필요 시 다른 레시피를 선택하세요.`
-      );
-    }
-  }
+  const finalized = finalizeRecipes(recipes, c);
+  recipes = finalized.recipes;
+  warnings = [...warnings, ...finalized.warnings];
 
   return { recipes, warnings, usedMock, provider };
 }

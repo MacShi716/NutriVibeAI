@@ -30,6 +30,8 @@ export type UserConditions = {
   servings: number; // 식사 인원
   cookMinutes: number; // 조리 시간 (분)
   goalCalories?: number | null; // 프로필 기반 목표 열량 (선택, 참고용)
+  goalProtein?: number | null; // 하루 단백질 목표(g), 선택
+  prioritizeExpiring?: boolean; // 유통기한이 가까운 재료를 먼저 쓰도록 생성
 };
 
 export type GenerateResult = {
@@ -55,5 +57,52 @@ export type UserProfile = {
     | "high" // 활발함(주 6~7회)
     | "very_high" // 매우 활발함(고강도·육체노동)
     | null;
+  proteinGoalG: number | null; // 하루 단백질 목표(g), 선택
   updatedAt: string;
+};
+
+export type MealSlot = "breakfast" | "lunch" | "dinner";
+
+export type PlannedMeal = {
+  slot: MealSlot;
+  recipe: Recipe | null;
+  pinned: boolean;
+};
+
+export type DayPlan = {
+  date: string; // YYYY-MM-DD
+  meals: PlannedMeal[];
+};
+
+export type WeeklyPlan = {
+  startDate: string;
+  days: DayPlan[];
+  conditions: UserConditions;
+  warnings: string[];
+  usedMock: boolean;
+  provider?: "groq" | "gemini" | "mock";
+  generatedAt: string;
+};
+
+/** 보유 식재료의 구매일·유통기한 (없으면 null) */
+export type PantryItem = {
+  name: string;
+  purchasedOn: string | null; // YYYY-MM-DD
+  expiresOn: string | null; // YYYY-MM-DD
+};
+
+/** 오늘 담은 레시피 1인분 영양 (진행 막대용) */
+export type DailyEntry = {
+  id: string;
+  title: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  loggedAt: string;
+};
+
+export type DailyLog = {
+  date: string;
+  entries: DailyEntry[];
 };
