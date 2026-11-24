@@ -34,7 +34,7 @@ const DATA: NutritionRow[] = (nutritionData as RawNutritionRow[]).map((row) => (
 export const TOTAL_INGREDIENTS = DATA.length;
 
 /** 재료명과 사용량 문자열에서 수량(숫자)을 추출한다. */
-export function parseIngredient(raw: string): { name: string; grams: number | null } {
+function parseIngredient(raw: string): { name: string; grams: number | null } {
   const match = raw.match(/^([^\d]+?)\s*(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+))?\s*(kg|g|ml|l|그램|밀리리터|리터|컵|개|알|모|대|쪽|마리|공기|큰술|작은술|tbsp|tsp)?/i);
   if (!match) {
     return { name: raw.trim(), grams: null };
