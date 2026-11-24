@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { storage } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
+import { isValidServings, SERVINGS_ERROR, SERVINGS_MIN, SERVINGS_MAX } from "@/lib/limits";
 import { collectIngredients, trackEvent } from "@/lib/gamification";
 import GenerationSteps from "@/components/GenerationSteps";
 import type { UserConditions } from "@/lib/types";
@@ -58,8 +59,8 @@ export default function HomePage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
-    if (form.servings < 1 || form.servings > 12) {
-      setError("식사 인원은 1~12명 사이로 입력해 주세요.");
+    if (!isValidServings(form.servings)) {
+      setError(SERVINGS_ERROR);
       return;
     }
     if (form.cookMinutes < 5 || form.cookMinutes > 180) {
@@ -127,6 +128,7 @@ export default function HomePage() {
 
       <form
         onSubmit={handleSubmit}
+        noValidate
         className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
       >
         {mounted && goalCal && (
@@ -204,12 +206,16 @@ export default function HomePage() {
             <input
               id="servings"
               type="number"
-              min={1}
-              max={12}
+              min={SERVINGS_MIN}
+              max={SERVINGS_MAX}
+              step={1}
               className={inputCls}
               value={form.servings}
               onChange={(e) => update("servings", Number(e.target.value))}
             />
+            <p className="mt-1 text-xs text-gray-400">
+              {SERVINGS_MIN}~{SERVINGS_MAX}명까지 입력할 수 있습니다.
+            </p>
           </div>
           <div>
             <label className={labelCls} htmlFor="cookMinutes">

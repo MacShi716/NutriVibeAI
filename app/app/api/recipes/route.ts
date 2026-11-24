@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { generateRecipes } from "@/lib/gemini";
 import type { UserConditions } from "@/lib/types";
+import { isValidServings, SERVINGS_ERROR } from "@/lib/limits";
 
 export const runtime = "nodejs";
 
@@ -11,8 +12,8 @@ function validateConditions(body: unknown): { ok: true; data: UserConditions } |
   const b = body as Record<string, unknown>;
   const servings = Number(b.servings ?? 0);
   const cookMinutes = Number(b.cookMinutes ?? 0);
-  if (!Number.isFinite(servings) || servings < 1 || servings > 12) {
-    return { ok: false, error: "식사 인원은 1~12명 사이여야 합니다." };
+  if (!isValidServings(servings)) {
+    return { ok: false, error: SERVINGS_ERROR };
   }
   if (!Number.isFinite(cookMinutes) || cookMinutes < 5 || cookMinutes > 180) {
     return { ok: false, error: "조리 시간은 5~180분 사이여야 합니다." };
