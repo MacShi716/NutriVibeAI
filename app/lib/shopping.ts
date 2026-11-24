@@ -84,9 +84,6 @@ export function groupShoppingItems(
   const order = CATEGORY_RULES.map((r) => r.key);
   order.push("etc");
   for (const key of order) groups.set(key, { key, label: "", items: [] });
-  const labels = new Map<string, string>();
-  for (const r of CATEGORY_RULES) labels.set(r.key, r.label);
-  labels.set("etc", "기타");
 
   for (const item of items) {
     const { key, label } = categorizeItem(item.name);
