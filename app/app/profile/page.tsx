@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { storage } from "@/lib/storage";
+import DailyNutrition from "@/components/DailyNutrition";
+import DataBackup from "@/components/DataBackup";
 import {
   bmiCategory,
   calcBMI,
@@ -18,12 +20,14 @@ const EMPTY: Omit<UserProfile, "updatedAt"> = {
   gender: null,
   age: null,
   activityLevel: null,
+  proteinGoalG: null,
 };
 
 export default function ProfilePage() {
   const [form, setForm] = useState({ ...EMPTY });
   const [goal, setGoal] = useState<"maintain" | "lose" | "gain">("maintain");
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const p = storage.getProfile();
@@ -35,6 +39,7 @@ export default function ProfilePage() {
         gender: p.gender,
         age: p.age,
         activityLevel: p.activityLevel,
+        proteinGoalG: p.proteinGoalG ?? null,
       });
     }
   }, []);
@@ -55,12 +60,20 @@ export default function ProfilePage() {
   }
 
   function save() {
+    const protein = form.proteinGoalG;
+    if (protein !== null && (protein < 1 || protein > 400)) {
+      setError("단백질 목표는 1~400g 사이로 입력해 주세요.");
+      setSaved(false);
+      return;
+    }
+    setError("");
     const next: UserProfile = {
       ...form,
       heightCm: num(String(form.heightCm ?? "")),
       weightKg: num(String(form.weightKg ?? "")),
       bodyFatPct: form.bodyFatPct !== null ? num(String(form.bodyFatPct)) : null,
       age: form.age !== null ? num(String(form.age)) : null,
+      proteinGoalG: protein === null ? null : Math.round(protein),
       updatedAt: new Date().toISOString(),
     };
     storage.saveProfile(next);
@@ -183,6 +196,23 @@ export default function ProfilePage() {
               <option value="very_high">매우 활발함 (고강도)</option>
             </select>
           </div>
+          <div>
+            <label className={labelCls} htmlFor="proteinGoal">
+              단백질 목표 (g) · 선택
+            </label>
+            <input
+              id="proteinGoal"
+              type="number"
+              min={1}
+              max={400}
+              value={form.proteinGoalG ?? ""}
+              onChange={(e) => setForm({ ...form, proteinGoalG: num(e.target.value) })}
+              className={inputCls}
+              placeholder="예: 80"
+              data-testid="protein-goal"
+            />
+            <p className="mt-1 text-[11px] text-gray-400">하루 단백질 목표입니다. 영양 정보는 참고용입니다.</p>
+          </div>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2">
@@ -203,6 +233,7 @@ export default function ProfilePage() {
               저장되었습니다.
             </span>
           )}
+          {error && <span className="self-center text-sm text-red-600">{error}</span>}
         </div>
       </div>
 
@@ -298,9 +329,14 @@ export default function ProfilePage() {
         </div>
       )}
 
+      <div className="mt-5">
+        <DailyNutrition />
+      </div>
+
       <p className="mt-5 text-xs text-gray-400">
         프로필 정보는 이 기기(브라우저)에만 저장되며 서버로 전송되지 않습니다.
       </p>
+      <DataBackup />
     </div>
   );
 }

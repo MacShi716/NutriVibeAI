@@ -1,49 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
+import { parseConditions } from "@/lib/conditions";
 import { generateRecipes } from "@/lib/gemini";
-import type { UserConditions } from "@/lib/types";
-import { isValidServings, SERVINGS_ERROR } from "@/lib/limits";
+import { orderIngredientsForGeneration } from "@/lib/pantry";
 
 export const runtime = "nodejs";
-
-function validateConditions(body: unknown): { ok: true; data: UserConditions } | { ok: false; error: string } {
-  if (typeof body !== "object" || body === null) {
-    return { ok: false, error: "잘못된 요청 본문입니다." };
-  }
-  const b = body as Record<string, unknown>;
-  const servings = Number(b.servings ?? 0);
-  const cookMinutes = Number(b.cookMinutes ?? 0);
-  if (!isValidServings(servings)) {
-    return { ok: false, error: SERVINGS_ERROR };
-  }
-  if (!Number.isFinite(cookMinutes) || cookMinutes < 5 || cookMinutes > 180) {
-    return { ok: false, error: "조리 시간은 5~180분 사이여야 합니다." };
-  }
-  const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
-  const goalCaloriesRaw = b.goalCalories;
-  let goalCalories: number | null = null;
-  if (
-    goalCaloriesRaw !== undefined &&
-    goalCaloriesRaw !== null &&
-    goalCaloriesRaw !== ""
-  ) {
-    const g = Number(goalCaloriesRaw);
-    if (!Number.isFinite(g) || g < 500 || g > 8000) {
-      return { ok: false, error: "목표 열량은 500~8000 kcal 사이여야 합니다." };
-    }
-    goalCalories = Math.round(g);
-  }
-  return {
-    ok: true,
-    data: {
-      ingredients: str(b.ingredients),
-      preferences: str(b.preferences),
-      restrictions: str(b.restrictions),
-      servings,
-      cookMinutes,
-      goalCalories,
-    },
-  };
-}
 
 export async function POST(req: NextRequest) {
   let body: unknown;
@@ -53,13 +13,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "JSON 본문을 파싱할 수 없습니다." }, { status: 400 });
   }
 
-  const check = validateConditions(body);
+  const check = parseConditions(body);
   if (!check.ok) {
     return NextResponse.json({ error: check.error }, { status: 400 });
   }
 
+  const generation = orderIngredientsForGeneration(check.data, check.expiringIngredients);
+
   try {
-    const { recipes, warnings, usedMock, provider } = await generateRecipes(check.data);
+    const { recipes, warnings, usedMock, provider } = await generateRecipes(generation);
     return NextResponse.json({
       conditions: check.data,
       recipes,

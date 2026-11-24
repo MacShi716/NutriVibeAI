@@ -1,12 +1,18 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { storage } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
 import { isValidServings, SERVINGS_ERROR, SERVINGS_MIN, SERVINGS_MAX } from "@/lib/limits";
 import { collectIngredients, trackEvent } from "@/lib/gamification";
+import { listExpiringNames } from "@/lib/pantry";
+import { splitIngredients } from "@/lib/shopping";
+import DailyNutrition from "@/components/DailyNutrition";
 import GenerationSteps from "@/components/GenerationSteps";
+import PantryEditor from "@/components/PantryEditor";
+import PhotoIngredients from "@/components/PhotoIngredients";
 import type { UserConditions } from "@/lib/types";
 
 const EMPTY: UserConditions = {
@@ -16,6 +22,8 @@ const EMPTY: UserConditions = {
   servings: 2,
   cookMinutes: 20,
   goalCalories: null,
+  goalProtein: null,
+  prioritizeExpiring: false,
 };
 
 export default function HomePage() {
@@ -25,36 +33,62 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<"form" | "generating" | "done">("form");
   const [error, setError] = useState("");
+  const hadSavedConditions = useRef(false);
 
   useEffect(() => {
-    setForm(storage.getConditions() ?? EMPTY);
+    const saved = storage.getConditions();
+    hadSavedConditions.current = saved != null;
+    setForm(saved ?? EMPTY);
     setMounted(true);
   }, []);
 
+  // 유통기한은 재료 목록과 함께 저장된다. 입력 중에도 조건을 남겨 페이지를 옮겨도 목록이 비지 않게 한다.
+  useEffect(() => {
+    if (!mounted) return;
+    storage.saveConditions(form);
+  }, [mounted, form]);
+
   // 프로필 연동: 저장된 신체 프로필로 목표 열량을 계산해 기본 반영
-  const goalCal = useMemo(() => {
-    if (!mounted) return null;
-    const p = storage.getProfile();
-    if (!p) return null;
-    const est = estimateDailyCalories({
-      gender: p.gender,
-      age: p.age,
-      heightCm: p.heightCm,
-      weightKg: p.weightKg,
-      activityLevel: p.activityLevel,
+  const profileGoals = useMemo(() => {
+    if (!mounted) return { calories: null as number | null, protein: null as number | null };
+    const profile = storage.getProfile();
+    if (!profile) return { calories: null, protein: null };
+    const estimate = estimateDailyCalories({
+      gender: profile.gender,
+      age: profile.age,
+      heightCm: profile.heightCm,
+      weightKg: profile.weightKg,
+      activityLevel: profile.activityLevel,
     });
-    return est ? targetCalories(est, "maintain") : null;
+    return {
+      calories: estimate ? targetCalories(estimate, "maintain") : null,
+      protein: profile.proteinGoalG ?? null,
+    };
   }, [mounted]);
+  const goalCal = profileGoals.calories;
 
   useEffect(() => {
-    if (goalCal && !storage.getConditions()) {
-      setForm((prev) => ({ ...prev, goalCalories: goalCal }));
-    }
-  }, [goalCal]);
+    if (!mounted || hadSavedConditions.current) return;
+    if (!profileGoals.calories && !profileGoals.protein) return;
+    setForm((prev) => ({
+      ...prev,
+      goalCalories: profileGoals.calories ?? prev.goalCalories,
+      goalProtein: profileGoals.protein ?? prev.goalProtein,
+    }));
+  }, [mounted, profileGoals]);
 
   function update<K extends keyof UserConditions>(key: K, value: UserConditions[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
+
+  function addIngredients(names: string[]) {
+    setForm((prev) => {
+      const merged = Array.from(new Set([...splitIngredients(prev.ingredients), ...names]));
+      return { ...prev, ingredients: merged.join(", ") };
+    });
+  }
+
+  const ingredientNames = useMemo(() => splitIngredients(form.ingredients), [form.ingredients]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -73,7 +107,10 @@ export default function HomePage() {
       const res = await fetch("/api/recipes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          expiringIngredients: form.prioritizeExpiring ? listExpiringNames(storage.getPantry()) : [],
+        }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -82,10 +119,7 @@ export default function HomePage() {
         return;
       }
       storage.saveLastResult(data);
-      const count = form.ingredients
-        .split(/[,，、\n]/)
-        .map((x) => x.trim())
-        .filter(Boolean).length;
+      const count = splitIngredients(form.ingredients).length;
       collectIngredients(form.ingredients);
       trackEvent({ type: "recipe", ingredientCount: count, cookMinutes: form.cookMinutes });
       setPhase("done");
@@ -115,6 +149,10 @@ export default function HomePage() {
 
   return (
     <div className="anim-fade-up mx-auto max-w-2xl">
+      <div className="mb-6">
+        <DailyNutrition />
+      </div>
+
       <section className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">
           오늘은 뭘 먹을까? <span className="text-brand-600">NutriVibe AI</span>가
@@ -131,23 +169,47 @@ export default function HomePage() {
         noValidate
         className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
       >
-        {mounted && goalCal && (
-          <div className="flex items-center justify-between rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-sm">
+        {mounted && (goalCal || profileGoals.protein) && (
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-sm">
             <span className="text-gray-700">
-              <b className="text-brand-700">내 프로필 연동</b> · 목표 열량{" "}
-              <b>{goalCal} kcal</b>이 반영됩니다.
+              <b className="text-brand-700">내 프로필 연동</b>
+              {goalCal ? (
+                <>
+                  {" "}
+                  · 목표 열량 <b>{goalCal} kcal</b>
+                </>
+              ) : null}
+              {profileGoals.protein ? (
+                <>
+                  {" "}
+                  · 단백질 <b>{profileGoals.protein} g</b>
+                </>
+              ) : null}
             </span>
-            <label className="flex cursor-pointer items-center gap-2 text-xs text-gray-600">
-              <input
-                type="checkbox"
-                checked={form.goalCalories !== null}
-                onChange={(e) =>
-                  update("goalCalories", e.target.checked ? goalCal : null)
-                }
-                className="h-4 w-4 accent-brand-600"
-              />
-              반영
-            </label>
+            <span className="flex flex-col items-end gap-1 text-xs text-gray-600">
+              {goalCal && (
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.goalCalories != null}
+                    onChange={(e) => update("goalCalories", e.target.checked ? goalCal : null)}
+                    className="h-4 w-4 accent-brand-600"
+                  />
+                  열량 반영
+                </label>
+              )}
+              {profileGoals.protein && (
+                <label className="flex cursor-pointer items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={form.goalProtein != null}
+                    onChange={(e) => update("goalProtein", e.target.checked ? profileGoals.protein : null)}
+                    className="h-4 w-4 accent-brand-600"
+                  />
+                  단백질 반영
+                </label>
+              )}
+            </span>
           </div>
         )}
 
@@ -163,6 +225,16 @@ export default function HomePage() {
             value={form.ingredients}
             onChange={(e) => update("ingredients", e.target.value)}
           />
+          <div className="mt-2">
+            <PhotoIngredients onAdd={addIngredients} />
+          </div>
+          {mounted && (
+            <PantryEditor
+              names={ingredientNames}
+              prioritize={Boolean(form.prioritizeExpiring)}
+              onPrioritize={(value) => update("prioritizeExpiring", value)}
+            />
+          )}
         </div>
 
         <div>
@@ -245,6 +317,9 @@ export default function HomePage() {
         >
           AI 레시피 생성하기
         </button>
+        <Link href="/meal-plan" className="block text-center text-sm font-medium text-brand-700 hover:underline">
+          이 재료로 주간 식단표 만들기
+        </Link>
       </form>
     </div>
   );

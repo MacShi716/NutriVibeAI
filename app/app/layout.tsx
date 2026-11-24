@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import ExpiryBanner from "@/components/ExpiryBanner";
 import GameToast from "@/components/GameToast";
 import VisitTracker from "@/components/VisitTracker";
 
@@ -32,6 +33,9 @@ export default function RootLayout({
               <Link href="/recipes" className="whitespace-nowrap hover:text-brand-600">
                 레시피
               </Link>
+              <Link href="/meal-plan" className="whitespace-nowrap hover:text-brand-600">
+                주간 식단
+              </Link>
               <Link href="/shopping-list" className="whitespace-nowrap hover:text-brand-600">
                 쇼핑리스트
               </Link>
@@ -50,6 +54,7 @@ export default function RootLayout({
             </nav>
           </div>
         </header>
+        <ExpiryBanner />
         <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>
         <footer className="border-t border-gray-200 bg-white py-6 text-center text-xs text-gray-400">
           <p>

@@ -1,4 +1,4 @@
-import type { RecipeIngredient } from "./types";
+import type { Recipe, RecipeIngredient, WeeklyPlan } from "./types";
 import { translateToKorean } from "./alias";
 
 export type ShoppingItem = {
@@ -92,6 +92,17 @@ export function groupShoppingItems(
     g.items.push(item);
   }
   return Array.from(groups.values()).filter((g) => g.items.length > 0);
+}
+
+/** 주간 식단에서 보유 재료를 뺀 일주일 장보기 목록 */
+export function weeklyShoppingList(plan: WeeklyPlan): ShoppingItem[] {
+  const lists = plan.days.flatMap((day) =>
+    day.meals
+      .map((meal) => meal.recipe)
+      .filter((recipe): recipe is Recipe => recipe !== null)
+      .map((recipe) => buildShoppingList(recipe.ingredients, plan.conditions.ingredients))
+  );
+  return mergeShoppingItems(lists);
 }
 
 /** 레시피에서 보유 식재료가 차지하는 비율(%)을 계산한다 (연동 표시용) */

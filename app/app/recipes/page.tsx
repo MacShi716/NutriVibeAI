@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { storage } from "@/lib/storage";
 import { calcOwnedUsage } from "@/lib/shopping";
+import { isLoggedToday, notifyDaily, toggleDailyLog } from "@/lib/daily";
 import { useCountUp } from "@/components/useCountUp";
-import type { GenerateResult } from "@/lib/types";
+import type { GenerateResult, Recipe } from "@/lib/types";
 
 function GoalBadge({ goalPct }: { goalPct?: number | null }) {
   if (!goalPct) return null;
@@ -54,10 +55,25 @@ function CalorieBar({
 export default function RecipesPage() {
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [regenerating, setRegenerating] = useState(false);
+  const [logged, setLogged] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
-    setResult(storage.getLastResult());
+    const saved = storage.getLastResult();
+    setResult(saved);
+    if (saved) {
+      const flags: Record<string, boolean> = {};
+      saved.recipes.forEach((recipe) => {
+        flags[recipe.id] = isLoggedToday(recipe.id);
+      });
+      setLogged(flags);
+    }
   }, []);
+
+  function toggleLog(recipe: Recipe) {
+    const on = toggleDailyLog(recipe);
+    notifyDaily();
+    setLogged((prev) => ({ ...prev, [recipe.id]: on }));
+  }
 
   async function regenerate() {
     if (!result || regenerating) return;
@@ -214,32 +230,47 @@ export default function RecipesPage() {
         {result.recipes.map((r, i) => {
           const usage = calcOwnedUsage(r.ingredients, result.conditions.ingredients);
           return (
-            <Link
+            <article
               key={r.id}
-              href={`/recipes/${r.id}`}
-              className="anim-fade-up group rounded-2xl border border-gray-200 bg-white p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-brand-500 hover:shadow-md"
+              className="anim-fade-up rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
               style={{ animationDelay: `${i * 120}ms` }}
             >
-              <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700">
-                {r.title}
-              </h2>
-              <p className="mt-1 line-clamp-2 text-sm text-gray-600">{r.description}</p>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
-                  {r.cookMinutes}분
-                </span>
-                <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
-                  {r.servings}인분
-                </span>
-                <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
-                  {r.nutrition.calories} kcal
-                </span>
-                <span className="rounded bg-gray-100 px-2 py-0.5 text-gray-600">
-                  보유 활용 {usage.pct}%
-                </span>
-                <GoalBadge goalPct={r.nutrition.goalPct} />
-              </div>
-            </Link>
+              <Link href={`/recipes/${r.id}`} className="group block">
+                <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700">
+                  {r.title}
+                </h2>
+                <p className="mt-1 line-clamp-2 text-sm text-gray-600">{r.description}</p>
+                <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                  <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
+                    {r.cookMinutes}분
+                  </span>
+                  <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
+                    {r.servings}인분
+                  </span>
+                  <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
+                    {r.nutrition.calories} kcal
+                  </span>
+                  <span className="rounded bg-brand-50 px-2 py-0.5 text-brand-700">
+                    단백질 {r.nutrition.protein}g
+                  </span>
+                  <span className="rounded bg-gray-100 px-2 py-0.5 text-gray-600">
+                    탄수 {r.nutrition.carbs}g · 지방 {r.nutrition.fat}g
+                  </span>
+                  <span className="rounded bg-gray-100 px-2 py-0.5 text-gray-600">
+                    보유 활용 {usage.pct}%
+                  </span>
+                  <GoalBadge goalPct={r.nutrition.goalPct} />
+                </div>
+              </Link>
+              <button
+                type="button"
+                onClick={() => toggleLog(r)}
+                className="mt-3 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+              >
+                {logged[r.id] ? "오늘 식단에서 빼기" : "오늘 식단에 담기"}
+              </button>
+              <p className="mt-2 text-[11px] text-gray-400">영양 정보는 참고용입니다.</p>
+            </article>
           );
         })}
       </div>

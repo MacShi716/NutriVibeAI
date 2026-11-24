@@ -1,8 +1,12 @@
+import { todayKey } from "./dates";
 import type {
   UserConditions,
   GenerateResult,
   Recipe,
   UserProfile,
+  PantryItem,
+  WeeklyPlan,
+  DailyLog,
 } from "./types";
 
 const KEY_CONDITIONS = "nutrivibe:conditions";
@@ -11,6 +15,9 @@ const KEY_FAVORITES = "nutrivibe:favorites";
 const KEY_HISTORY = "nutrivibe:history";
 const KEY_SHOPPING = "nutrivibe:shopping";
 const KEY_PROFILE = "nutrivibe:profile";
+const KEY_PANTRY = "nutrivibe:pantry";
+const KEY_WEEKLY = "nutrivibe:weeklyPlan";
+const KEY_DAILY = "nutrivibe:dailyLog";
 
 function read<T>(key: string): T | null {
   if (typeof window === "undefined") return null;
@@ -89,6 +96,29 @@ export const storage = {
   },
   clearProfile(): void {
     window.localStorage.removeItem(KEY_PROFILE);
+  },
+  getPantry(): PantryItem[] {
+    return read<PantryItem[]>(KEY_PANTRY) ?? [];
+  },
+  savePantry(items: PantryItem[]): void {
+    write(KEY_PANTRY, items);
+  },
+  getWeeklyPlan(): WeeklyPlan | null {
+    return read<WeeklyPlan>(KEY_WEEKLY);
+  },
+  saveWeeklyPlan(plan: WeeklyPlan): void {
+    write(KEY_WEEKLY, plan);
+  },
+  getDailyLog(): DailyLog {
+    const today = todayKey();
+    const raw = read<DailyLog>(KEY_DAILY);
+    if (!raw || raw.date !== today || !Array.isArray(raw.entries)) {
+      return { date: today, entries: [] };
+    }
+    return raw;
+  },
+  saveDailyLog(log: DailyLog): void {
+    write(KEY_DAILY, log);
   },
 };
 
