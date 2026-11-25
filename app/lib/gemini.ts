@@ -2,7 +2,7 @@ import type { Recipe, UserConditions } from "./types";
 import { splitIngredients } from "./shopping";
 import { estimateNutrition } from "./nutrition";
 import { translateToKorean } from "./alias";
-import { mockRecipes } from "./mock";
+import { libraryRecipes, localeOf } from "./recipe-library";
 
 // ============================================================ 프롬프트
 
@@ -18,8 +18,16 @@ export function buildPrompt(c: UserConditions): string {
   const expiryLine = c.prioritizeExpiring
     ? "- 목록 앞쪽의 식재료는 유통기한이 가까우므로 그 재료를 우선 사용할 것"
     : "";
+  const locale = localeOf(c);
+  const languageLine =
+    locale === "zh"
+      ? "- 全部用简体中文撰写菜名、简介、食材名和步骤，做中国家常菜，不要使用韩文菜名。"
+      : locale === "en"
+        ? "- Write titles, descriptions, ingredient names, and steps in natural English. Suggest everyday home recipes, not Korean dish names."
+        : "- 레시피 제목, 설명, 재료명, 조리 단계는 정중한 한국어로 작성하고, 한국 가정식을 제안할 것";
   return [
     "당신은 가정식 레시피 전문가입니다. 아래 조건을 바탕으로 2~3개의 레시피를 JSON 형식으로 생성하세요.",
+    languageLine,
     `- 보유 식재료: ${c.ingredients || "없음"}`,
     `- 식사 인원: ${c.servings}명`,
     `- 조리 시간: ${c.cookMinutes}분 이내`,
@@ -126,7 +134,8 @@ function filterByRestrictions(recipes: Recipe[], restrictionsRaw: string): {
     const bad = recipe.ingredients.filter((ing) =>
       restricted.some(
         (r) =>
-          normalizeName(ing.name).includes(r) || r.includes(normalizeName(ing.name))
+          normalizeName(translateToKorean(ing.name)).includes(r) ||
+          r.includes(normalizeName(translateToKorean(ing.name)))
       )
     );
     if (bad.length > 0) {
@@ -184,13 +193,13 @@ export function finalizeRecipes(recipes: Recipe[], c: UserConditions): {
 
 /** 키가 없거나 모델 응답이 비었을 때 쓰는 내장 레시피. mock.ts 매칭 규칙은 바꾸지 않는다. */
 export function recipesFromLibrary(c: UserConditions): { recipes: Recipe[]; warnings: string[] } {
-  const mock = mockRecipes(c);
+  const library = libraryRecipes(c);
   const warnings: string[] = [];
-  if (mock.uncovered.length > 0) {
+  if (library.uncovered.length > 0) {
     warnings.push(
-      `입력한 식재료 중 일부(${mock.uncovered.join(", ")})를 사용하는 레시피가 내장 라이브러리에 없어 추천에 반영되지 않았습니다. 다른 재료와 함께 시도해 주세요.`
+      `입력한 식재료 중 일부(${library.uncovered.join(", ")})를 사용하는 레시피가 내장 라이브러리에 없어 추천에 반영되지 않았습니다. 다른 재료와 함께 시도해 주세요.`
     );
   }
-  return { recipes: mock.recipes, warnings };
+  return { recipes: library.recipes, warnings };
 }
 

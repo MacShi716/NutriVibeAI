@@ -1,4 +1,5 @@
 import type { Recipe, RecipeIngredient } from "./types";
+import { translateToKorean } from "./alias";
 import nutritionData from "@/data/nutrition-data.json";
 
 type NutritionRow = {
@@ -35,7 +36,7 @@ export const TOTAL_INGREDIENTS = DATA.length;
 
 /** 재료명과 사용량 문자열에서 수량(숫자)을 추출한다. */
 function parseIngredient(raw: string): { name: string; grams: number | null } {
-  const match = raw.match(/^([^\d]+?)\s*(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+))?\s*(kg|g|ml|l|그램|밀리리터|리터|컵|개|알|모|대|쪽|마리|공기|큰술|작은술|tbsp|tsp)?/i);
+  const match = raw.match(/^([^\d]+?)\s*(\d+(?:\.\d+)?)(?:\s*\/\s*(\d+))?\s*(kg|g|ml|l|그램|밀리리터|리터|컵|개|알|모|대|쪽|마리|공기|큰술|작은술|tbsp|tsp|tablespoons?|teaspoons?|ounces?|oz|pounds?|lbs?|cups?|克|千克|毫升|升|个|颗|根|大勺|小勺|汤匙|茶匙)?/i);
   if (!match) {
     return { name: raw.trim(), grams: null };
   }
@@ -50,7 +51,17 @@ function parseIngredient(raw: string): { name: string; grams: number | null } {
   else if (unit === "큰술") grams = value * 15;
   else if (unit === "작은술") grams = value * 5;
   else if (unit.toLowerCase() === "tbsp") grams = value * 15;
-  else if (unit.toLowerCase() === "tsp") grams = value * 5;
+  else if (unit.toLowerCase() === "tsp" || unit === "小勺" || unit === "茶匙" || /^teaspoons?$/i.test(unit)) grams = value * 5;
+  else if (unit === "克") grams = value;
+  else if (unit === "千克") grams = value * 1000;
+  else if (unit === "毫升") grams = value;
+  else if (unit === "升") grams = value * 1000;
+  else if (unit === "个" || unit === "颗") grams = value * 50;
+  else if (unit === "根") grams = value * 100;
+  else if (unit === "大勺" || unit === "汤匙" || /^tablespoons?$/i.test(unit)) grams = value * 15;
+  else if (/^ounces?$/i.test(unit) || unit.toLowerCase() === "oz") grams = value * 28;
+  else if (/^pounds?$/i.test(unit) || /^lbs?$/i.test(unit)) grams = value * 453;
+  else if (/^cups?$/i.test(unit)) grams = value * 150;
   else if (unit === "ml") grams = value;
   else if (unit === "kg") grams = value * 1000;
   else if (unit === "l" || unit === "L" || unit === "리터") grams = value * 1000;
@@ -69,8 +80,8 @@ const NAME_SYNONYMS: Record<string, string> = { 계란: "달걀" };
 export function lookupNutrition(name: string): NutritionRow | undefined {
   const exact = DATA.find((row) => row.name === name);
   if (exact) return exact;
-  // "소고기(채끝)" -> "소고기", "계란" -> "달걀"
-  const cleaned = name.replace(/\([^)]*\)/g, "").replace(/\s+/g, "");
+  // "소고기(채끝)" -> "소고기", "鸡蛋" / "potato" -> "달걀" / "감자"
+  const cleaned = translateToKorean(name.replace(/\([^)]*\)/g, "").replace(/\s+/g, ""));
   const mapped = NAME_SYNONYMS[cleaned] ?? cleaned;
   const direct = DATA.find((row) => row.name === mapped);
   if (direct) return direct;
