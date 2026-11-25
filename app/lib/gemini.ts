@@ -331,6 +331,18 @@ export function finalizeRecipes(recipes: Recipe[], c: UserConditions): {
   return { recipes: next, warnings };
 }
 
+/** 키가 없거나 모델 응답이 비었을 때 쓰는 내장 레시피. mock.ts 매칭 규칙은 바꾸지 않는다. */
+export function recipesFromLibrary(c: UserConditions): { recipes: Recipe[]; warnings: string[] } {
+  const mock = mockRecipes(c);
+  const warnings: string[] = [];
+  if (mock.uncovered.length > 0) {
+    warnings.push(
+      `입력한 식재료 중 일부(${mock.uncovered.join(", ")})를 사용하는 레시피가 내장 라이브러리에 없어 추천에 반영되지 않았습니다. 다른 재료와 함께 시도해 주세요.`
+    );
+  }
+  return { recipes: mock.recipes, warnings };
+}
+
 export async function generateRecipes(c: UserConditions): Promise<{
   recipes: Recipe[];
   warnings: string[];
@@ -373,13 +385,9 @@ export async function generateRecipes(c: UserConditions): Promise<{
   if (recipes.length === 0) {
     usedMock = true;
     provider = "mock";
-    const mock = mockRecipes(c);
-    recipes = mock.recipes;
-    if (mock.uncovered.length > 0) {
-      warnings.push(
-        `입력한 식재료 중 일부(${mock.uncovered.join(", ")})를 사용하는 레시피가 내장 라이브러리에 없어 추천에 반영되지 않았습니다. 다른 재료와 함께 시도해 주세요.`
-      );
-    }
+    const library = recipesFromLibrary(c);
+    recipes = library.recipes;
+    warnings = library.warnings;
   }
 
   const finalized = finalizeRecipes(recipes, c);

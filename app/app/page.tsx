@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { requestRecipes } from "@/lib/client-api";
 import { storage } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
 import { isValidServings, SERVINGS_ERROR, SERVINGS_MIN, SERVINGS_MAX } from "@/lib/limits";
@@ -104,20 +105,16 @@ export default function HomePage() {
     storage.saveConditions(form);
     setPhase("generating");
     try {
-      const res = await fetch("/api/recipes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          expiringIngredients: form.prioritizeExpiring ? listExpiringNames(storage.getPantry()) : [],
-        }),
+      const outcome = await requestRecipes({
+        ...form,
+        expiringIngredients: form.prioritizeExpiring ? listExpiringNames(storage.getPantry()) : [],
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error ?? "레시피 생성에 실패했습니다.");
+      if (!outcome.ok) {
+        setError(outcome.error);
         setPhase("form");
         return;
       }
+      const data = outcome.result;
       storage.saveLastResult(data);
       const count = splitIngredients(form.ingredients).length;
       collectIngredients(form.ingredients);

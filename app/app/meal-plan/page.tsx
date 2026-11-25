@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { requestMealSwap, requestWeeklyPlan } from "@/lib/client-api";
 import { logRecipesToday, notifyDaily } from "@/lib/daily";
 import { todayKey, weekdayKo } from "@/lib/dates";
 import { listExpiringNames } from "@/lib/pantry";
@@ -66,29 +67,23 @@ export default function MealPlanPage() {
     const pinned =
       keepPinned && plan
         ? plan.days.flatMap((day) =>
-            day.meals
-              .filter((meal) => meal.pinned && meal.recipe)
-              .map((meal) => ({ date: day.date, slot: meal.slot, recipe: meal.recipe }))
+            day.meals.flatMap((meal) =>
+              meal.pinned && meal.recipe ? [{ date: day.date, slot: meal.slot, recipe: meal.recipe }] : []
+            )
           )
         : [];
     try {
-      const res = await fetch("/api/meal-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "generate",
-          startDate: plan?.startDate && keepPinned ? plan.startDate : todayKey(),
-          conditions: payload(conditions),
-          pinned,
-        }),
+      const outcome = await requestWeeklyPlan({
+        startDate: plan?.startDate && keepPinned ? plan.startDate : todayKey(),
+        conditions: payload(conditions),
+        pinned,
       });
-      const data = (await res.json()) as { plan?: WeeklyPlan; error?: string };
-      if (!res.ok || !data.plan) {
-        setError(data.error ?? "주간 식단을 만들지 못했습니다.");
+      if (!outcome.ok) {
+        setError(outcome.error);
         return;
       }
-      storage.saveWeeklyPlan(data.plan);
-      setPlan(data.plan);
+      storage.saveWeeklyPlan(outcome.plan);
+      setPlan(outcome.plan);
     } catch {
       setError("서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     } finally {
@@ -103,19 +98,13 @@ export default function MealPlanPage() {
     setBusy(`${date}:${slot}`);
     setError("");
     try {
-      const res = await fetch("/api/meal-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          action: "swap",
-          conditions: payload(conditions),
-          slot,
-          avoidTitles,
-        }),
+      const outcome = await requestMealSwap({
+        conditions: payload(conditions),
+        slot,
+        avoidTitles,
       });
-      const data = (await res.json()) as { recipe?: Recipe; error?: string };
-      if (!res.ok || !data.recipe) {
-        setError(data.error ?? "다른 레시피를 찾지 못했습니다.");
+      if (!outcome.ok) {
+        setError(outcome.error);
         return;
       }
       const next: WeeklyPlan = {
@@ -126,7 +115,7 @@ export default function MealPlanPage() {
             : {
                 ...day,
                 meals: day.meals.map((meal) =>
-                  meal.slot === slot ? { ...meal, recipe: data.recipe ?? meal.recipe } : meal
+                  meal.slot === slot ? { ...meal, recipe: outcome.recipe } : meal
                 ),
               }
         ),

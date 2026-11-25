@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { storage } from "@/lib/storage";
 import { calcNutritionDetail } from "@/lib/nutrition";
@@ -13,8 +13,7 @@ import { isLoggedToday, notifyDaily, toggleDailyLog } from "@/lib/daily";
 import type { Recipe } from "@/lib/types";
 
 export default function RecipeDetailPage() {
-  const params = useParams<{ id: string }>();
-  const id = params.id;
+  const id = useSearchParams().get("id") ?? "";
   // SSR/CSR 일치를 위해 localStorage는 mount 이후에만 읽는다
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [ownedRaw, setOwnedRaw] = useState("");

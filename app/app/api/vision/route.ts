@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { translateToKorean } from "@/lib/alias";
+import { VISION_DEMO_INGREDIENTS } from "@/lib/vision-demo";
 
 export const runtime = "nodejs";
 
 /** 업로드 이미지는 메모리에서만 처리하고 저장하지 않는다. */
 const MAX_BYTES = 4 * 1024 * 1024;
 const DEFAULT_GROQ_VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
-const DEMO_LIST = ["달걀", "양파", "대파", "두부", "감자", "당근", "우유"];
-
 const PROMPT =
   "이 사진에 보이는 식재료만 한국어 일반 명칭으로 나열하세요. " +
   '반드시 {"ingredients":["재료명"]} 형식의 JSON만 출력하고, 식재료가 없으면 {"ingredients":[]}를 출력하세요.';
@@ -114,7 +113,7 @@ export async function POST(req: NextRequest) {
 
   const cfg = visionConfig();
   if (!cfg) {
-    return NextResponse.json({ ingredients: DEMO_LIST, demo: true });
+    return NextResponse.json({ ingredients: VISION_DEMO_INGREDIENTS, demo: true });
   }
 
   try {
