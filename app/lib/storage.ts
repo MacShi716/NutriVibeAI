@@ -19,6 +19,23 @@ const KEY_PANTRY = "nutrivibe:pantry";
 const KEY_WEEKLY = "nutrivibe:weeklyPlan";
 const KEY_DAILY = "nutrivibe:dailyLog";
 
+export const CONDITIONS_EVENT = "nutrivibe:conditions";
+export const PROFILE_EVENT = "nutrivibe:profile";
+
+function notify(name: string): void {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new Event(name));
+}
+
+function unchanged(key: string, value: unknown): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(key) === JSON.stringify(value);
+  } catch {
+    return false;
+  }
+}
+
 function read<T>(key: string): T | null {
   if (typeof window === "undefined") return null;
   try {
@@ -43,7 +60,9 @@ export const storage = {
     return read<UserConditions>(KEY_CONDITIONS);
   },
   saveConditions(c: UserConditions): void {
+    if (unchanged(KEY_CONDITIONS, c)) return;
     write(KEY_CONDITIONS, c);
+    notify(CONDITIONS_EVENT);
   },
   getLastResult(): GenerateResult | null {
     return read<GenerateResult>(KEY_LAST_RESULT);
@@ -92,10 +111,13 @@ export const storage = {
     return read<UserProfile>(KEY_PROFILE);
   },
   saveProfile(p: UserProfile): void {
+    if (unchanged(KEY_PROFILE, p)) return;
     write(KEY_PROFILE, p);
+    notify(PROFILE_EVENT);
   },
   clearProfile(): void {
     window.localStorage.removeItem(KEY_PROFILE);
+    notify(PROFILE_EVENT);
   },
   getPantry(): PantryItem[] {
     return read<PantryItem[]>(KEY_PANTRY) ?? [];

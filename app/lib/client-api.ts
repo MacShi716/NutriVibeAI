@@ -1,15 +1,25 @@
 import { parseConditions } from "./conditions";
 import { isIsoDate } from "./dates";
 import { finalizeRecipes, recipesFromLibrary } from "./gemini";
+import { STATIC_HOST } from "./host";
 import { createWeeklyPlan, swapWeeklyMeal, type PinnedMeal } from "./mealplan";
 import { orderIngredientsForGeneration } from "./pantry";
+import { storage } from "./storage";
 import type { GenerateResult, MealSlot, Recipe, WeeklyPlan } from "./types";
-import { VISION_DEMO_INGREDIENTS } from "./vision-demo";
+import { demoVisionIngredients, ingredientMatchesRestriction } from "./vision-demo";
 
 type ApiFailure = { kind: "unavailable" } | { kind: "error"; message: string };
 
 /** GitHub Pages 빌드에서만 켜진다. 없는 API로 요청을 보내지 않고 데모 경로를 쓴다. */
-const staticHost = process.env.NEXT_PUBLIC_STATIC_HOST === "true";
+const staticHost = STATIC_HOST;
+
+function currentRestrictions(): string {
+  return storage.getConditions()?.restrictions ?? "";
+}
+
+function withoutRestricted(ingredients: string[], restrictions: string): string[] {
+  return ingredients.filter((name) => !ingredientMatchesRestriction(name, restrictions));
+}
 
 /**
  * GitHub Pages에는 API 라우트가 없다. JSON이 아니면 서버가 없는 것으로 보고
@@ -157,18 +167,20 @@ export async function requestMealSwap(input: {
 export async function requestVision(
   body: FormData
 ): Promise<{ ok: true; ingredients: string[]; demo: boolean } | { ok: false; error: string }> {
-  if (staticHost) return { ok: true, ingredients: [...VISION_DEMO_INGREDIENTS], demo: true };
+  const restrictions = currentRestrictions();
+  if (staticHost) return { ok: true, ingredients: demoVisionIngredients(restrictions), demo: true };
   try {
+    if (restrictions && !body.has("restrictions")) body.append("restrictions", restrictions);
     const res = await fetch("/api/vision", { method: "POST", body });
     const type = (res.headers.get("content-type") ?? "").toLowerCase();
     if (!type.includes("json")) {
-      return { ok: true, ingredients: [...VISION_DEMO_INGREDIENTS], demo: true };
+      return { ok: true, ingredients: demoVisionIngredients(restrictions), demo: true };
     }
     let data: unknown;
     try {
       data = await res.json();
     } catch {
-      return { ok: true, ingredients: [...VISION_DEMO_INGREDIENTS], demo: true };
+      return { ok: true, ingredients: demoVisionIngredients(restrictions), demo: true };
     }
     const record = typeof data === "object" && data !== null ? (data as { ingredients?: unknown; demo?: unknown; error?: unknown }) : {};
     if (!res.ok) {
@@ -178,8 +190,9 @@ export async function requestVision(
     const ingredients = Array.isArray(record.ingredients)
       ? record.ingredients.filter((item): item is string => typeof item === "string")
       : [];
-    return { ok: true, ingredients, demo: record.demo === true };
+    const demo = record.demo === true;
+    return { ok: true, ingredients: demo ? withoutRestricted(ingredients, restrictions) : ingredients, demo };
   } catch {
-    return { ok: true, ingredients: [...VISION_DEMO_INGREDIENTS], demo: true };
+    return { ok: true, ingredients: demoVisionIngredients(restrictions), demo: true };
   }
 }

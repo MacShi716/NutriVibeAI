@@ -51,12 +51,21 @@ export default function DataBackup() {
   const btn = "rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50";
 
   return (
-    <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm" data-testid="data-backup">
+    <div
+      id="backup"
+      className="mt-6 scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+      data-testid="data-backup"
+    >
       <h2 className="text-lg font-bold text-gray-900">데이터 백업 및 기기 간 이동</h2>
       <p className="mt-1 text-xs leading-relaxed text-gray-500">
         로그인 없이 프로필(단백질 목표 포함), 즐겨찾기·기록, 쇼핑리스트, 포인트·레벨·업적·도감, 주간 식단, 식재료
         유통기한을 다른 기기로 옮길 수 있습니다. 데이터는 서버에 저장되지 않습니다.
       </p>
+      <ol className="mt-3 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-gray-600">
+        <li>이 기기에서 「동기화 코드 만들기」를 눌러 코드를 만듭니다.</li>
+        <li>다른 기기의 프로필 화면에서 그 코드를 붙여 넣고 「코드로 가져오기」를 누릅니다.</li>
+        <li>병합은 두 기기의 기록을 합치고, 교체는 이 기기의 데이터를 가져온 내용으로 바꿉니다.</li>
+      </ol>
       <div className="mt-3 flex flex-wrap gap-3 text-xs text-gray-600">
         <label className="flex items-center gap-1">
           <input

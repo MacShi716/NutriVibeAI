@@ -120,9 +120,8 @@ export default function PhotoIngredients({ onAdd }: { onAdd: (names: string[]) =
         사진은 인식에만 쓰이며 서버에 저장하지 않습니다. 큰 사진은 자동으로 줄이고, 4MB를 넘으면 업로드할 수 없습니다.
       </p>
       {demo && items.length > 0 && (
-        <p className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700">
-          데모 모드입니다. 비전 API 키가 설정되지 않아 예시 식재료를 보여 드립니다. GROQ_API_KEY 또는 VISION_API_KEY를
-          설정하면 사진 속 재료를 인식합니다.
+        <p className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700" data-testid="photo-demo-notice">
+          예시 식재료입니다. 지금은 사진 속 재료를 온라인으로 인식하지 않습니다.
         </p>
       )}
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}

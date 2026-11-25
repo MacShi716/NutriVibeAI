@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { translateToKorean } from "@/lib/alias";
-import { VISION_DEMO_INGREDIENTS } from "@/lib/vision-demo";
+import { demoVisionIngredients } from "@/lib/vision-demo";
 
 export const runtime = "nodejs";
 
@@ -97,10 +97,13 @@ async function recognize(cfg: VisionCall, file: File): Promise<string[]> {
 
 export async function POST(req: NextRequest) {
   let file: File | null = null;
+  let restrictions = "";
   try {
     const form = await req.formData();
     const uploaded = form.get("image");
     file = uploaded instanceof File ? uploaded : null;
+    const rawRestrictions = form.get("restrictions");
+    restrictions = typeof rawRestrictions === "string" ? rawRestrictions : "";
   } catch {
     file = null;
   }
@@ -113,7 +116,7 @@ export async function POST(req: NextRequest) {
 
   const cfg = visionConfig();
   if (!cfg) {
-    return NextResponse.json({ ingredients: VISION_DEMO_INGREDIENTS, demo: true });
+    return NextResponse.json({ ingredients: demoVisionIngredients(restrictions), demo: true });
   }
 
   try {

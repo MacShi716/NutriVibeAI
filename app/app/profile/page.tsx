@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { storage } from "@/lib/storage";
+import { CONDITIONS_EVENT, storage } from "@/lib/storage";
 import DailyNutrition from "@/components/DailyNutrition";
 import DataBackup from "@/components/DataBackup";
+import RestrictionPicker from "@/components/RestrictionPicker";
 import {
   bmiCategory,
   calcBMI,
@@ -11,7 +12,7 @@ import {
   targetCalories,
 } from "@/lib/profile";
 import { trackEvent } from "@/lib/gamification";
-import type { UserProfile } from "@/lib/types";
+import type { UserConditions, UserProfile } from "@/lib/types";
 
 const EMPTY: Omit<UserProfile, "updatedAt"> = {
   heightCm: null,
@@ -28,6 +29,30 @@ export default function ProfilePage() {
   const [goal, setGoal] = useState<"maintain" | "lose" | "gain">("maintain");
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
+  const [restrictions, setRestrictions] = useState("");
+
+  useEffect(() => {
+    const syncRestrictions = () => setRestrictions(storage.getConditions()?.restrictions ?? "");
+    syncRestrictions();
+    window.addEventListener(CONDITIONS_EVENT, syncRestrictions);
+    return () => window.removeEventListener(CONDITIONS_EVENT, syncRestrictions);
+  }, []);
+
+  function updateRestrictions(value: string) {
+    setRestrictions(value);
+    const prev = storage.getConditions();
+    const next: UserConditions = {
+      ingredients: prev?.ingredients ?? "",
+      preferences: prev?.preferences ?? "",
+      restrictions: value,
+      servings: prev?.servings ?? 2,
+      cookMinutes: prev?.cookMinutes ?? 20,
+      goalCalories: prev?.goalCalories ?? null,
+      goalProtein: prev?.goalProtein ?? null,
+      prioritizeExpiring: Boolean(prev?.prioritizeExpiring),
+    };
+    storage.saveConditions(next);
+  }
 
   useEffect(() => {
     const p = storage.getProfile();
@@ -196,12 +221,12 @@ export default function ProfilePage() {
               <option value="very_high">매우 활발함 (고강도)</option>
             </select>
           </div>
-          <div>
-            <label className={labelCls} htmlFor="proteinGoal">
+          <div id="proteinGoal" className="scroll-mt-24">
+            <label className={labelCls} htmlFor="proteinGoalInput">
               단백질 목표 (g) · 선택
             </label>
             <input
-              id="proteinGoal"
+              id="proteinGoalInput"
               type="number"
               min={1}
               max={400}
@@ -236,6 +261,17 @@ export default function ProfilePage() {
           {error && <span className="self-center text-sm text-red-600">{error}</span>}
         </div>
       </div>
+
+      <section id="restrictions" className="mt-5 scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-5">
+        <h2 className="text-base font-bold text-gray-900">기피·알레르기</h2>
+        <p className="mt-1 text-xs leading-relaxed text-gray-500">
+          선택한 항목은 홈의 레시피 추천과 주간 식단에 함께 반영됩니다. 선택하면 바로 이 기기에 저장됩니다.
+          의료적 진단이 아니며, 포장의 원재료명과 교차 오염은 직접 확인해 주세요.
+        </p>
+        <div className="mt-3">
+          <RestrictionPicker value={restrictions} onChange={updateRestrictions} inputId="profile-restrictions" />
+        </div>
+      </section>
 
       {bmi && (
         <div className="mt-5 rounded-2xl border border-gray-200 bg-white p-5">

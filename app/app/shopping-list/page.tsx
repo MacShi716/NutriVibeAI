@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { storage } from "@/lib/storage";
+import { ingredientExpiryMark } from "@/lib/pantry";
 import {
   buildShoppingList,
   groupShoppingItems,
@@ -10,9 +11,11 @@ import {
 } from "@/lib/shopping";
 import { trackEvent } from "@/lib/gamification";
 import type { ShoppingItem } from "@/lib/shopping";
+import type { PantryItem } from "@/lib/types";
 
 export default function ShoppingListPage() {
   const [items, setItems] = useState<ShoppingItem[]>([]);
+  const [pantry, setPantry] = useState<PantryItem[]>([]);
   const [loaded, setLoaded] = useState(false);
   const [copied, setCopied] = useState(false);
   const [mergedFav, setMergedFav] = useState(false);
@@ -28,6 +31,7 @@ export default function ShoppingListPage() {
       );
       setItems(mergeShoppingItems(lists));
     }
+    setPantry(storage.getPantry());
     setLoaded(true);
   }, []);
 
@@ -104,12 +108,18 @@ export default function ShoppingListPage() {
           <p className="text-gray-600">
             누락된 식재료가 없거나 아직 생성된 레시피가 없습니다.
           </p>
-          <Link
-            href="/"
-            className="mt-4 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
-          >
-            조건 입력하러 가기
-          </Link>
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <Link
+              href="/meal-plan"
+              data-testid="shopping-merge-weekly"
+              className="inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
+            >
+              주간 식단에서 장보기 합치기
+            </Link>
+            <Link href="/" className="text-sm font-medium text-brand-700 underline">
+              조건 입력하러 가기
+            </Link>
+          </div>
         </div>
       ) : (
         <>
@@ -126,30 +136,35 @@ export default function ShoppingListPage() {
               >
                 <h2 className="mb-2 text-sm font-bold text-gray-700">{g.label}</h2>
                 <ul className="space-y-1">
-                  {g.items.map((item) => (
-                    <li key={item.name}>
-                      <label className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-gray-50">
-                        <input
-                          type="checkbox"
-                          checked={item.checked}
-                          onChange={() => toggle(item.name)}
-                          className="h-4 w-4 accent-brand-600"
-                        />
-                        <span
-                          className={`flex-1 text-sm ${
-                            item.checked
-                              ? "text-gray-400 line-through"
-                              : "text-gray-800"
-                          }`}
-                        >
-                          {item.name}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {item.amount}
-                        </span>
-                      </label>
-                    </li>
-                  ))}
+                  {g.items.map((item) => {
+                    const expiryMark = ingredientExpiryMark(item.name, pantry);
+                    return (
+                      <li key={item.name}>
+                        <label className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-gray-50">
+                          <input
+                            type="checkbox"
+                            checked={item.checked}
+                            onChange={() => toggle(item.name)}
+                            className="h-4 w-4 accent-brand-600"
+                          />
+                          <span
+                            className={`flex-1 text-sm ${
+                              item.checked ? "text-gray-400 line-through" : "text-gray-800"
+                            }`}
+                          >
+                            {item.name}
+                          </span>
+                          {expiryMark === "expired" && (
+                            <span className="text-[11px] font-semibold text-red-600">기한 지남</span>
+                          )}
+                          {expiryMark === "soon" && (
+                            <span className="text-[11px] font-semibold text-amber-700">임박</span>
+                          )}
+                          <span className="text-xs text-gray-500">{item.amount}</span>
+                        </label>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             ))}

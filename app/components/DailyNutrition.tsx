@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DAILY_EVENT, resolveMacroGoals } from "@/lib/daily";
-import { storage } from "@/lib/storage";
+import Link from "next/link";
+import { DAILY_EVENT, resolveMacroGoals, type MacroGoals } from "@/lib/daily";
+import { PROFILE_EVENT, storage } from "@/lib/storage";
 import type { DailyEntry } from "@/lib/types";
 
 function Bar({
@@ -41,20 +42,25 @@ function Bar({
 
 export default function DailyNutrition() {
   const [entries, setEntries] = useState<DailyEntry[]>([]);
+  const [goals, setGoals] = useState<MacroGoals | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const load = () => {
       setEntries(storage.getDailyLog().entries);
+      setGoals(resolveMacroGoals());
       setReady(true);
     };
     load();
     window.addEventListener(DAILY_EVENT, load);
-    return () => window.removeEventListener(DAILY_EVENT, load);
+    window.addEventListener(PROFILE_EVENT, load);
+    return () => {
+      window.removeEventListener(DAILY_EVENT, load);
+      window.removeEventListener(PROFILE_EVENT, load);
+    };
   }, []);
 
-  if (!ready) return null;
-  const goals = resolveMacroGoals();
+  if (!ready || !goals) return null;
   const sum = entries.reduce(
     (acc, entry) => ({
       calories: acc.calories + entry.calories,
@@ -71,7 +77,7 @@ export default function DailyNutrition() {
         <h2 className="text-sm font-bold text-gray-900">오늘 영양 진행</h2>
         <span className="text-xs text-gray-400">{entries.length}끼 · 1인분 기준</span>
       </div>
-      {entries.length === 0 ? (
+      {entries.length === 0 && goals.calories == null && goals.protein == null ? (
         <p className="mt-2 text-xs text-gray-500">
           레시피에서 오늘 식단에 담으면 열량과 단백질, 탄수화물, 지방 진행이 여기에 표시됩니다.
         </p>
@@ -88,6 +94,14 @@ export default function DailyNutrition() {
           />
           <Bar label="지방" value={sum.fat} goal={goals.fat} unit="g" note={goals.fatIsReference ? "참고" : undefined} />
         </div>
+      )}
+      {goals.protein == null && (
+        <p className="mt-3 text-xs text-gray-500">
+          단백질 목표가 없습니다.{" "}
+          <Link href="/profile#proteinGoal" className="font-medium text-brand-700 underline">
+            프로필에서 단백질 목표 입력
+          </Link>
+        </p>
       )}
       <p className="mt-3 text-xs text-gray-400">
         영양 정보는 참고용입니다. 탄수화물·지방 막대는 열량과 단백질 목표로 나눈 참고 배분입니다.
