@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { displayRestrictions, format } from "@/i18n/text";
 import { CONDITIONS_EVENT, storage } from "@/lib/storage";
 
 export default function RestrictionBadge() {
+  const { t } = useUi();
   const [text, setText] = useState("");
 
   useEffect(() => {
@@ -21,7 +24,7 @@ export default function RestrictionBadge() {
 
   return (
     <p className="mt-2 text-[11px] text-amber-700" data-testid="restriction-badge">
-      기피·알레르기 적용 중: {text}
+      {format(t.footer.restrictionsActive, { list: displayRestrictions(text, t) })}
     </p>
   );
 }

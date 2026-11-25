@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { restrictionLabel } from "@/i18n/text";
 import { joinRestrictions, parseRestrictionSelection, RESTRICTION_PRESETS } from "@/lib/restrictions";
 
 export default function RestrictionPicker({
@@ -12,6 +14,7 @@ export default function RestrictionPicker({
   onChange: (next: string) => void;
   inputId: string;
 }) {
+  const { t } = useUi();
   const parsed = parseRestrictionSelection(value);
   const [customDraft, setCustomDraft] = useState(parsed.custom);
   const [focused, setFocused] = useState(false);
@@ -29,7 +32,7 @@ export default function RestrictionPicker({
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2" role="group" aria-label="기피 및 알레르기">
+      <div className="flex flex-wrap gap-2" role="group" aria-label={t.restrictions.group}>
         {RESTRICTION_PRESETS.map((name) => {
           const on = parsed.presets.includes(name);
           return (
@@ -45,13 +48,13 @@ export default function RestrictionPicker({
                   : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
               }`}
             >
-              {name}
+              {restrictionLabel(t, name)}
             </button>
           );
         })}
       </div>
       <label className="mt-3 block text-xs text-gray-500" htmlFor={inputId}>
-        그 외 기피 식재료
+        {t.restrictions.otherLabel}
         <input
           id={inputId}
           value={customDraft}
@@ -62,7 +65,7 @@ export default function RestrictionPicker({
             setCustomDraft(next);
             onChange(joinRestrictions(parsed.presets, next));
           }}
-          placeholder="예: 고수, 조개 (쉼표로 구분)"
+          placeholder={t.restrictions.otherPlaceholder}
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
         />
       </label>

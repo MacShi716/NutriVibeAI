@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUi } from "@/components/UiProvider";
+import { format } from "@/i18n/text";
 import { DAILY_EVENT, resolveMacroGoals, type MacroGoals } from "@/lib/daily";
 import { PROFILE_EVENT, storage } from "@/lib/storage";
 import CalorieFormula from "@/components/CalorieFormula";
@@ -43,6 +45,7 @@ function Bar({
 }
 
 export default function DailyNutrition() {
+  const { t } = useUi();
   const [entries, setEntries] = useState<DailyEntry[]>([]);
   const [goals, setGoals] = useState<MacroGoals | null>(null);
   const [ready, setReady] = useState(false);
@@ -76,49 +79,52 @@ export default function DailyNutrition() {
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" data-testid="daily-nutrition">
       <div className="flex items-baseline justify-between gap-2">
-        <h2 className="text-sm font-bold text-gray-900">오늘 영양 진행</h2>
-        <span className="text-xs text-gray-400">{entries.length}끼 · 1인분 기준</span>
+        <h2 className="text-sm font-bold text-gray-900">{t.daily.title}</h2>
+        <span className="text-xs text-gray-400">{format(t.daily.meals, { n: entries.length })}</span>
       </div>
       {entries.length === 0 && goals.calories == null && goals.protein == null ? (
-        <p className="mt-2 text-xs text-gray-500">
-          레시피에서 오늘 식단에 담으면 열량과 단백질, 탄수화물, 지방 진행이 여기에 표시됩니다.
-        </p>
+        <p className="mt-2 text-xs text-gray-500">{t.daily.empty}</p>
       ) : (
         <div className="mt-3 space-y-3">
-          <Bar label="열량" value={sum.calories} goal={goals.calories} unit="kcal" />
+          <Bar label={t.daily.calories} value={sum.calories} goal={goals.calories} unit="kcal" />
           <CalorieFormula parts={caloriePartsOf(entries)} />
           {entries.length > 0 && (
             <ul className="space-y-1 text-xs text-gray-500">
               {entries.map((entry) => (
                 <li key={entry.id}>
-                  {entry.title} {entry.calories} kcal
-                  {entry.servingsLogged ? ` · ${entry.servingsLogged}인분` : ""}
+                  {entry.servingsLogged
+                    ? format(t.daily.entryServings, { title: entry.title, calories: entry.calories, n: entry.servingsLogged })
+                    : format(t.daily.entryMeta, { title: entry.title, calories: entry.calories })}
                 </li>
               ))}
             </ul>
           )}
-          <Bar label="단백질" value={sum.protein} goal={goals.protein} unit="g" />
+          <Bar label={t.daily.protein} value={sum.protein} goal={goals.protein} unit="g" />
           <Bar
-            label="탄수화물"
+            label={t.daily.carbs}
             value={sum.carbs}
             goal={goals.carbs}
             unit="g"
-            note={goals.carbsIsReference ? "참고" : undefined}
+            note={goals.carbsIsReference ? t.common.reference : undefined}
           />
-          <Bar label="지방" value={sum.fat} goal={goals.fat} unit="g" note={goals.fatIsReference ? "참고" : undefined} />
+          <Bar
+            label={t.daily.fat}
+            value={sum.fat}
+            goal={goals.fat}
+            unit="g"
+            note={goals.fatIsReference ? t.common.reference : undefined}
+          />
         </div>
       )}
       {goals.protein == null && (
         <p className="mt-3 text-xs text-gray-500">
-          단백질 목표가 없습니다.{" "}
+          {t.daily.noProtein}{" "}
           <Link href="/profile#proteinGoal" className="font-medium text-brand-700 underline">
-            프로필에서 단백질 목표 입력
+            {t.daily.proteinLink}
           </Link>
         </p>
       )}
-      <p className="mt-3 text-xs text-gray-400">
-        영양 정보는 참고용입니다. 탄수화물·지방 막대는 열량과 단백질 목표로 나눈 참고 배분입니다.
-      </p>
+      <p className="mt-3 text-xs text-gray-400">{t.daily.note}</p>
     </section>
   );
 }

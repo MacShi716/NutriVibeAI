@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { achievementCopy, format, levelTitle, missionTitle } from "@/i18n/text";
 import type { TrackResult } from "@/lib/gamification";
 
 type ToastItem = {
@@ -14,6 +16,7 @@ type ToastItem = {
 let seq = 0;
 
 export default function GameToast() {
+  const { t } = useUi();
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   useEffect(() => {
@@ -21,7 +24,7 @@ export default function GameToast() {
       const id = ++seq;
       setToasts((prev) => [...prev.slice(-3), { ...item, id }]);
       setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== id));
+        setToasts((prev) => prev.filter((item) => item.id !== id));
       }, 3600);
     }
 
@@ -32,24 +35,25 @@ export default function GameToast() {
         push({
           kind: "level",
           icon: "🎖️",
-          title: `레벨 ${detail.newLevel} 달성!`,
-          desc: `새 칭호: ${detail.newTitle}`,
+          title: format(t.toast.level, { level: detail.newLevel }),
+          desc: format(t.toast.title, { title: levelTitle(t, detail.newLevel) }),
         });
       }
       for (const a of detail.newAchievements) {
+        const copy = achievementCopy(t, a.id);
         push({
           kind: "achievement",
           icon: a.icon,
-          title: `업적 달성: ${a.title}`,
-          desc: a.desc,
+          title: format(t.toast.achievement, { title: copy?.title ?? a.title }),
+          desc: copy?.desc ?? a.desc,
         });
       }
       for (const m of detail.completedMissions) {
         push({
           kind: "mission",
           icon: m.icon,
-          title: `미션 완료: ${m.title}`,
-          desc: `+${m.xp} 포인트`,
+          title: format(t.toast.mission, { title: missionTitle(t, m.id) ?? m.title }),
+          desc: format(t.toast.missionXp, { n: m.xp }),
         });
       }
       if (
@@ -61,32 +65,27 @@ export default function GameToast() {
         push({
           kind: "xp",
           icon: "✨",
-          title: `+${detail.xpGained} 포인트`,
-          desc: "경험치를 획득했습니다",
+          title: format(t.toast.xp, { n: detail.xpGained }),
+          desc: t.toast.xpDesc,
         });
       }
     }
 
     window.addEventListener("nv:game", onGame);
     return () => window.removeEventListener("nv:game", onGame);
-  }, []);
+  }, [t]);
 
   if (toasts.length === 0) return null;
 
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-50 flex w-72 flex-col gap-2">
-      {toasts.map((t) => (
-        <div
-          key={t.id}
-          className="anim-toast-in rounded-xl border border-brand-100 bg-white px-4 py-3 shadow-lg"
-        >
+      {toasts.map((item) => (
+        <div key={item.id} className="anim-toast-in rounded-xl border border-brand-100 bg-white px-4 py-3 shadow-lg">
           <div className="flex items-center gap-2">
-            <span className="text-xl">{t.icon}</span>
+            <span className="text-xl">{item.icon}</span>
             <div className="min-w-0">
-              <div className="truncate text-sm font-bold text-gray-900">
-                {t.title}
-              </div>
-              <div className="truncate text-xs text-gray-500">{t.desc}</div>
+              <div className="truncate text-sm font-bold text-gray-900">{item.title}</div>
+              <div className="truncate text-xs text-gray-500">{item.desc}</div>
             </div>
           </div>
         </div>

@@ -1,9 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { expiryLabel, expiryState, PANTRY_EVENT, syncPantry } from "@/lib/pantry";
+import { useUi } from "@/components/UiProvider";
+import { expiryState, PANTRY_EVENT, syncPantry, type ExpiryState } from "@/lib/pantry";
 import { storage } from "@/lib/storage";
 import type { PantryItem } from "@/lib/types";
+
+function expiryText(state: ExpiryState, labels: { ok: string; soon: string; expired: string }): string {
+  switch (state) {
+    case "none":
+      return "";
+    case "ok":
+      return labels.ok;
+    case "soon":
+      return labels.soon;
+    case "expired":
+      return labels.expired;
+    default: {
+      const never: never = state;
+      return never;
+    }
+  }
+}
 
 export default function PantryEditor({
   names,
@@ -14,6 +32,7 @@ export default function PantryEditor({
   prioritize: boolean;
   onPrioritize: (value: boolean) => void;
 }) {
+  const { t } = useUi();
   const [items, setItems] = useState<PantryItem[]>([]);
   const namesKey = names.join("\n");
 
@@ -33,11 +52,7 @@ export default function PantryEditor({
   }
 
   if (names.length === 0) {
-    return (
-      <p className="mt-2 text-xs text-gray-400">
-        식재료를 입력하면 구매일과 유통기한을 선택적으로 적을 수 있습니다.
-      </p>
-    );
+    return <p className="mt-2 text-xs text-gray-400">{t.pantry.empty}</p>;
   }
 
   return (
@@ -49,12 +64,12 @@ export default function PantryEditor({
           checked={prioritize}
           onChange={(e) => onPrioritize(e.target.checked)}
         />
-        <span>유통기한이 가까운 재료를 레시피 추천에서 우선 사용</span>
+        <span>{t.pantry.prioritize}</span>
       </label>
       <ul className="space-y-2">
         {items.map((item, index) => {
           const state = expiryState(item.expiresOn);
-          const badge = expiryLabel(state);
+          const badge = expiryText(state, t.expiry);
           return (
             <li key={`${item.name}-${index}`} className="rounded-lg bg-gray-50 px-3 py-2">
               <div className="flex items-center justify-between gap-2">
@@ -74,18 +89,18 @@ export default function PantryEditor({
                 )}
               </div>
               <label className="mt-2 block text-[11px] text-gray-500">
-                보유량 · 선택
+                {t.pantry.amount}
                 <input
                   type="text"
                   value={item.amount ?? ""}
                   onChange={(e) => update(index, "amount", e.target.value)}
-                  placeholder="예: 200g, 2개"
+                  placeholder={t.pantry.amountPlaceholder}
                   className="mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-700"
                 />
               </label>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <label className="text-[11px] text-gray-500">
-                  구매일 · 선택
+                  {t.pantry.purchased}
                   <input
                     type="date"
                     value={item.purchasedOn ?? ""}
@@ -94,7 +109,7 @@ export default function PantryEditor({
                   />
                 </label>
                 <label className="text-[11px] text-gray-500">
-                  유통기한 · 선택
+                  {t.pantry.expires}
                   <input
                     type="date"
                     value={item.expiresOn ?? ""}

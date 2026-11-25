@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUi } from "@/components/UiProvider";
+import { format } from "@/i18n/text";
 import { expiryState, PANTRY_EVENT } from "@/lib/pantry";
 import { storage } from "@/lib/storage";
 import type { PantryItem, UserConditions } from "@/lib/types";
@@ -18,6 +20,7 @@ const EMPTY: UserConditions = {
 };
 
 export default function ExpiryBanner() {
+  const { t } = useUi();
   const [items, setItems] = useState<PantryItem[]>([]);
   const [hidden, setHidden] = useState(false);
   const [priorityOn, setPriorityOn] = useState(false);
@@ -51,17 +54,18 @@ export default function ExpiryBanner() {
 
   const expired = flagged.filter((item) => expiryState(item.expiresOn) === "expired").map((item) => item.name);
   const soon = flagged.filter((item) => expiryState(item.expiresOn) === "soon").map((item) => item.name);
-  const shown = (names: string[]) => (names.length > 6 ? `${names.slice(0, 6).join(", ")} 외 ${names.length - 6}개` : names.join(", "));
+  const shown = (names: string[]) =>
+    names.length > 6 ? format(t.expiryBanner.more, { names: names.slice(0, 6).join(", "), n: names.length - 6 }) : names.join(", ");
 
   return (
     <div className="border-b border-amber-200 bg-amber-50" data-testid="expiry-banner">
       <div className="mx-auto flex max-w-4xl flex-col gap-2 px-4 py-2 text-xs text-amber-800 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p>
-            <span className="font-semibold">유통기한 안내. </span>
-            {expired.length > 0 && <span>기한이 지난 재료: {shown(expired)}. </span>}
-            {soon.length > 0 && <span>곧 소비하면 좋은 재료: {shown(soon)}. </span>}
-            주간 식단에서 이 재료를 먼저 쓰도록 할 수 있습니다.
+            <span className="font-semibold">{t.expiryBanner.title} </span>
+            {expired.length > 0 && <span>{format(t.expiryBanner.expired, { names: shown(expired) })} </span>}
+            {soon.length > 0 && <span>{format(t.expiryBanner.soon, { names: shown(soon) })} </span>}
+            {t.expiryBanner.hint}
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
             <button
@@ -71,15 +75,15 @@ export default function ExpiryBanner() {
               onClick={enablePriority}
               disabled={priorityOn}
             >
-              {priorityOn ? "임박 재료 우선 추천 켜짐" : "임박 재료 우선 추천 켜기"}
+              {priorityOn ? t.expiryBanner.priorityOn : t.expiryBanner.priorityOff}
             </button>
             <Link href="/meal-plan" className="rounded-md px-2 py-1 font-medium text-amber-800 underline">
-              주간 식단 보기
+              {t.expiryBanner.openPlan}
             </Link>
           </div>
         </div>
         <button type="button" className="shrink-0 self-start text-amber-700 underline" onClick={() => setHidden(true)}>
-          닫기
+          {t.common.close}
         </button>
       </div>
     </div>

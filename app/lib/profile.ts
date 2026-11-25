@@ -7,12 +7,33 @@ export function calcBMI(heightCm: number, weightKg: number): number {
   return weightKg / (h * h);
 }
 
-/** 대한비만학회 기준 BMI 분류 (참고용) */
+export type BmiBand = "under" | "normal" | "over" | "obese";
+
+/** 대한비만학회 구간. 화면 문구는 로케일 파일이 담당하고, 진단이 아니다. */
+export function bmiBand(bmi: number): BmiBand {
+  if (bmi < 18.5) return "under";
+  if (bmi < 23) return "normal";
+  if (bmi < 25) return "over";
+  return "obese";
+}
+
+/** 대한비만학회 기준 BMI 분류 (참고용). 기존 한국어 문구를 유지한다. */
 export function bmiCategory(bmi: number): string {
-  if (bmi < 18.5) return "저체중";
-  if (bmi < 23) return "정상";
-  if (bmi < 25) return "과체중";
-  return "비만";
+  const band = bmiBand(bmi);
+  switch (band) {
+    case "under":
+      return "저체중";
+    case "normal":
+      return "정상";
+    case "over":
+      return "과체중";
+    case "obese":
+      return "비만";
+    default: {
+      const never: never = band;
+      return never;
+    }
+  }
 }
 
 type DailyCalorieEstimate = {

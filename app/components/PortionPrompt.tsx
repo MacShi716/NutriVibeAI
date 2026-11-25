@@ -1,6 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { format } from "@/i18n/text";
 
 export const SERVING_CHIPS = [1, 2, 3, 4] as const;
 
@@ -24,6 +26,7 @@ export default function PortionPrompt({
   onConfirm: (servingsById: Record<string, number>) => void;
   onCancel: () => void;
 }) {
+  const { t } = useUi();
   const initial = useMemo(() => {
     const next: Record<string, string> = {};
     for (const item of items) next[item.id] = "";
@@ -42,7 +45,7 @@ export default function PortionPrompt({
     for (const item of items) {
       const servings = parseServings(values[item.id] ?? "");
       if (servings == null) {
-        setError("드실 인분을 입력해 주세요. 임의로 정하지 않습니다.");
+        setError(t.portion.error);
         return;
       }
       servingsById[item.id] = servings;
@@ -58,13 +61,11 @@ export default function PortionPrompt({
       aria-labelledby="portion-prompt-title"
       data-testid="portion-prompt"
     >
-      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-5 shadow-lg">
+      <div className="nv-chrome w-full max-w-md rounded-2xl border p-5 shadow-lg">
         <h2 id="portion-prompt-title" className="text-base font-bold text-gray-900">
-          드실 양을 알려 주세요
+          {t.portion.title}
         </h2>
-        <p className="mt-1 text-sm text-gray-600">
-          몇 인분을 기록할지 직접 입력해 주세요. 기본 인분을 가정하지 않습니다.
-        </p>
+        <p className="mt-1 text-sm text-gray-600">{t.portion.body}</p>
         <ul className="mt-4 space-y-3">
           {items.map((item) => (
             <li key={item.id} className="rounded-lg bg-gray-50 px-3 py-3">
@@ -82,7 +83,7 @@ export default function PortionPrompt({
                         : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
                     }`}
                   >
-                    {count}인분
+                    {format(t.portion.chip, { n: count })}
                   </button>
                 ))}
                 <button
@@ -95,11 +96,11 @@ export default function PortionPrompt({
                       : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
                   }`}
                 >
-                  0.5인분
+                  {t.portion.half}
                 </button>
               </div>
               <label className="mt-2 block text-xs text-gray-500">
-                인분
+                {t.portion.servings}
                 <input
                   type="number"
                   min={0.5}
@@ -107,7 +108,7 @@ export default function PortionPrompt({
                   step={0.5}
                   inputMode="decimal"
                   value={values[item.id] ?? ""}
-                  placeholder="예: 1"
+                  placeholder={t.portion.placeholder}
                   onChange={(e) => setValue(item.id, e.target.value)}
                   className="mt-1 w-full rounded-md border border-gray-300 bg-white px-2 py-1.5 text-sm text-gray-800"
                 />
@@ -122,14 +123,14 @@ export default function PortionPrompt({
             onClick={onCancel}
             className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
           >
-            취소
+            {t.common.cancel}
           </button>
           <button
             type="button"
             onClick={confirm}
             className="flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-bold text-white hover:bg-brand-700"
           >
-            이 양으로 담기
+            {t.portion.confirm}
           </button>
         </div>
       </div>

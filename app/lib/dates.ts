@@ -25,8 +25,14 @@ export function weekDates(start: string): string[] {
   return Array.from({ length: 7 }, (_, index) => addDays(start, index));
 }
 
-export function weekdayKo(iso: string): string {
+const WEEKDAY_KO = ["일", "월", "화", "수", "목", "금", "토"] as const;
+
+/** 0=일요일 … 6=토요일. 화면 문구는 로케일 파일에서 고른다. */
+export function weekdayIndex(iso: string): number {
   const [y, m, d] = iso.split("-").map(Number);
-  const names = ["일", "월", "화", "수", "목", "금", "토"];
-  return names[new Date(y, m - 1, d).getDay()] ?? "";
+  return new Date(y, m - 1, d).getDay();
+}
+
+export function weekdayKo(iso: string): string {
+  return WEEKDAY_KO[weekdayIndex(iso)] ?? "";
 }

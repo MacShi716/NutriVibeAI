@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { format, localizeMessage } from "@/i18n/text";
+import type { Messages } from "@/i18n/messages/types";
 import { storage, SUPPLEMENTS_EVENT } from "@/lib/storage";
 import {
   DOSE_UNITS,
@@ -12,6 +15,35 @@ import {
 } from "@/lib/supplements";
 import type { SupplementItem, SupplementLog } from "@/lib/types";
 
+function unitLabel(unit: string, messages: Messages): string {
+  switch (unit) {
+    case "정":
+      return messages.supplements.unitTablet;
+    case "캡슐":
+      return messages.supplements.unitCapsule;
+    case "포":
+      return messages.supplements.unitPacket;
+    case "ml":
+      return messages.supplements.unitMl;
+    case "g":
+      return messages.supplements.unitG;
+    case "회":
+      return messages.supplements.unitCount;
+    default:
+      return unit;
+  }
+}
+
+function displayDose(label: string, messages: Messages): string {
+  const units = ["캡슐", "정", "포", "ml", "g", "회"];
+  for (const unit of units) {
+    const spaced = ` ${unit}`;
+    if (label.endsWith(spaced)) return `${label.slice(0, -spaced.length)} ${unitLabel(unit, messages)}`.trim();
+    if (label.endsWith(unit)) return `${label.slice(0, -unit.length)} ${unitLabel(unit, messages)}`.trim();
+  }
+  return label;
+}
+
 const EMPTY_FORM = {
   name: "",
   doseLabel: "",
@@ -21,6 +53,7 @@ const EMPTY_FORM = {
 };
 
 export default function SupplementPlanner() {
+  const { t } = useUi();
   const [items, setItems] = useState<SupplementItem[]>([]);
   const [log, setLog] = useState<SupplementLog>({ date: "", taken: {} });
   const [form, setForm] = useState(EMPTY_FORM);
@@ -79,15 +112,12 @@ export default function SupplementPlanner() {
 
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" data-testid="supplement-planner">
-      <h2 className="text-sm font-bold text-gray-900">오늘의 영양제</h2>
-      <p className="mt-1 text-xs leading-relaxed text-gray-500">
-        이름과 하루 횟수, 1회 분량을 직접 등록해 주세요. 기본 영양제 목록은 비어 있으며, 이 기기에만 저장됩니다.
-        복용 기록은 의학적 처방이나 진단이 아닙니다.
-      </p>
+      <h2 className="text-sm font-bold text-gray-900">{t.supplements.title}</h2>
+      <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.supplements.intro}</p>
 
       {items.length === 0 ? (
         <p className="mt-3 rounded-lg bg-gray-50 px-3 py-3 text-sm text-gray-600">
-          아직 등록한 영양제가 없습니다. 아래에서 추가해 주세요.
+          {t.supplements.empty}
         </p>
       ) : (
         <ul className="mt-3 space-y-2">
@@ -99,9 +129,9 @@ export default function SupplementPlanner() {
                   <div>
                     <p className="text-sm font-semibold text-gray-900">{item.name}</p>
                     <p className="mt-0.5 text-xs text-gray-500">
-                      하루 {item.dailyCount}회
-                      {item.doseLabel ? ` · 1회 ${item.doseLabel}` : ""}
-                      {item.reminderTime ? ` · 알림 ${item.reminderTime}` : ""}
+                      {format(t.supplements.schedule, { count: item.dailyCount })}
+                      {item.doseLabel ? ` · ${format(t.supplements.dose, { dose: displayDose(item.doseLabel, t) })}` : ""}
+                      {item.reminderTime ? ` · ${format(t.supplements.remindAt, { time: item.reminderTime })}` : ""}
                     </p>
                   </div>
                   <div className="flex gap-2">
@@ -110,14 +140,14 @@ export default function SupplementPlanner() {
                       onClick={() => startEdit(item)}
                       className="text-xs font-medium text-brand-700 hover:underline"
                     >
-                      수정
+                      {t.supplements.edit}
                     </button>
                     <button
                       type="button"
                       onClick={() => removeSupplement(item.id)}
                       className="text-xs font-medium text-red-600 hover:underline"
                     >
-                      삭제
+                      {t.common.remove}
                     </button>
                   </div>
                 </div>
@@ -137,12 +167,12 @@ export default function SupplementPlanner() {
                             : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
                         }`}
                       >
-                        {n}회차 {on ? "복용함" : "미복용"}
+                        {on ? format(t.supplements.taken, { n }) : format(t.supplements.missed, { n })}
                       </button>
                     );
                   })}
                   <span className="text-xs text-gray-500">
-                    오늘 {taken}/{item.dailyCount}
+                    {format(t.supplements.today, { taken, total: item.dailyCount })}
                   </span>
                 </div>
               </li>
@@ -152,24 +182,24 @@ export default function SupplementPlanner() {
       )}
 
       <form onSubmit={submit} className="mt-4 space-y-3 border-t border-gray-100 pt-4">
-        <h3 className="text-xs font-bold text-gray-800">{editingId ? "영양제 수정" : "영양제 추가"}</h3>
+        <h3 className="text-xs font-bold text-gray-800">{editingId ? t.supplements.editTitle : t.supplements.addTitle}</h3>
         <label className="block text-xs text-gray-500">
-          이름
+          {t.supplements.name}
           <input
             value={form.name}
             onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
-            placeholder="예: 비타민"
+            placeholder={t.supplements.namePlaceholder}
             className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800"
           />
         </label>
         <div className="grid gap-3 sm:grid-cols-2">
           <label className="block text-xs text-gray-500">
-            1회 분량
+            {t.supplements.doseLabel}
             <span className="mt-1 flex gap-2">
               <input
                 value={form.doseLabel}
                 onChange={(e) => setForm((prev) => ({ ...prev, doseLabel: e.target.value }))}
-                placeholder="예: 1"
+                placeholder={t.supplements.dosePlaceholder}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800"
               />
               <select
@@ -177,17 +207,17 @@ export default function SupplementPlanner() {
                 onChange={(e) => setForm((prev) => ({ ...prev, unit: e.target.value }))}
                 className="rounded-lg border border-gray-300 bg-white px-2 py-2 text-sm text-gray-800"
               >
-                <option value="">단위</option>
+                <option value="">{t.supplements.unit}</option>
                 {DOSE_UNITS.map((unit) => (
                   <option key={unit} value={unit}>
-                    {unit}
+                    {unitLabel(unit, t)}
                   </option>
                 ))}
               </select>
             </span>
           </label>
           <label className="block text-xs text-gray-500">
-            하루 횟수
+            {t.supplements.dailyCount}
             <input
               type="number"
               min={1}
@@ -199,7 +229,7 @@ export default function SupplementPlanner() {
           </label>
         </div>
         <label className="block text-xs text-gray-500">
-          다음 복용 알림 시각 (선택)
+          {t.supplements.time}
           <input
             type="time"
             value={form.reminderTime}
@@ -207,7 +237,7 @@ export default function SupplementPlanner() {
             className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800"
           />
         </label>
-        {error && <p className="text-xs text-red-600">{error}</p>}
+        {error && <p className="text-xs text-red-600">{localizeMessage(error, t)}</p>}
         <div className="flex gap-2">
           {editingId && (
             <button
@@ -215,14 +245,14 @@ export default function SupplementPlanner() {
               onClick={resetForm}
               className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
             >
-              취소
+              {t.common.cancel}
             </button>
           )}
           <button
             type="submit"
             className="flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-bold text-white hover:bg-brand-700"
           >
-            {editingId ? "수정 저장" : "추가"}
+            {editingId ? t.supplements.saveEdit : t.supplements.add}
           </button>
         </div>
       </form>

@@ -10,6 +10,7 @@ export type DueReminder = {
   body: string;
   href?: string;
   scheduledMinutes: number;
+  supplement?: { name: string; dose: string; taken: number; total: number };
 };
 
 export const VEGGIE_LUNCH_MINUTES = 11 * 60 + 50;
@@ -99,6 +100,7 @@ export function listDueReminders(
       body: `${item.name}${dose}을(를) 복용할 시각입니다. 오늘 ${takenToday(item.id)}/${item.dailyCount}회 기록되었습니다.`,
       href: "/supplements",
       scheduledMinutes: scheduled,
+      supplement: { name: item.name, dose, taken: takenToday(item.id), total: item.dailyCount },
     });
   }
   return due;

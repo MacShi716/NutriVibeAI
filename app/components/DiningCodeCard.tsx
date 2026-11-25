@@ -1,29 +1,34 @@
 "use client";
 
 import { useState } from "react";
+import { useUi } from "@/components/UiProvider";
 import { DININGCODE_HOME, DININGCODE_SUGGESTIONS, diningCodeSearchUrl } from "@/lib/diningcode";
 
 export default function DiningCodeCard({ compact }: { compact?: boolean }) {
+  const { t } = useUi();
   const [query, setQuery] = useState("");
   const url = diningCodeSearchUrl(query);
+  const labels: Record<(typeof DININGCODE_SUGGESTIONS)[number], string> = {
+    한식: t.dining.suggestKorean,
+    점심: t.dining.suggestLunch,
+    분식: t.dining.suggestSnack,
+    백반: t.dining.suggestSet,
+  };
 
   return (
     <section
       className={compact ? "rounded-xl border border-gray-200 bg-white p-4" : "rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"}
       data-testid="diningcode-entry"
     >
-      <h2 className="text-sm font-bold text-gray-900">외식 맛집 · 다이닝코드</h2>
-      <p className="mt-1 text-xs leading-relaxed text-gray-500">
-        밖에서 드실 때는 다이닝코드의 공개 검색 페이지로 이동합니다. 이 앱은 다이닝코드 계정이나 비공개 API를
-        사용하지 않습니다.
-      </p>
+      <h2 className="text-sm font-bold text-gray-900">{t.dining.title}</h2>
+      <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.dining.body}</p>
       <label className="mt-3 block text-xs text-gray-500" htmlFor="diningcode-query">
-        지역 또는 음식 종류
+        {t.dining.queryLabel}
         <input
           id="diningcode-query"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="예: 강남 한식"
+          placeholder={t.dining.placeholder}
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
         />
       </label>
@@ -35,7 +40,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
             onClick={() => setQuery(word)}
             className="rounded-full border border-gray-300 bg-white px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
           >
-            {word}
+            {labels[word]}
           </button>
         ))}
       </div>
@@ -46,7 +51,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
           rel="noreferrer"
           className="inline-flex rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
         >
-          {query.trim() ? "다이닝코드에서 검색" : "다이닝코드 홈 열기"}
+          {query.trim() ? t.dining.search : t.dining.home}
         </a>
         <a
           href={DININGCODE_HOME}
@@ -54,7 +59,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
           rel="noreferrer"
           className="inline-flex rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
         >
-          내 근처 찾기
+          {t.dining.nearby}
         </a>
       </div>
     </section>
