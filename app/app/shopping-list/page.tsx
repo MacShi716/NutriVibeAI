@@ -11,6 +11,7 @@ import {
 } from "@/lib/shopping";
 import { trackEvent } from "@/lib/gamification";
 import type { ShoppingItem } from "@/lib/shopping";
+import DiningCodeCard from "@/components/DiningCodeCard";
 import type { PantryItem } from "@/lib/types";
 
 export default function ShoppingListPage() {
@@ -200,6 +201,16 @@ export default function ShoppingListPage() {
           </div>
         </>
       )}
+      <div className="mt-6 space-y-3">
+        <p className="text-xs text-gray-500">
+          수요일과 일요일 저녁 알림은{" "}
+          <Link href="/supplements" className="font-medium text-brand-700 underline">
+            영양제·알림
+          </Link>
+          에서 켤 수 있습니다.
+        </p>
+        <DiningCodeCard compact />
+      </div>
     </div>
   );
 }

@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { requestMealSwap, requestWeeklyPlan } from "@/lib/client-api";
-import { logRecipesToday, notifyDaily } from "@/lib/daily";
+import { isLoggedToday, logRecipesToday, notifyDaily } from "@/lib/daily";
+import DiningCodeCard from "@/components/DiningCodeCard";
+import PortionPrompt from "@/components/PortionPrompt";
 import { todayKey, weekdayKo } from "@/lib/dates";
 import { listExpiringNames } from "@/lib/pantry";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
@@ -43,6 +45,7 @@ export default function MealPlanPage() {
   const [error, setError] = useState("");
   const [note, setNote] = useState("");
   const [justMade, setJustMade] = useState(false);
+  const [pendingMeals, setPendingMeals] = useState<Recipe[] | null>(null);
 
   useEffect(() => {
     setPlan(storage.getWeeklyPlan());
@@ -165,9 +168,19 @@ export default function MealPlanPage() {
       setNote("오늘 날짜의 식단이 없습니다. 이번 주 시작일로 다시 만들어 주세요.");
       return;
     }
-    const added = logRecipesToday(recipes);
+    const pending = recipes.filter((recipe) => !isLoggedToday(recipe.id));
+    if (pending.length === 0) {
+      setNote("오늘 끼니는 이미 영양 진행에 있습니다.");
+      return;
+    }
+    setPendingMeals(pending);
+  }
+
+  function confirmToday(servingsById: Record<string, number>) {
+    const added = logRecipesToday(pendingMeals ?? [], servingsById);
     notifyDaily();
-    setNote(added > 0 ? `오늘 끼니 ${added}개를 영양 진행에 담았습니다.` : "오늘 끼니는 이미 영양 진행에 있습니다.");
+    setPendingMeals(null);
+    setNote(added > 0 ? `오늘 끼니 ${added}개를 영양 진행에 담았습니다.` : "담을 인분을 확인한 끼니가 없습니다.");
   }
 
   if (!ready) return null;
@@ -359,6 +372,16 @@ export default function MealPlanPage() {
           </div>
           <p className="mt-3 text-xs text-gray-400">영양 정보는 참고용입니다.</p>
         </>
+      )}
+      <div className="mt-6">
+        <DiningCodeCard />
+      </div>
+      {pendingMeals && (
+        <PortionPrompt
+          items={pendingMeals.map((recipe) => ({ id: recipe.id, title: recipe.title }))}
+          onConfirm={confirmToday}
+          onCancel={() => setPendingMeals(null)}
+        />
       )}
     </div>
   );

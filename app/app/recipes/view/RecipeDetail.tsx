@@ -9,7 +9,10 @@ import { calcOwnedUsage } from "@/lib/shopping";
 import { estimateDailyCalories } from "@/lib/profile";
 import { useCountUp } from "@/components/useCountUp";
 import { trackEvent } from "@/lib/gamification";
-import { isLoggedToday, notifyDaily, toggleDailyLog } from "@/lib/daily";
+import { caloriePartsOf } from "@/lib/calories";
+import { isLoggedToday, logRecipeToday, notifyDaily, removeDailyLog } from "@/lib/daily";
+import CalorieFormula from "@/components/CalorieFormula";
+import PortionPrompt from "@/components/PortionPrompt";
 import type { Recipe } from "@/lib/types";
 
 export default function RecipeDetailPage() {
@@ -21,6 +24,7 @@ export default function RecipeDetailPage() {
   const [logged, setLogged] = useState(false);
   const [dailyCal, setDailyCal] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [askPortion, setAskPortion] = useState(false);
 
   useEffect(() => {
     const result = storage.getLastResult();
@@ -124,9 +128,13 @@ export default function RecipeDetailPage() {
             <button
               type="button"
               onClick={() => {
-                const on = toggleDailyLog(recipe);
-                setLogged(on);
-                notifyDaily();
+                if (logged) {
+                  removeDailyLog(recipe.id);
+                  setLogged(false);
+                  notifyDaily();
+                  return;
+                }
+                setAskPortion(true);
               }}
               className="rounded-lg border border-brand-600 bg-white px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
             >
@@ -238,6 +246,10 @@ export default function RecipeDetailPage() {
             </tbody>
           </table>
         </div>
+        <CalorieFormula
+          className="mt-2 text-xs text-gray-500"
+          parts={caloriePartsOf(detail.rows.map((row) => ({ name: row.name, calories: row.calories })))}
+        />
         {unknown > 0 && (
           <p className="mt-1 text-xs text-gray-400">
             영양 데이터에 없는 재료 {unknown}종은 계산에서 제외되었습니다.
@@ -296,6 +308,18 @@ export default function RecipeDetailPage() {
           </Link>
         </div>
       </div>
+      {askPortion && (
+        <PortionPrompt
+          items={[{ id: recipe.id, title: recipe.title }]}
+          onConfirm={(servingsById) => {
+            const on = logRecipeToday(recipe, servingsById[recipe.id]);
+            setLogged(on);
+            notifyDaily();
+            setAskPortion(false);
+          }}
+          onCancel={() => setAskPortion(false)}
+        />
+      )}
     </div>
   );
 }

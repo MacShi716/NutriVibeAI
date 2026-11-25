@@ -96,6 +96,7 @@ export function syncPantry(names: string[], prev: PantryItem[]): PantryItem[] {
     const found = prev.find((item) => compact(item.name) === key);
     return {
       name,
+      amount: found?.amount ?? null,
       purchasedOn: found?.purchasedOn ?? null,
       expiresOn: found?.expiresOn ?? null,
     };

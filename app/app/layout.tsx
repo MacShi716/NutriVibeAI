@@ -4,6 +4,7 @@ import "./globals.css";
 import ExpiryBanner from "@/components/ExpiryBanner";
 import GameToast from "@/components/GameToast";
 import RestrictionBadge from "@/components/RestrictionBadge";
+import ReminderHost from "@/components/ReminderHost";
 import VisitTracker from "@/components/VisitTracker";
 
 function NavLinks({ stacked }: { stacked?: boolean }) {
@@ -21,6 +22,9 @@ function NavLinks({ stacked }: { stacked?: boolean }) {
       </Link>
       <Link href="/shopping-list" className={item}>
         쇼핑리스트
+      </Link>
+      <Link href="/supplements" className={item}>
+        영양제·알림
       </Link>
       <Link href="/favorites" className={item}>
         즐겨찾기·기록
@@ -75,6 +79,7 @@ export default function RootLayout({
           </div>
         </header>
         <ExpiryBanner />
+        <ReminderHost />
         <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>
         <footer className="border-t border-gray-200 bg-white py-6 text-center text-xs text-gray-400">
           <p>

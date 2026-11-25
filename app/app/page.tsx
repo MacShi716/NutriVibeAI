@@ -9,9 +9,11 @@ import { storage, CONDITIONS_EVENT, PROFILE_EVENT } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
 import { isValidServings, SERVINGS_ERROR, SERVINGS_MIN, SERVINGS_MAX } from "@/lib/limits";
 import { collectIngredients, trackEvent } from "@/lib/gamification";
-import { listExpiringNames } from "@/lib/pantry";
+import { listExpiringNames, PANTRY_EVENT, syncPantry } from "@/lib/pantry";
 import { splitIngredients } from "@/lib/shopping";
 import DailyNutrition from "@/components/DailyNutrition";
+import DiningCodeCard from "@/components/DiningCodeCard";
+import IngredientAdder from "@/components/IngredientAdder";
 import GenerationSteps from "@/components/GenerationSteps";
 import OnboardingGuide from "@/components/OnboardingGuide";
 import PantryEditor from "@/components/PantryEditor";
@@ -110,11 +112,33 @@ export default function HomePage() {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  function addIngredients(names: string[]) {
+  function rememberAmounts(names: string[], amounts: Record<string, string>) {
+    const next = syncPantry(names, storage.getPantry()).map((item) => {
+      const amount = amounts[item.name];
+      return amount ? { ...item, amount } : item;
+    });
+    storage.savePantry(next);
+    if (typeof window !== "undefined") window.dispatchEvent(new Event(PANTRY_EVENT));
+  }
+
+  function addIngredients(items: { name: string; amount: string }[] | string[]) {
+    const rows = items.map((item) =>
+      typeof item === "string" ? { name: item.trim(), amount: "" } : { name: item.name.trim(), amount: item.amount.trim() }
+    ).filter((item) => item.name);
+    if (rows.length === 0) return;
     setForm((prev) => {
-      const merged = Array.from(new Set([...splitIngredients(prev.ingredients), ...names]));
+      const merged = Array.from(new Set([...splitIngredients(prev.ingredients), ...rows.map((row) => row.name)]));
+      const amounts: Record<string, string> = {};
+      for (const row of rows) {
+        if (row.amount) amounts[row.name] = row.amount;
+      }
+      if (Object.keys(amounts).length > 0) rememberAmounts(merged, amounts);
       return { ...prev, ingredients: merged.join(", ") };
     });
+  }
+
+  function addOneIngredient(name: string, amount: string) {
+    addIngredients([{ name, amount }]);
   }
 
   const ingredientNames = useMemo(() => splitIngredients(form.ingredients), [form.ingredients]);
@@ -269,6 +293,9 @@ export default function HomePage() {
             onChange={(e) => update("ingredients", e.target.value)}
           />
           <div className="mt-2">
+            <IngredientAdder onAdd={addOneIngredient} />
+          </div>
+          <div className="mt-2">
             <PhotoIngredients onAdd={addIngredients} />
           </div>
           {mounted && (
@@ -384,6 +411,17 @@ export default function HomePage() {
           이 재료로 주간 식단표 만들기
         </Link>
       </form>
+
+      <div className="mt-6 space-y-4">
+        <DiningCodeCard />
+        <p className="text-center text-sm text-gray-500">
+          영양제 복용과 식사 전 안내는{" "}
+          <Link href="/supplements" className="font-medium text-brand-700 underline">
+            영양제·알림
+          </Link>
+          에서 설정할 수 있습니다.
+        </p>
+      </div>
     </div>
   );
 }

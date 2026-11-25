@@ -23,8 +23,12 @@ async function shrink(file: File): Promise<Blob> {
   }
 }
 
-export default function PhotoIngredients({ onAdd }: { onAdd: (names: string[]) => void }) {
-  const [items, setItems] = useState<string[]>([]);
+export default function PhotoIngredients({
+  onAdd,
+}: {
+  onAdd: (items: { name: string; amount: string }[]) => void;
+}) {
+  const [items, setItems] = useState<{ name: string; amount: string }[]>([]);
   const [demo, setDemo] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -54,8 +58,10 @@ export default function PhotoIngredients({ onAdd }: { onAdd: (names: string[]) =
         setError(data.error);
         return;
       }
-      const names = data.ingredients.map((name) => translateToKorean(name)).filter(Boolean);
-      setItems(Array.from(new Set(names)));
+      const names = Array.from(
+        new Set(data.ingredients.map((name) => translateToKorean(name)).filter(Boolean))
+      );
+      setItems(names.map((name) => ({ name, amount: "" })));
       setDemo(Boolean(data.demo));
       if (names.length === 0) setError("사진에서 식재료를 찾지 못했습니다.");
     } catch {
@@ -65,21 +71,31 @@ export default function PhotoIngredients({ onAdd }: { onAdd: (names: string[]) =
     }
   }
 
-  function updateItem(index: number, value: string) {
-    setItems((prev) => prev.map((name, i) => (i === index ? value : name)));
+  function updateItem(index: number, field: "name" | "amount", value: string) {
+    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   }
 
-  function commit() {
-    const names = items
-      .map((name) => translateToKorean(name).replace(/[,，、]/g, " ").trim())
-      .filter((name) => name.length > 0);
-    if (names.length === 0) {
+  function commit(allowEmptyAmount: boolean) {
+    const next = items
+      .map((item) => ({
+        name: translateToKorean(item.name).replace(/[,，、]/g, " ").trim(),
+        amount: item.amount.trim(),
+      }))
+      .filter((item) => item.name.length > 0);
+    if (next.length === 0) {
       setError("추가할 식재료 이름을 입력해 주세요.");
       return;
     }
-    onAdd(Array.from(new Set(names)));
+    if (!allowEmptyAmount && next.some((item) => !item.amount)) {
+      setError("각 식재료의 양을 입력해 주세요. 임의로 정하지 않습니다.");
+      return;
+    }
+    const unique = new Map<string, { name: string; amount: string }>();
+    for (const item of next) unique.set(item.name, item);
+    onAdd(Array.from(unique.values()));
     setItems([]);
     setDemo(false);
+    setError("");
   }
 
   const btn =
@@ -127,37 +143,53 @@ export default function PhotoIngredients({ onAdd }: { onAdd: (names: string[]) =
       {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
       {items.length > 0 && (
         <div className="mt-2">
-          <div className="flex flex-wrap gap-2">
-            {items.map((name, index) => (
-              <span
+          <p className="mb-2 text-xs text-gray-500">인식된 식재료의 양을 입력한 뒤 추가해 주세요.</p>
+          <div className="space-y-2">
+            {items.map((item, index) => (
+              <div
                 key={`chip-${index}`}
-                className="flex items-center gap-1 rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-700"
+                className="flex flex-wrap items-center gap-2 rounded-lg bg-gray-100 px-2 py-2 text-xs text-gray-700"
               >
                 <input
                   aria-label={`인식된 식재료 ${index + 1}`}
-                  value={name}
-                  onChange={(e) => updateItem(index, e.target.value)}
-                  className="w-20 bg-transparent text-xs outline-none"
-                  style={{ width: `${Math.max(name.length, 2)}ch` }}
+                  value={item.name}
+                  onChange={(e) => updateItem(index, "name", e.target.value)}
+                  className="min-w-[6rem] flex-1 rounded-md bg-white px-2 py-1 text-xs outline-none"
+                />
+                <input
+                  aria-label={`${item.name || "식재료"}의 양`}
+                  value={item.amount}
+                  onChange={(e) => updateItem(index, "amount", e.target.value)}
+                  placeholder="양 (예: 200g)"
+                  className="w-28 rounded-md bg-white px-2 py-1 text-xs outline-none"
                 />
                 <button
                   type="button"
-                  aria-label={`${name || "식재료"} 삭제`}
+                  aria-label={`${item.name || "식재료"} 삭제`}
                   className="text-gray-400 hover:text-red-500"
                   onClick={() => setItems((prev) => prev.filter((_, i) => i !== index))}
                 >
                   ×
                 </button>
-              </span>
+              </div>
             ))}
           </div>
-          <button
-            type="button"
-            className="mt-2 rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
-            onClick={commit}
-          >
-            보유 식재료에 추가
-          </button>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <button
+              type="button"
+              className="rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
+              onClick={() => commit(false)}
+            >
+              보유 식재료에 추가
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
+              onClick={() => commit(true)}
+            >
+              이름만 추가
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -87,6 +87,7 @@ export type WeeklyPlan = {
 /** 보유 식재료의 구매일·유통기한 (없으면 null) */
 export type PantryItem = {
   name: string;
+  amount?: string | null; // 보유량(선택). 재료 이름과 따로 두어 추천 매칭을 건드리지 않는다.
   purchasedOn: string | null; // YYYY-MM-DD
   expiresOn: string | null; // YYYY-MM-DD
 };
@@ -100,6 +101,32 @@ export type DailyEntry = {
   carbs: number;
   fat: number;
   loggedAt: string;
+  /** 기록할 때 입력한 인분. 없으면 과거에 담은 항목으로 보고 1인분으로 표시한다. */
+  servingsLogged?: number;
+};
+
+/** 사용자가 직접 등록하는 영양제. 기본 목록은 비어 있다. */
+export type SupplementItem = {
+  id: string;
+  name: string;
+  doseLabel: string;
+  dailyCount: number;
+  reminderTime: string | null; // HH:MM, 선택
+  updatedAt: string;
+};
+
+export type SupplementLog = {
+  date: string; // YYYY-MM-DD
+  taken: Record<string, number>;
+};
+
+/** 앱을 연 동안만 동작하는 로컬 알림. 기본값은 모두 꺼짐. */
+export type ReminderSettings = {
+  veggieLunch: boolean;
+  veggieDinner: boolean;
+  grocery: boolean;
+  notify: boolean;
+  updatedAt: string;
 };
 
 export type DailyLog = {

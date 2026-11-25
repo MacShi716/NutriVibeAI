@@ -2,7 +2,7 @@
 
 import { translateToKorean } from "./alias";
 import { isValidServings } from "./limits";
-import type { DailyLog, PantryItem, Recipe, UserConditions, UserProfile, WeeklyPlan } from "./types";
+import type { DailyLog, PantryItem, Recipe, ReminderSettings, SupplementItem, SupplementLog, UserConditions, UserProfile, WeeklyPlan } from "./types";
 import type { HistoryEntry } from "./storage";
 
 const PREFIX = "nutrivibe:";
@@ -27,6 +27,9 @@ const KEY = {
   daily: "nutrivibe:dailyLog",
   conditions: "nutrivibe:conditions",
   lastResult: "nutrivibe:lastResult",
+  supplements: "nutrivibe:supplements",
+  supplementLog: "nutrivibe:supplementLog",
+  reminders: "nutrivibe:reminders",
 } as const;
 
 type ShoppingStored = {
@@ -275,6 +278,7 @@ function mergePantry(local: string | null, incoming: string): string {
     if (item && typeof item.name === "string" && item.name.trim()) {
       map.set(compactName(item.name), {
         name: item.name,
+        amount: item.amount ?? null,
         purchasedOn: item.purchasedOn ?? null,
         expiresOn: item.expiresOn ?? null,
       });
@@ -285,11 +289,12 @@ function mergePantry(local: string | null, incoming: string): string {
     const key = compactName(item.name);
     const prev = map.get(key);
     if (!prev) {
-      map.set(key, { name: item.name, purchasedOn: item.purchasedOn ?? null, expiresOn: item.expiresOn ?? null });
+      map.set(key, { name: item.name, amount: item.amount ?? null, purchasedOn: item.purchasedOn ?? null, expiresOn: item.expiresOn ?? null });
       continue;
     }
     map.set(key, {
       name: prev.name,
+      amount: item.amount || prev.amount,
       purchasedOn: item.purchasedOn || prev.purchasedOn,
       expiresOn: item.expiresOn || prev.expiresOn,
     });
@@ -348,6 +353,44 @@ function mergeLastResult(local: string | null, incoming: string): string {
   return nextAt >= currentAt ? incoming : local ?? incoming;
 }
 
+function mergeSupplements(local: string | null, incoming: string): string {
+  const current = readJson<SupplementItem[]>(local) ?? [];
+  const next = readJson<SupplementItem[]>(incoming) ?? [];
+  if (!Array.isArray(current) || !Array.isArray(next)) return incoming;
+  const map = new Map<string, SupplementItem>();
+  for (const item of [...current, ...next]) {
+    if (!item || typeof item.id !== "string" || typeof item.name !== "string") continue;
+    const prev = map.get(item.id);
+    if (!prev) {
+      map.set(item.id, item);
+      continue;
+    }
+    const prevAt = Date.parse(prev.updatedAt) || 0;
+    const nextAt = Date.parse(item.updatedAt) || 0;
+    map.set(item.id, nextAt >= prevAt ? item : prev);
+  }
+  return JSON.stringify(Array.from(map.values()));
+}
+
+function mergeSupplementLog(local: string | null, incoming: string): string {
+  const current = readJson<SupplementLog>(local);
+  const next = readJson<SupplementLog>(incoming);
+  if (!current?.taken) return incoming;
+  if (!next?.taken) return local ?? incoming;
+  if (current.date !== next.date) return current.date > next.date ? local ?? incoming : incoming;
+  return JSON.stringify({ date: current.date, taken: { ...next.taken, ...current.taken } });
+}
+
+function mergeReminders(local: string | null, incoming: string): string {
+  const current = readJson<ReminderSettings>(local);
+  const next = readJson<ReminderSettings>(incoming);
+  if (!current) return incoming;
+  if (!next) return local ?? incoming;
+  const currentAt = Date.parse(current.updatedAt) || 0;
+  const nextAt = Date.parse(next.updatedAt) || 0;
+  return nextAt >= currentAt ? incoming : local ?? incoming;
+}
+
 function mergeValue(key: string, local: string | null, incoming: string): string {
   switch (key) {
     case KEY.profile:
@@ -370,6 +413,12 @@ function mergeValue(key: string, local: string | null, incoming: string): string
       return mergeConditions(local, incoming);
     case KEY.lastResult:
       return mergeLastResult(local, incoming);
+    case KEY.supplements:
+      return mergeSupplements(local, incoming);
+    case KEY.supplementLog:
+      return mergeSupplementLog(local, incoming);
+    case KEY.reminders:
+      return mergeReminders(local, incoming);
     default:
       return local ?? incoming;
   }
