@@ -7,7 +7,8 @@ import { DININGCODE_HOME, DININGCODE_SUGGESTIONS, diningCodeSearchUrl } from "@/
 export default function DiningCodeCard({ compact }: { compact?: boolean }) {
   const { t } = useUi();
   const [query, setQuery] = useState("");
-  const url = diningCodeSearchUrl(query);
+  const [searchQuery, setSearchQuery] = useState("");
+  const url = diningCodeSearchUrl(searchQuery || query);
   const labels: Record<(typeof DININGCODE_SUGGESTIONS)[number], string> = {
     한식: t.dining.suggestKorean,
     점심: t.dining.suggestLunch,
@@ -27,7 +28,10 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
         <input
           id="diningcode-query"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setSearchQuery(e.target.value);
+          }}
           placeholder={t.dining.placeholder}
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
         />
@@ -37,7 +41,10 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
           <button
             key={word}
             type="button"
-            onClick={() => setQuery(word)}
+            onClick={() => {
+              setQuery(labels[word]);
+              setSearchQuery(word);
+            }}
             className="rounded-full border border-gray-300 bg-white px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
           >
             {labels[word]}
