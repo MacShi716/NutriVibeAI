@@ -43,7 +43,8 @@ function pickFromLibrary(
   slot: MealSlot,
   used: Map<string, number>,
   salt: number,
-  id: string
+  id: string,
+  warnings?: string[]
 ): Recipe | null {
   const owned = splitIngredients(conditions.ingredients);
   const queries: string[] = [];
@@ -66,7 +67,11 @@ function pickFromLibrary(
       if (seen.has(recipe.title)) continue;
       seen.add(recipe.title);
       const finalized = finalizeRecipes([recipe], conditions);
-      if (finalized.recipes[0]) pool.push(finalized.recipes[0]);
+      if (!finalized.recipes[0]) {
+        warnings?.push(...finalized.warnings);
+        continue;
+      }
+      pool.push(finalized.recipes[0]);
     }
   }
   if (pool.length === 0) return null;
@@ -87,7 +92,12 @@ function isMealSlot(value: unknown): value is MealSlot {
   return value === "breakfast" || value === "lunch" || value === "dinner";
 }
 
-function recipeFromUnknown(raw: unknown, id: string, conditions: UserConditions): Recipe | null {
+function recipeFromUnknown(
+  raw: unknown,
+  id: string,
+  conditions: UserConditions,
+  warnings?: string[]
+): Recipe | null {
   if (typeof raw !== "object" || raw === null) return null;
   const record = raw as Record<string, unknown>;
   if (typeof record.title !== "string" || !record.title.trim()) return null;
@@ -120,7 +130,11 @@ function recipeFromUnknown(raw: unknown, id: string, conditions: UserConditions)
     },
   };
   const finalized = finalizeRecipes([draft], conditions);
-  return finalized.recipes[0] ? withId(finalized.recipes[0], id) : null;
+  if (!finalized.recipes[0]) {
+    warnings?.push(...finalized.warnings);
+    return null;
+  }
+  return withId(finalized.recipes[0], id);
 }
 
 function buildWeekPrompt(conditions: UserConditions, open: { date: string; slot: MealSlot }[]): string {
@@ -159,7 +173,7 @@ function buildWeekPrompt(conditions: UserConditions, open: { date: string; slot:
     .join("\n");
 }
 
-function parseWeek(text: string, conditions: UserConditions): Map<string, Recipe> {
+function parseWeek(text: string, conditions: UserConditions, warnings?: string[]): Map<string, Recipe> {
   const start = text.indexOf("{");
   const end = text.lastIndexOf("}");
   const json = start >= 0 && end > start ? text.slice(start, end + 1) : text;
@@ -177,7 +191,7 @@ function parseWeek(text: string, conditions: UserConditions): Map<string, Recipe
       if (!isMealSlot(slot)) continue;
       const id = `w-${row.date}-${slot}-${seq}`;
       seq += 1;
-      const recipe = recipeFromUnknown(meal, id, conditions);
+      const recipe = recipeFromUnknown(meal, id, conditions, warnings);
       if (recipe) found.set(`${row.date}|${slot}`, recipe);
     }
   }
@@ -241,7 +255,7 @@ export async function createWeeklyPlan(input: {
     usedMock = ai.usedMock;
     if (ai.text) {
       try {
-        generated = parseWeek(ai.text, generation);
+        generated = parseWeek(ai.text, generation, warnings);
         if (generated.size === 0) {
           usedMock = true;
           provider = "mock";
@@ -270,7 +284,7 @@ export async function createWeeklyPlan(input: {
       }
       const fromAi = generated.get(key);
       if (fromAi) return { slot, recipe: fromAi, pinned: false };
-      const picked = pickFromLibrary(generation, slot, used, dayIndex * 3 + slotIndex, `w-${date}-${slot}`);
+      const picked = pickFromLibrary(generation, slot, used, dayIndex * 3 + slotIndex, `w-${date}-${slot}`, warnings);
       if (picked) {
         used.set(picked.title, (used.get(picked.title) ?? 0) + 1);
         if (!usedMock) warnings.push("일부 끼니는 내장 레시피로 채웠습니다.");

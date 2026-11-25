@@ -42,6 +42,7 @@ export default function MealPlanPage() {
   const [busy, setBusy] = useState("");
   const [error, setError] = useState("");
   const [note, setNote] = useState("");
+  const [justMade, setJustMade] = useState(false);
 
   useEffect(() => {
     setPlan(storage.getWeeklyPlan());
@@ -84,6 +85,7 @@ export default function MealPlanPage() {
       }
       storage.saveWeeklyPlan(outcome.plan);
       setPlan(outcome.plan);
+      setJustMade(true);
     } catch {
       setError("서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     } finally {
@@ -189,7 +191,9 @@ export default function MealPlanPage() {
           type="button"
           disabled={busy !== ""}
           onClick={() => void generate(false)}
-          className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-50"
+          className={`rounded-lg bg-brand-600 font-bold text-white hover:bg-brand-700 disabled:opacity-50 ${
+            plan ? "px-4 py-2 text-sm" : "px-5 py-3 text-base"
+          }`}
         >
           {busy === "generate" ? "구성 중…" : "이번 주 식단 만들기"}
         </button>
@@ -206,16 +210,27 @@ export default function MealPlanPage() {
       {error && <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</p>}
 
       {!plan && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-8 text-center text-sm text-gray-600">
-          아직 만들어진 주간 식단이 없습니다. 홈에 저장한 보유 식재료로 일주일 식단을 만들 수 있습니다.
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-gray-600 sm:p-8">
+          <p>아직 만들어진 주간 식단이 없습니다. 홈에 저장한 보유 식재료로 일주일 식단을 만들 수 있습니다.</p>
+          <button
+            type="button"
+            disabled={busy !== ""}
+            onClick={() => void generate(false)}
+            className="mt-4 w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-50 sm:w-auto"
+          >
+            {busy === "generate" ? "구성 중…" : "이번 주 식단 만들기"}
+          </button>
         </div>
       )}
 
       {plan && (
         <>
           {plan.usedMock && (
-            <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
-              데모 모드입니다. API 키가 없거나 생성에 실패해 내장 레시피로 주간 식단을 구성했습니다.
+            <div
+              className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+              data-testid="plan-demo-notice"
+            >
+              내장된 한국 가정식 레시피로 주간 식단을 구성했습니다. 온라인 AI를 호출하지 않은 결과입니다.
             </div>
           )}
           {plan.warnings.length > 0 && (
@@ -240,6 +255,40 @@ export default function MealPlanPage() {
                 단백질 {plan.conditions.goalProtein} g
               </span>
             ) : null}
+          </div>
+
+          <div className="mb-4 rounded-2xl border border-brand-100 bg-brand-50 p-4" data-testid="plan-next-steps">
+            <p className="text-sm font-semibold text-gray-900">
+              {justMade
+                ? "주간 식단을 만들었습니다. 이어서 진행해 주세요."
+                : "만든 식단으로 오늘 영양과 장보기를 이어서 정리할 수 있습니다."}
+            </p>
+            <div className="mt-3 flex flex-col gap-2 sm:flex-row">
+              <button
+                type="button"
+                onClick={logToday}
+                className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
+              >
+                오늘 끼니를 영양 진행에 담기
+              </button>
+              <button
+                type="button"
+                onClick={applyShopping}
+                className="flex-1 rounded-lg border border-brand-600 bg-white px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
+              >
+                장보기 목록 합치기
+              </button>
+            </div>
+            {note && (
+              <p className="mt-3 text-sm text-brand-700">
+                {note}{" "}
+                {note.includes("쇼핑리스트") && (
+                  <Link href="/shopping-list" className="underline">
+                    쇼핑리스트 보기
+                  </Link>
+                )}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -308,16 +357,6 @@ export default function MealPlanPage() {
               오늘 끼니를 영양 기록에 담기
             </button>
           </div>
-          {note && (
-            <p className="mt-3 text-sm text-brand-700">
-              {note}{" "}
-              {note.includes("쇼핑리스트") && (
-                <Link href="/shopping-list" className="underline">
-                  쇼핑리스트 보기
-                </Link>
-              )}
-            </p>
-          )}
           <p className="mt-3 text-xs text-gray-400">영양 정보는 참고용입니다.</p>
         </>
       )}

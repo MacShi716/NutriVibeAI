@@ -70,6 +70,25 @@ export function orderIngredientsForGeneration(
   return { ...conditions, ingredients: ordered.join(", ") };
 }
 
+/** 쇼핑 항목과 이름이 겹치는 보유 재료가 임박하거나 지났으면 그 상태를 돌려준다. */
+export function ingredientExpiryMark(
+  name: string,
+  items: PantryItem[],
+  today = todayKey()
+): "soon" | "expired" | null {
+  const key = compact(name);
+  if (!key) return null;
+  let soon = false;
+  for (const item of items) {
+    const other = compact(item.name);
+    if (!other || (key !== other && !key.includes(other) && !other.includes(key))) continue;
+    const state = expiryState(item.expiresOn, today);
+    if (state === "expired") return "expired";
+    if (state === "soon") soon = true;
+  }
+  return soon ? "soon" : null;
+}
+
 /** 입력란의 재료 목록과 저장된 날짜를 맞춘다. 같은 재료의 날짜는 유지한다. */
 export function syncPantry(names: string[], prev: PantryItem[]): PantryItem[] {
   return names.map((name) => {

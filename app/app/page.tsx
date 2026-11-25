@@ -4,7 +4,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { requestRecipes } from "@/lib/client-api";
-import { storage } from "@/lib/storage";
+import { STATIC_HOST } from "@/lib/host";
+import { storage, CONDITIONS_EVENT, PROFILE_EVENT } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
 import { isValidServings, SERVINGS_ERROR, SERVINGS_MIN, SERVINGS_MAX } from "@/lib/limits";
 import { collectIngredients, trackEvent } from "@/lib/gamification";
@@ -12,8 +13,10 @@ import { listExpiringNames } from "@/lib/pantry";
 import { splitIngredients } from "@/lib/shopping";
 import DailyNutrition from "@/components/DailyNutrition";
 import GenerationSteps from "@/components/GenerationSteps";
+import OnboardingGuide from "@/components/OnboardingGuide";
 import PantryEditor from "@/components/PantryEditor";
 import PhotoIngredients from "@/components/PhotoIngredients";
+import RestrictionPicker from "@/components/RestrictionPicker";
 import type { UserConditions } from "@/lib/types";
 
 const EMPTY: UserConditions = {
@@ -34,24 +37,14 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<"form" | "generating" | "done">("form");
   const [error, setError] = useState("");
+  const [showDemoNote, setShowDemoNote] = useState(STATIC_HOST);
+  const [profileGoals, setProfileGoals] = useState<{ calories: number | null; protein: number | null }>({
+    calories: null,
+    protein: null,
+  });
   const hadSavedConditions = useRef(false);
 
-  useEffect(() => {
-    const saved = storage.getConditions();
-    hadSavedConditions.current = saved != null;
-    setForm(saved ?? EMPTY);
-    setMounted(true);
-  }, []);
-
-  // 유통기한은 재료 목록과 함께 저장된다. 입력 중에도 조건을 남겨 페이지를 옮겨도 목록이 비지 않게 한다.
-  useEffect(() => {
-    if (!mounted) return;
-    storage.saveConditions(form);
-  }, [mounted, form]);
-
-  // 프로필 연동: 저장된 신체 프로필로 목표 열량을 계산해 기본 반영
-  const profileGoals = useMemo(() => {
-    if (!mounted) return { calories: null as number | null, protein: null as number | null };
+  function readProfileGoals(): { calories: number | null; protein: number | null } {
     const profile = storage.getProfile();
     if (!profile) return { calories: null, protein: null };
     const estimate = estimateDailyCalories({
@@ -65,6 +58,41 @@ export default function HomePage() {
       calories: estimate ? targetCalories(estimate, "maintain") : null,
       protein: profile.proteinGoalG ?? null,
     };
+  }
+
+  useEffect(() => {
+    const saved = storage.getConditions();
+    hadSavedConditions.current = saved != null;
+    setForm(saved ?? EMPTY);
+    if (!STATIC_HOST) setShowDemoNote(storage.getLastResult()?.usedMock === true);
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    const onConditions = () => {
+      const saved = storage.getConditions();
+      if (!saved) return;
+      setForm((prev) => (JSON.stringify(prev) === JSON.stringify(saved) ? prev : saved));
+    };
+    const onProfile = () => setProfileGoals(readProfileGoals());
+    window.addEventListener(CONDITIONS_EVENT, onConditions);
+    window.addEventListener(PROFILE_EVENT, onProfile);
+    return () => {
+      window.removeEventListener(CONDITIONS_EVENT, onConditions);
+      window.removeEventListener(PROFILE_EVENT, onProfile);
+    };
+  }, []);
+
+  // 유통기한은 재료 목록과 함께 저장된다. 입력 중에도 조건을 남겨 페이지를 옮겨도 목록이 비지 않게 한다.
+  useEffect(() => {
+    if (!mounted) return;
+    storage.saveConditions(form);
+  }, [mounted, form]);
+
+  // 프로필 연동: 저장된 신체 프로필로 목표 열량을 계산해 기본 반영
+  useEffect(() => {
+    if (!mounted) return;
+    setProfileGoals(readProfileGoals());
   }, [mounted]);
   const goalCal = profileGoals.calories;
 
@@ -150,15 +178,33 @@ export default function HomePage() {
         <DailyNutrition />
       </div>
 
+      <OnboardingGuide />
+
       <section className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">
           오늘은 뭘 먹을까? <span className="text-brand-600">NutriVibe AI</span>가
           정해드립니다
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-gray-600">
-          보유 식재료와 식습관, 기피·알레르기 정보를 입력하면 AI가 맞춤 레시피 2~3개를
+          보유 식재료와 식습관, 기피·알레르기 정보를 입력하면 맞춤 레시피 2~3개를
           제안하고, 부족한 식재료를 정리해 쇼핑리스트를 자동 생성합니다.
         </p>
+        <p className="mt-2 text-sm leading-relaxed text-gray-600">
+          로그인 없이 이 기기에만 저장됩니다.{" "}
+          <Link href="/profile#backup" className="font-medium text-brand-700 underline">
+            프로필의 백업
+          </Link>
+          에서 다른 기기로 옮길 수 있습니다.
+        </p>
+        {showDemoNote && (
+          <p
+            className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-800"
+            data-testid="demo-notice"
+          >
+            현재는 내장된 한국 가정식 레시피에서 추천하며, 온라인 AI를 호출하지 않습니다. 사진 인식은 예시
+            식재료를 보여 드립니다.
+          </p>
+        )}
       </section>
 
       <form
@@ -249,16 +295,13 @@ export default function HomePage() {
         </div>
 
         <div>
-          <label className={labelCls} htmlFor="restrictions">
+          <p className={labelCls} id="restrictions-label">
             기피 및 알레르기 <span className="text-amber-600">(위험 안내 대상)</span>
-          </label>
-          <textarea
-            id="restrictions"
-            className={inputCls}
-            rows={2}
-            placeholder="예: 땅콩, 새우, 우유"
+          </p>
+          <RestrictionPicker
             value={form.restrictions}
-            onChange={(e) => update("restrictions", e.target.value)}
+            onChange={(value) => update("restrictions", value)}
+            inputId="restrictions"
           />
           <p className="mt-1 text-xs text-gray-400">
             시스템은 입력한 정보를 바탕으로 규칙 기반 필터링과 위험 안내를 수행하지만,
@@ -282,8 +325,30 @@ export default function HomePage() {
               value={form.servings}
               onChange={(e) => update("servings", Number(e.target.value))}
             />
+            <div className="mt-2 flex flex-wrap gap-2">
+              {[1, 2, 3, 4].map((count) => (
+                <button
+                  key={count}
+                  type="button"
+                  aria-pressed={form.servings === count}
+                  data-testid={`servings-chip-${count}`}
+                  onClick={() => update("servings", count)}
+                  className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                    form.servings === count
+                      ? "border-brand-600 bg-brand-50 text-brand-700"
+                      : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+                  }`}
+                >
+                  {count}명
+                </button>
+              ))}
+            </div>
             <p className="mt-1 text-xs text-gray-400">
               {SERVINGS_MIN}~{SERVINGS_MAX}명까지 입력할 수 있습니다.
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-gray-400">
+              손바닥만 한 단백질 양은 대략적인 참고입니다. 저울로 재거나 포장 표시를 확인하는 편이 더
+              정확합니다. 영양 정보는 1인분 기준이며, 인원에 따라 재료 양이 늘어납니다.
             </p>
           </div>
           <div>
@@ -310,9 +375,10 @@ export default function HomePage() {
 
         <button
           type="submit"
+          data-testid="generate-recipes"
           className="w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
         >
-          AI 레시피 생성하기
+          {STATIC_HOST ? "내장 레시피로 추천받기" : "AI 레시피 생성하기"}
         </button>
         <Link href="/meal-plan" className="block text-center text-sm font-medium text-brand-700 hover:underline">
           이 재료로 주간 식단표 만들기
