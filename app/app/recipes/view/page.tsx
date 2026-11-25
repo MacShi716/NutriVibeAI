@@ -1,13 +1,10 @@
 import { Suspense } from "react";
+import LoadingLine from "@/components/LoadingLine";
 import RecipeDetailPage from "./RecipeDetail";
 
 export default function RecipeViewPage() {
   return (
-    <Suspense
-      fallback={
-        <div className="mx-auto max-w-2xl text-center text-sm text-gray-500">불러오는 중입니다.</div>
-      }
-    >
+    <Suspense fallback={<LoadingLine />}>
       <RecipeDetailPage />
     </Suspense>
   );

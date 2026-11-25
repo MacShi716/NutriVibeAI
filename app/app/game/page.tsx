@@ -2,12 +2,13 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useUi } from "@/components/UiProvider";
+import { achievementCopy, format, levelTitle, missionTitle } from "@/i18n/text";
 import {
   ACHIEVEMENTS,
   getGameState,
   levelForXp,
   MAX_LEVEL,
-  titleForLevel,
   todaysMissions,
   trackEvent,
   xpForLevel,
@@ -24,6 +25,7 @@ type RollResult = {
 };
 
 export default function GamePage() {
+  const { t } = useUi();
   const [state, setState] = useState<GameStats | null>(null);
   const [spin, setSpin] = useState(false);
   const [roll, setRoll] = useState<RollResult | null>(null);
@@ -37,7 +39,7 @@ export default function GamePage() {
   const needXp = 100;
   const isMax = level === MAX_LEVEL;
   const pct = isMax ? 100 : Math.min(100, Math.round((curXp / needXp) * 100));
-  const title = state ? titleForLevel(level) : titleForLevel(1);
+  const title = levelTitle(t, level);
 
   const missions = useMemo(() => todaysMissions(), []);
   const collected = useMemo(
@@ -52,12 +54,12 @@ export default function GamePage() {
     setSpin(true);
     setRoll(null);
     setTimeout(() => {
-      const t = TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)];
+      const picked = TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)];
       setRoll({
-        title: t.title,
-        desc: t.desc,
-        cookMinutes: t.cookMinutes,
-        ingredients: t.build(2).map((i) => `${i.name} ${i.amount}`),
+        title: picked.title,
+        desc: picked.desc,
+        cookMinutes: picked.cookMinutes,
+        ingredients: picked.build(2).map((i) => `${i.name} ${i.amount}`),
       });
       setSpin(false);
       trackEvent({ type: "roll" });
@@ -68,31 +70,25 @@ export default function GamePage() {
   return (
     <div className="mx-auto max-w-4xl">
       <div className="mb-5 flex items-center justify-between">
-        <h1 className="text-xl font-bold text-gray-900">놀이터 · 재미 요소</h1>
+        <h1 className="text-xl font-bold text-gray-900">{t.game.title}</h1>
         <Link href="/" className="text-sm text-brand-600 hover:underline">
-          조건 입력하러 가기
+          {t.common.enterConditions}
         </Link>
       </div>
 
       <div className="mb-5 rounded-2xl border border-brand-100 bg-gradient-to-r from-brand-50 to-amber-50 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="text-xs font-semibold text-brand-600">
-              Lv.{level} · {title}
-            </div>
-            <div className="mt-1 text-2xl font-black text-gray-900">
-              {state.xp} 포인트
-            </div>
+            <div className="text-xs font-semibold text-brand-600">{format(t.game.level, { level, title })}</div>
+            <div className="mt-1 text-2xl font-black text-gray-900">{format(t.game.points, { n: state.xp })}</div>
             <div className="mt-1 text-xs text-gray-500">
-              {isMax ? "최고 레벨입니다" : `레벨업까지 ${needXp - curXp} 포인트 남음`}
+              {isMax ? t.game.max : format(t.game.remain, { n: needXp - curXp })}
             </div>
           </div>
           <div className="text-right">
-            <div className="text-xs text-gray-500">
-              연속 사용 {state.streak}일 🔥
-            </div>
+            <div className="text-xs text-gray-500">{format(t.game.streak, { n: state.streak })}</div>
             <div className="mt-1 text-xs text-gray-500">
-              도감 {collected.length}/{TOTAL_INGREDIENTS}종
+              {format(t.game.dex, { have: collected.length, total: TOTAL_INGREDIENTS })}
             </div>
           </div>
         </div>
@@ -110,7 +106,7 @@ export default function GamePage() {
 
       <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
-          오늘의 미션 <span className="text-xs font-normal text-gray-400">(매일 3개 새로 나옵니다)</span>
+          {t.game.missions} <span className="text-xs font-normal text-gray-400">{t.game.missionsHint}</span>
         </h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-3">
           {missions.map((m) => {
@@ -118,21 +114,15 @@ export default function GamePage() {
             return (
               <div
                 key={m.id}
-                className={`rounded-xl border p-3 ${
-                  done ? "border-green-200 bg-green-50" : "border-gray-200 bg-gray-50"
-                }`}
+                className={`rounded-xl border p-3 ${done ? "border-green-200 bg-green-50" : "border-gray-200 bg-gray-50"}`}
               >
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{m.icon}</span>
-                  <span
-                    className={`text-sm font-semibold ${
-                      done ? "text-green-700" : "text-gray-700"
-                    }`}
-                  >
-                    {done ? "완료!" : m.title}
+                  <span className={`text-sm font-semibold ${done ? "text-green-700" : "text-gray-700"}`}>
+                    {done ? t.game.done : (missionTitle(t, m.id) ?? m.title)}
                   </span>
                 </div>
-                <div className="mt-2 text-xs text-gray-500">보상 +{m.xp} 포인트</div>
+                <div className="mt-2 text-xs text-gray-500">{format(t.game.reward, { n: m.xp })}</div>
               </div>
             );
           })}
@@ -141,11 +131,9 @@ export default function GamePage() {
 
       <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
-          오늘 뭐 먹지? <span className="text-xs font-normal text-gray-400">레시피 룰렛</span>
+          {t.game.roulette} <span className="text-xs font-normal text-gray-400">{t.game.rouletteHint}</span>
         </h2>
-        <p className="mt-1 text-sm text-gray-600">
-          고민될 땐 룰렛을 돌려보세요. 내장 레시피 70여 종 중 하나를 골라드립니다.
-        </p>
+        <p className="mt-1 text-sm text-gray-600">{t.game.rouletteBody}</p>
         <div className="mt-4 flex items-center gap-5">
           <button
             onClick={doRoll}
@@ -162,14 +150,15 @@ export default function GamePage() {
                 <div className="text-lg font-bold text-gray-900">{roll.title}</div>
                 <p className="mt-0.5 text-sm text-gray-600">{roll.desc}</p>
                 <div className="mt-1 text-xs text-gray-500">
-                  ⏱️ {roll.cookMinutes}분 · 재료: {roll.ingredients.slice(0, 4).join(", ")}
-                  {roll.ingredients.length > 4 ? " 외" : ""}
+                  {format(t.game.rollMeta, {
+                    minutes: roll.cookMinutes,
+                    list: roll.ingredients.slice(0, 4).join(", "),
+                  })}
+                  {roll.ingredients.length > 4 ? t.game.rollMore : ""}
                 </div>
               </div>
             ) : (
-              <div className="text-sm text-gray-400">
-                {spin ? "돌리는 중..." : "룰렛을 돌려 오늘의 메뉴를 뽑아보세요! (+5 포인트)"}
-              </div>
+              <div className="text-sm text-gray-400">{spin ? t.game.spinning : t.game.spinHint}</div>
             )}
           </div>
         </div>
@@ -177,29 +166,27 @@ export default function GamePage() {
 
       <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
-          업적 <span className="text-xs font-normal text-gray-400">
-            {state.achievements.length}/{ACHIEVEMENTS.length} 달성
+          {t.game.achievements}{" "}
+          <span className="text-xs font-normal text-gray-400">
+            {format(t.game.unlocked, { have: state.achievements.length, total: ACHIEVEMENTS.length })}
           </span>
         </h2>
         <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
           {ACHIEVEMENTS.map((a) => {
             const got = state.achievements.includes(a.id);
+            const copy = achievementCopy(t, a.id);
             return (
               <div
                 key={a.id}
-                className={`rounded-xl border p-3 ${
-                  got
-                    ? "border-amber-200 bg-amber-50"
-                    : "border-gray-100 bg-gray-50 opacity-60"
-                }`}
+                className={`rounded-xl border p-3 ${got ? "border-amber-200 bg-amber-50" : "border-gray-100 bg-gray-50 opacity-60"}`}
               >
                 <div className="flex items-center gap-2">
                   <span className="text-xl grayscale-0">{a.icon}</span>
                   <span className={`text-sm font-bold ${got ? "text-amber-800" : "text-gray-500"}`}>
-                    {got ? a.title : "???"}
+                    {got ? (copy?.title ?? a.title) : t.game.hidden}
                   </span>
                 </div>
-                <div className="mt-1 text-xs text-gray-500">{got ? a.desc : "조건을 채우면 해금"}</div>
+                <div className="mt-1 text-xs text-gray-500">{got ? (copy?.desc ?? a.desc) : t.game.locked}</div>
               </div>
             );
           })}
@@ -208,9 +195,9 @@ export default function GamePage() {
 
       <section className="rounded-2xl border border-gray-200 bg-white p-5">
         <h2 className="text-base font-bold text-gray-900">
-          내 식재료 도감{" "}
+          {t.game.dexTitle}{" "}
           <span className="text-xs font-normal text-gray-400">
-            {collected.length}/{TOTAL_INGREDIENTS}종 · 레시피 생성 시 자동 기록
+            {format(t.game.dexHint, { have: collected.length, total: TOTAL_INGREDIENTS })}
           </span>
         </h2>
         <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-100">
@@ -220,23 +207,17 @@ export default function GamePage() {
           />
         </div>
         {collected.length === 0 ? (
-          <p className="mt-3 text-sm text-gray-400">
-            아직 모은 식재료가 없습니다. 홈에서 레시피를 생성하면 입력한 식재료가 도감에 기록됩니다.
-          </p>
+          <p className="mt-3 text-sm text-gray-400">{t.game.dexEmpty}</p>
         ) : (
           <div className="mt-3 flex flex-wrap gap-2">
             {collected.map(([name, cnt]) => (
-              <span
-                key={name}
-                className="rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700"
-              >
+              <span key={name} className="rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
                 {name} ×{cnt}
               </span>
             ))}
           </div>
         )}
       </section>
-
     </div>
   );
 }

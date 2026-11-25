@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { format, localizeMessage } from "@/i18n/text";
+import { ko } from "@/i18n/messages/ko";
 import { translateToKorean } from "@/lib/alias";
 import { requestVision } from "@/lib/client-api";
 
@@ -28,6 +31,7 @@ export default function PhotoIngredients({
 }: {
   onAdd: (items: { name: string; amount: string }[]) => void;
 }) {
+  const { t } = useUi();
   const [items, setItems] = useState<{ name: string; amount: string }[]>([]);
   const [demo, setDemo] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -37,18 +41,18 @@ export default function PhotoIngredients({
     if (!file) return;
     setError("");
     if (!file.type.startsWith("image/") || file.type === "image/svg+xml") {
-      setError("이미지 파일만 선택할 수 있습니다.");
+      setError(ko.errors.imageOnly);
       return;
     }
     if (file.size > MAX_ORIGINAL) {
-      setError("이미지 용량은 15MB 이하만 선택할 수 있습니다.");
+      setError(ko.errors.image15);
       return;
     }
     setBusy(true);
     try {
       const shrunk = await shrink(file);
       if (shrunk.size > MAX_UPLOAD) {
-        setError("이미지 용량은 4MB 이하만 업로드할 수 있습니다. 더 작은 사진을 선택해 주세요.");
+        setError(ko.errors.image4upload);
         return;
       }
       const body = new FormData();
@@ -58,14 +62,12 @@ export default function PhotoIngredients({
         setError(data.error);
         return;
       }
-      const names = Array.from(
-        new Set(data.ingredients.map((name) => translateToKorean(name)).filter(Boolean))
-      );
+      const names = Array.from(new Set(data.ingredients.map((name) => translateToKorean(name)).filter(Boolean)));
       setItems(names.map((name) => ({ name, amount: "" })));
       setDemo(Boolean(data.demo));
-      if (names.length === 0) setError("사진에서 식재료를 찾지 못했습니다.");
+      if (names.length === 0) setError(ko.errors.photoNone);
     } catch {
-      setError("서버 연결에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+      setError(ko.errors.server);
     } finally {
       setBusy(false);
     }
@@ -83,11 +85,11 @@ export default function PhotoIngredients({
       }))
       .filter((item) => item.name.length > 0);
     if (next.length === 0) {
-      setError("추가할 식재료 이름을 입력해 주세요.");
+      setError(ko.errors.photoNeedName);
       return;
     }
     if (!allowEmptyAmount && next.some((item) => !item.amount)) {
-      setError("각 식재료의 양을 입력해 주세요. 임의로 정하지 않습니다.");
+      setError(ko.errors.photoNeedAmount);
       return;
     }
     const unique = new Map<string, { name: string; amount: string }>();
@@ -104,9 +106,9 @@ export default function PhotoIngredients({
   return (
     <div className="rounded-lg border border-dashed border-gray-300 p-3" data-testid="photo-ingredients">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm font-medium text-gray-700">사진으로 식재료 인식</span>
+        <span className="text-sm font-medium text-gray-700">{t.photo.title}</span>
         <label className={btn}>
-          사진 업로드
+          {t.photo.upload}
           <input
             type="file"
             accept="image/*"
@@ -118,7 +120,7 @@ export default function PhotoIngredients({
           />
         </label>
         <label className={btn}>
-          카메라 촬영
+          {t.photo.camera}
           <input
             type="file"
             accept="image/*"
@@ -130,20 +132,18 @@ export default function PhotoIngredients({
             }}
           />
         </label>
-        {busy && <span className="text-xs text-gray-500">인식 중입니다…</span>}
+        {busy && <span className="text-xs text-gray-500">{t.photo.busy}</span>}
       </div>
-      <p className="mt-1 text-xs text-gray-400">
-        사진은 인식에만 쓰이며 서버에 저장하지 않습니다. 큰 사진은 자동으로 줄이고, 4MB를 넘으면 업로드할 수 없습니다.
-      </p>
+      <p className="mt-1 text-xs text-gray-400">{t.photo.note}</p>
       {demo && items.length > 0 && (
         <p className="mt-2 rounded-md bg-amber-50 px-3 py-2 text-xs text-amber-700" data-testid="photo-demo-notice">
-          예시 식재료입니다. 지금은 사진 속 재료를 온라인으로 인식하지 않습니다.
+          {t.photo.demo}
         </p>
       )}
-      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
+      {error && <p className="mt-2 text-xs text-red-600">{localizeMessage(error, t)}</p>}
       {items.length > 0 && (
         <div className="mt-2">
-          <p className="mb-2 text-xs text-gray-500">인식된 식재료의 양을 입력한 뒤 추가해 주세요.</p>
+          <p className="mb-2 text-xs text-gray-500">{t.photo.enterAmounts}</p>
           <div className="space-y-2">
             {items.map((item, index) => (
               <div
@@ -151,21 +151,21 @@ export default function PhotoIngredients({
                 className="flex flex-wrap items-center gap-2 rounded-lg bg-gray-100 px-2 py-2 text-xs text-gray-700"
               >
                 <input
-                  aria-label={`인식된 식재료 ${index + 1}`}
+                  aria-label={format(t.photo.recognized, { n: index + 1 })}
                   value={item.name}
                   onChange={(e) => updateItem(index, "name", e.target.value)}
                   className="min-w-[6rem] flex-1 rounded-md bg-white px-2 py-1 text-xs outline-none"
                 />
                 <input
-                  aria-label={`${item.name || "식재료"}의 양`}
+                  aria-label={format(t.photo.amountLabel, { name: item.name || t.photo.ingredient })}
                   value={item.amount}
                   onChange={(e) => updateItem(index, "amount", e.target.value)}
-                  placeholder="양 (예: 200g)"
+                  placeholder={t.photo.amountPlaceholder}
                   className="w-28 rounded-md bg-white px-2 py-1 text-xs outline-none"
                 />
                 <button
                   type="button"
-                  aria-label={`${item.name || "식재료"} 삭제`}
+                  aria-label={format(t.photo.remove, { name: item.name || t.photo.ingredient })}
                   className="text-gray-400 hover:text-red-500"
                   onClick={() => setItems((prev) => prev.filter((_, i) => i !== index))}
                 >
@@ -180,14 +180,14 @@ export default function PhotoIngredients({
               className="rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
               onClick={() => commit(false)}
             >
-              보유 식재료에 추가
+              {t.photo.add}
             </button>
             <button
               type="button"
               className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
               onClick={() => commit(true)}
             >
-              이름만 추가
+              {t.photo.addNameOnly}
             </button>
           </div>
         </div>

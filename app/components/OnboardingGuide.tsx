@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUi } from "@/components/UiProvider";
 
 const DISMISS_KEY = "nutrivibe:onboardingDismissed";
 
 export default function OnboardingGuide() {
+  const { t } = useUi();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -31,25 +33,25 @@ export default function OnboardingGuide() {
     <section
       className="mb-5 rounded-2xl border border-brand-100 bg-white p-4 shadow-sm"
       data-testid="onboarding"
-      aria-label="처음 사용 안내"
+      aria-label={t.onboarding.label}
     >
       <div className="flex items-start justify-between gap-3">
-        <h2 className="text-sm font-bold text-gray-900">처음이시라면 이 순서대로 이용해 주세요</h2>
+        <h2 className="text-sm font-bold text-gray-900">{t.onboarding.title}</h2>
         <button type="button" onClick={close} className="shrink-0 text-xs font-medium text-gray-500 underline">
-          닫기
+          {t.common.close}
         </button>
       </div>
       <ol className="mt-3 list-decimal space-y-1.5 pl-4 text-sm leading-relaxed text-gray-700">
-        <li>보유 식재료를 입력하거나 사진으로 추가합니다.</li>
-        <li>기피·알레르기를 설정합니다.</li>
-        <li>레시피를 추천받거나 주간 식단을 만듭니다.</li>
+        <li>{t.onboarding.step1}</li>
+        <li>{t.onboarding.step2}</li>
+        <li>{t.onboarding.step3}</li>
       </ol>
       <p className="mt-3 text-xs leading-relaxed text-gray-500">
-        데이터는 이 기기에만 저장됩니다. 다른 기기로 옮기려면{" "}
+        {t.onboarding.localBefore}{" "}
         <Link href="/profile#backup" className="font-medium text-brand-700 underline">
-          프로필의 백업
+          {t.onboarding.backupLink}
         </Link>
-        을 사용해 주세요.
+        {t.onboarding.localAfter}
       </p>
     </section>
   );

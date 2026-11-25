@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { useUi } from "@/components/UiProvider";
+import { format, localizeMessage } from "@/i18n/text";
 import { storage } from "@/lib/storage";
 import { calcNutritionDetail } from "@/lib/nutrition";
 import { calcOwnedUsage } from "@/lib/shopping";
@@ -16,6 +18,7 @@ import PortionPrompt from "@/components/PortionPrompt";
 import type { Recipe } from "@/lib/types";
 
 export default function RecipeDetailPage() {
+  const { t } = useUi();
   const id = useSearchParams().get("id") ?? "";
   // SSR/CSR 일치를 위해 localStorage는 mount 이후에만 읽는다
   const [recipe, setRecipe] = useState<Recipe | null>(null);
@@ -66,12 +69,12 @@ export default function RecipeDetailPage() {
   if (!recipe || !detail) {
     return (
       <div className="mx-auto max-w-2xl rounded-2xl border border-gray-200 bg-white p-10 text-center">
-        <p className="text-gray-600">레시피를 찾을 수 없습니다.</p>
+        <p className="text-gray-600">{t.detail.missing}</p>
         <Link
           href="/recipes"
           className="mt-4 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
         >
-          추천 레시피로 돌아가기
+          {t.detail.back}
         </Link>
       </div>
     );
@@ -104,7 +107,7 @@ export default function RecipeDetailPage() {
     <div className="mx-auto max-w-3xl">
       <div className="mb-4">
         <Link href="/recipes" className="text-sm text-brand-600 hover:underline">
-          ← 추천 레시피로 돌아가기
+          {t.detail.backShort}
         </Link>
       </div>
 
@@ -123,7 +126,7 @@ export default function RecipeDetailPage() {
                   : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
               } ${popFav ? "anim-pop" : ""}`}
             >
-              {isFav ? "★ 즐겨찾기됨" : "☆ 즐겨찾기"}
+              {isFav ? t.detail.saved : t.detail.save}
             </button>
             <button
               type="button"
@@ -138,27 +141,27 @@ export default function RecipeDetailPage() {
               }}
               className="rounded-lg border border-brand-600 bg-white px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
             >
-              {logged ? "오늘 식단에서 빼기" : "오늘 식단에 담기"}
+              {logged ? t.detail.logOn : t.detail.logOff}
             </button>
           </div>
         </div>
 
         <div className="mt-4 flex flex-wrap gap-2 text-xs">
           <span className="rounded bg-brand-50 px-2 py-1 text-brand-700">
-            조리 시간 {recipe.cookMinutes}분
+            {format(t.detail.cook, { n: recipe.cookMinutes })}
           </span>
           <span className="rounded bg-brand-50 px-2 py-1 text-brand-700">
-            {recipe.servings}인분
+            {format(t.detail.servings, { n: recipe.servings })}
           </span>
           <span className="rounded bg-brand-50 px-2 py-1 text-brand-700">
-            총 열량 {totalCal} kcal
+            {format(t.detail.totalCal, { n: totalCal })}
           </span>
           <span className="rounded bg-brand-50 px-2 py-1 text-brand-700">
-            1인분 약 {perServing.calories} kcal
+            {format(t.detail.perCal, { n: perServing.calories })}
           </span>
           {dailyPct !== null && (
             <span className="rounded bg-amber-50 px-2 py-1 text-amber-700">
-              일일 권장 열량의 약 {dailyPct}%
+              {format(t.detail.dailyPct, { n: dailyPct })}
             </span>
           )}
           {recipe.nutrition.goalPct !== null && recipe.nutrition.goalPct !== undefined && (
@@ -171,17 +174,17 @@ export default function RecipeDetailPage() {
                     : "bg-red-50 text-red-600"
               }`}
             >
-              목표 열량 대비 {recipe.nutrition.goalPct}%
+              {format(t.detail.goalPct, { n: recipe.nutrition.goalPct })}
             </span>
           )}
           {usage && (
             <span className="rounded bg-gray-100 px-2 py-1 text-gray-600">
-              보유 식재료 활용 {usage.pct}% ({usage.used}/{usage.total})
+              {format(t.detail.owned, { pct: usage.pct, used: usage.used, total: usage.total })}
             </span>
           )}
         </div>
 
-        <h2 className="mt-6 text-base font-bold text-gray-900">재료</h2>
+        <h2 className="mt-6 text-base font-bold text-gray-900">{t.detail.ingredients}</h2>
         <ul className="mt-2 grid gap-1.5 sm:grid-cols-2">
           {recipe.ingredients.map((ing, i) => (
             <li
@@ -194,7 +197,7 @@ export default function RecipeDetailPage() {
           ))}
         </ul>
 
-        <h2 className="mt-6 text-base font-bold text-gray-900">조리 방법</h2>
+        <h2 className="mt-6 text-base font-bold text-gray-900">{t.detail.steps}</h2>
         <ol className="mt-2 space-y-2">
           {recipe.steps.map((step, i) => (
             <li key={i} className="flex gap-3 text-sm leading-relaxed">
@@ -207,17 +210,17 @@ export default function RecipeDetailPage() {
         </ol>
 
         <h2 className="mt-6 text-base font-bold text-gray-900">
-          열량 상세 계산 (재료별)
+          {t.detail.tableTitle}
         </h2>
         <div className="mt-2 overflow-x-auto rounded-lg border border-gray-200">
           <table className="w-full min-w-[480px] text-sm">
             <thead>
               <tr className="bg-gray-50 text-left text-xs text-gray-500">
-                <th className="px-3 py-2 font-semibold">재료</th>
-                <th className="px-3 py-2 font-semibold">사용량</th>
-                <th className="px-3 py-2 text-right font-semibold">100g당 열량</th>
-                <th className="px-3 py-2 text-right font-semibold">열량(kcal)</th>
-                <th className="px-3 py-2 text-right font-semibold">단백질(g)</th>
+                <th className="px-3 py-2 font-semibold">{t.detail.colIngredient}</th>
+                <th className="px-3 py-2 font-semibold">{t.detail.colAmount}</th>
+                <th className="px-3 py-2 text-right font-semibold">{t.detail.colPer100}</th>
+                <th className="px-3 py-2 text-right font-semibold">{t.detail.colKcal}</th>
+                <th className="px-3 py-2 text-right font-semibold">{t.detail.colProtein}</th>
               </tr>
             </thead>
             <tbody>
@@ -238,7 +241,7 @@ export default function RecipeDetailPage() {
               ))}
               <tr className="border-t-2 border-gray-200 bg-gray-50 font-bold text-gray-900">
                 <td className="px-3 py-2" colSpan={3}>
-                  합계 ({recipe.servings}인분)
+                  {format(t.detail.totalRow, { n: recipe.servings })}
                 </td>
                 <td className="px-3 py-2 text-right">{detail.totals.calories} kcal</td>
                 <td className="px-3 py-2 text-right">{detail.totals.protein} g</td>
@@ -252,19 +255,19 @@ export default function RecipeDetailPage() {
         />
         {unknown > 0 && (
           <p className="mt-1 text-xs text-gray-400">
-            영양 데이터에 없는 재료 {unknown}종은 계산에서 제외되었습니다.
+            {format(t.detail.unknown, { n: unknown })}
           </p>
         )}
 
         <h2 className="mt-6 text-base font-bold text-gray-900">
-          기본 영양 참고 정보
+          {t.detail.macroTitle}
         </h2>
         <div className="mt-2 grid grid-cols-4 gap-2 text-center">
           {[
-            ["열량(총)", `${detail.totals.calories} kcal`],
-            ["단백질", `${detail.totals.protein} g`],
-            ["탄수화물", `${detail.totals.carbs} g`],
-            ["지방", `${detail.totals.fat} g`],
+            [t.detail.calTotal, `${detail.totals.calories} kcal`],
+            [t.detail.protein, `${detail.totals.protein} g`],
+            [t.detail.carbs, `${detail.totals.carbs} g`],
+            [t.detail.fat, `${detail.totals.fat} g`],
           ].map(([label, value]) => (
             <div
               key={label}
@@ -277,10 +280,10 @@ export default function RecipeDetailPage() {
         </div>
         <div className="mt-2 grid grid-cols-4 gap-2 text-center">
           {[
-            ["1인분 열량", `${perServing.calories} kcal`],
-            ["1인분 단백질", `${perServing.protein} g`],
-            ["1인분 탄수화물", `${perServing.carbs} g`],
-            ["1인분 지방", `${perServing.fat} g`],
+            [t.detail.perCalLabel, `${perServing.calories} kcal`],
+            [t.detail.perProtein, `${perServing.protein} g`],
+            [t.detail.perCarbs, `${perServing.carbs} g`],
+            [t.detail.perFat, `${perServing.fat} g`],
           ].map(([label, value]) => (
             <div
               key={label}
@@ -292,11 +295,10 @@ export default function RecipeDetailPage() {
           ))}
         </div>
         <p className="mt-2 text-xs text-gray-400">
-          {recipe.nutrition.note ??
-            "내부 영양 참고 데이터(nutrition-data.json) 기준 추정치입니다."}
+          {recipe.nutrition.note ? localizeMessage(recipe.nutrition.note, t) : t.detail.fallback}
           {dailyPct !== null && dailyCal
-            ? ` 일일 권장 열량(${dailyCal} kcal)은 내 프로필 정보로 추정한 참고치입니다.`
-            : " 내 프로필에서 신체 정보를 저장하면 일일 권장 열량 대비 비율을 볼 수 있습니다."}
+            ? format(t.detail.dailyWith, { n: dailyCal })
+            : t.detail.dailyWithout}
         </p>
 
         <div className="mt-6 flex gap-3">
@@ -304,7 +306,7 @@ export default function RecipeDetailPage() {
             href="/shopping-list"
             className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-brand-700"
           >
-            이 레시피로 쇼핑리스트 생성
+            {t.detail.shopping}
           </Link>
         </div>
       </div>

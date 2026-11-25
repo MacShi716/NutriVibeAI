@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useUi } from "@/components/UiProvider";
 import { REMINDERS_EVENT, storage } from "@/lib/storage";
 import {
   notificationPermission,
@@ -20,6 +21,7 @@ function emptySettings(): ReminderSettings {
 }
 
 export default function ReminderSettingsPanel() {
+  const { t } = useUi();
   const [settings, setSettings] = useState<ReminderSettings>(emptySettings());
   const [permission, setPermission] = useState<"unsupported" | NotificationPermission>("unsupported");
   const [ready, setReady] = useState(false);
@@ -54,18 +56,15 @@ export default function ReminderSettingsPanel() {
   if (!ready) return null;
 
   const rows: Array<{ key: keyof Pick<ReminderSettings, "veggieLunch" | "veggieDinner" | "grocery">; label: string; hint: string }> = [
-    { key: "veggieLunch", label: "점심 전 채소 안내", hint: "매일 오전 11:50 (기기 로컬 시간)" },
-    { key: "veggieDinner", label: "저녁 전 채소 안내", hint: "매일 오후 5:50 (기기 로컬 시간)" },
-    { key: "grocery", label: "쇼핑리스트 확인", hint: "수요일·일요일 오후 6:00 (기기 로컬 시간)" },
+    { key: "veggieLunch", label: t.reminders.lunchLabel, hint: t.reminders.lunchHint },
+    { key: "veggieDinner", label: t.reminders.dinnerLabel, hint: t.reminders.dinnerHint },
+    { key: "grocery", label: t.reminders.groceryLabel, hint: t.reminders.groceryHint },
   ];
 
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" data-testid="reminder-settings">
-      <h2 className="text-sm font-bold text-gray-900">알림</h2>
-      <p className="mt-1 text-xs leading-relaxed text-gray-500">
-        서버에 예약을 두지 않고, 이 기기의 로컬 시간과 브라우저 알림을 사용합니다. 앱을 열어 두시면 안내 배너가
-        표시됩니다. 알림을 거부하셔도 배너는 그대로 이용할 수 있습니다.
-      </p>
+      <h2 className="text-sm font-bold text-gray-900">{t.reminders.settingsTitle}</h2>
+      <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.reminders.settingsBody}</p>
       <ul className="mt-3 space-y-2">
         {rows.map((row) => (
           <li key={row.key}>
@@ -93,13 +92,13 @@ export default function ReminderSettingsPanel() {
           onChange={(e) => void enableNotify(e.target.checked)}
         />
         <span>
-          브라우저 알림 사용
+          {t.reminders.notify}
           <span className="mt-0.5 block text-xs text-gray-500">
             {!notificationsAvailable()
-              ? "이 브라우저는 알림을 지원하지 않습니다. 앱을 열어 두시면 배너로 안내합니다."
+              ? t.reminders.unsupported
               : permission === "denied"
-                ? "알림이 거부되어 있습니다. 앱을 열어 두시면 배너로만 안내합니다."
-                : "허용하시면 해당 시각 전후에 시스템 알림을 한 번 보여 드립니다."}
+                ? t.reminders.denied
+                : t.reminders.allowed}
           </span>
         </span>
       </label>

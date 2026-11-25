@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useUi } from "@/components/UiProvider";
+import { format } from "@/i18n/text";
+import type { Messages } from "@/i18n/messages/types";
 import { REMINDERS_EVENT, SUPPLEMENTS_EVENT, storage } from "@/lib/storage";
 import {
   listDueReminders,
@@ -12,7 +15,21 @@ import {
   type DueReminder,
 } from "@/lib/reminders";
 
+function reminderText(item: DueReminder, messages: Messages): { title: string; body: string } {
+  if (item.id === "veggieLunch") return { title: messages.reminders.lunchTitle, body: messages.reminders.lunchBody };
+  if (item.id === "veggieDinner") return { title: messages.reminders.dinnerTitle, body: messages.reminders.dinnerBody };
+  if (item.id === "grocery") return { title: messages.reminders.groceryTitle, body: messages.reminders.groceryBody };
+  if (item.supplement) {
+    return {
+      title: messages.reminders.supplementTitle,
+      body: format(messages.reminders.supplementBody, item.supplement),
+    };
+  }
+  return { title: item.title, body: item.body };
+}
+
 export default function ReminderHost() {
+  const { t } = useUi();
   const [visible, setVisible] = useState<DueReminder[]>([]);
 
   useEffect(() => {
@@ -27,7 +44,8 @@ export default function ReminderHost() {
       if (settings.notify) {
         for (const item of listNotifyCandidates(due)) {
           if (state.notified.includes(item.id)) continue;
-          if (showSystemNotification(item.title, item.body)) markNotified(item.id);
+          const text = reminderText(item, t);
+          if (showSystemNotification(text.title, text.body)) markNotified(item.id);
         }
       }
     }
@@ -47,10 +65,11 @@ export default function ReminderHost() {
       window.removeEventListener(SUPPLEMENTS_EVENT, refresh);
       document.removeEventListener("visibilitychange", onVis);
     };
-  }, []);
+  }, [t]);
 
   if (visible.length === 0) return null;
   const current = visible[0];
+  const text = reminderText(current, t);
 
   return (
     <div
@@ -60,11 +79,11 @@ export default function ReminderHost() {
     >
       <div className="mx-auto flex max-w-4xl items-start justify-between gap-3 px-4 py-3">
         <div>
-          <p className="text-sm font-semibold text-amber-900">{current.title}</p>
-          <p className="mt-0.5 text-xs leading-relaxed text-amber-800">{current.body}</p>
+          <p className="text-sm font-semibold text-amber-900">{text.title}</p>
+          <p className="mt-0.5 text-xs leading-relaxed text-amber-800">{text.body}</p>
           {current.href && (
             <Link href={current.href} className="mt-1 inline-block text-xs font-medium text-brand-700 underline">
-              바로 가기
+              {t.reminders.open}
             </Link>
           )}
         </div>
@@ -76,7 +95,7 @@ export default function ReminderHost() {
           }}
           className="shrink-0 rounded-lg border border-amber-300 bg-white px-2 py-1 text-xs font-medium text-amber-800 hover:bg-amber-100"
         >
-          오늘 닫기
+          {t.reminders.dismissToday}
         </button>
       </div>
     </div>
