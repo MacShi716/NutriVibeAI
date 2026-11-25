@@ -17,6 +17,11 @@
 - **收藏 + 生成历史**(最近 20 条,可一键重新生成)
 - **个人身体档案**:BMI、BMR(Mifflin-St Jeor)、TDEE、目标热量
 - **游戏化**:积分 / 等级(Lv.1~10)/ 12 个成就 / 每日任务 / 菜谱轮盘 / 食材图鉴,全局 toast 通知
+- **营养剂计划**(`/supplements`):用户自行添加/修改/删除项目、设定每日次数与单次用量,勾选今日服用,可选下次提醒时间。默认空列表,不预置个人补剂
+- **份量确认**:添加食材或把菜谱记入今日营养时询问用量/份数,不默认假设
+- **热量加法式**:在有分项数值时显示 `120 + 80 = 200 kcal` 这类算式,而不仅是一个总数
+- **DiningCode 外食入口**:从首页、周食谱、购物清单、营养剂页跳转到公开搜索 `https://www.diningcode.com/list.dc?query=`
+- **本地提醒**:用户可开启午餐前(11:50)、晚餐前(17:50)蔬菜提醒,以及周三/周日 18:00 购物清单提醒。静态站点用本机时间 + Notification API 或页内横幅,拒绝通知时仍可看横幅
 - 所有用户数据保存在浏览器 localStorage(键前缀 `nutrivibe:`),无账号、无服务端数据库
 
 ## 技术栈
@@ -51,6 +56,7 @@ NutriVibeAI/
 │   │   ├── shopping-list/page.tsx    # 购物清单
 │   │   ├── favorites/page.tsx        # 收藏 + 历史
 │   │   ├── profile/page.tsx          # 身体档案
+│   │   ├── supplements/page.tsx      # 营养剂计划与本地提醒
 │   │   └── game/page.tsx             # 游戏中心
 │   ├── components/                   # GameToast / VisitTracker / GenerationSteps / useCountUp
 │   ├── lib/

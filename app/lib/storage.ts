@@ -7,6 +7,9 @@ import type {
   PantryItem,
   WeeklyPlan,
   DailyLog,
+  SupplementItem,
+  SupplementLog,
+  ReminderSettings,
 } from "./types";
 
 const KEY_CONDITIONS = "nutrivibe:conditions";
@@ -18,9 +21,15 @@ const KEY_PROFILE = "nutrivibe:profile";
 const KEY_PANTRY = "nutrivibe:pantry";
 const KEY_WEEKLY = "nutrivibe:weeklyPlan";
 const KEY_DAILY = "nutrivibe:dailyLog";
+const KEY_SUPPLEMENTS = "nutrivibe:supplements";
+const KEY_SUPPLEMENT_LOG = "nutrivibe:supplementLog";
+const KEY_REMINDERS = "nutrivibe:reminders";
+const KEY_REMINDER_STATE = "nutrivibe:reminderState";
 
 export const CONDITIONS_EVENT = "nutrivibe:conditions";
 export const PROFILE_EVENT = "nutrivibe:profile";
+export const SUPPLEMENTS_EVENT = "nutrivibe:supplements";
+export const REMINDERS_EVENT = "nutrivibe:reminders";
 
 function notify(name: string): void {
   if (typeof window === "undefined") return;
@@ -142,6 +151,57 @@ export const storage = {
   saveDailyLog(log: DailyLog): void {
     write(KEY_DAILY, log);
   },
+  getSupplements(): SupplementItem[] {
+    const raw = read<SupplementItem[]>(KEY_SUPPLEMENTS);
+    return Array.isArray(raw) ? raw.filter((item) => item && typeof item.id === "string") : [];
+  },
+  saveSupplements(items: SupplementItem[]): void {
+    if (unchanged(KEY_SUPPLEMENTS, items)) return;
+    write(KEY_SUPPLEMENTS, items);
+    notify(SUPPLEMENTS_EVENT);
+  },
+  getSupplementLog(): SupplementLog {
+    const today = todayKey();
+    const raw = read<SupplementLog>(KEY_SUPPLEMENT_LOG);
+    if (!raw || raw.date !== today || !raw.taken || typeof raw.taken !== "object") {
+      return { date: today, taken: {} };
+    }
+    return raw;
+  },
+  saveSupplementLog(log: SupplementLog): void {
+    write(KEY_SUPPLEMENT_LOG, log);
+    notify(SUPPLEMENTS_EVENT);
+  },
+  getReminderSettings(): ReminderSettings {
+    const raw = read<ReminderSettings>(KEY_REMINDERS);
+    return {
+      veggieLunch: Boolean(raw?.veggieLunch),
+      veggieDinner: Boolean(raw?.veggieDinner),
+      grocery: Boolean(raw?.grocery),
+      notify: Boolean(raw?.notify),
+      updatedAt: raw?.updatedAt ?? "",
+    };
+  },
+  saveReminderSettings(settings: ReminderSettings): void {
+    if (unchanged(KEY_REMINDERS, settings)) return;
+    write(KEY_REMINDERS, settings);
+    notify(REMINDERS_EVENT);
+  },
+  getReminderState(): ReminderState {
+    const today = todayKey();
+    const raw = read<ReminderState>(KEY_REMINDER_STATE);
+    if (!raw || raw.date !== today) {
+      return { date: today, dismissed: [], notified: [] };
+    }
+    return {
+      date: today,
+      dismissed: Array.isArray(raw.dismissed) ? raw.dismissed : [],
+      notified: Array.isArray(raw.notified) ? raw.notified : [],
+    };
+  },
+  saveReminderState(state: ReminderState): void {
+    write(KEY_REMINDER_STATE, state);
+  },
 };
 
 export type HistoryEntry = {
@@ -155,4 +215,10 @@ export type HistoryEntry = {
 type ShoppingStored = {
   items: { name: string; amount: string; checked: boolean }[];
   updatedAt: string | null;
+};
+
+export type ReminderState = {
+  date: string;
+  dismissed: string[];
+  notified: string[];
 };

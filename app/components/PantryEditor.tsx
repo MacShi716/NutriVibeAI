@@ -25,7 +25,7 @@ export default function PantryEditor({
     window.dispatchEvent(new Event(PANTRY_EVENT));
   }, [namesKey]);
 
-  function update(index: number, field: "purchasedOn" | "expiresOn", value: string) {
+  function update(index: number, field: "amount" | "purchasedOn" | "expiresOn", value: string) {
     const next = items.map((item, i) => (i === index ? { ...item, [field]: value || null } : item));
     setItems(next);
     storage.savePantry(next);
@@ -73,6 +73,16 @@ export default function PantryEditor({
                   </span>
                 )}
               </div>
+              <label className="mt-2 block text-[11px] text-gray-500">
+                보유량 · 선택
+                <input
+                  type="text"
+                  value={item.amount ?? ""}
+                  onChange={(e) => update(index, "amount", e.target.value)}
+                  placeholder="예: 200g, 2개"
+                  className="mt-1 w-full rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-700"
+                />
+              </label>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <label className="text-[11px] text-gray-500">
                   구매일 · 선택

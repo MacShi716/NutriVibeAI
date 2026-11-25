@@ -5,7 +5,10 @@ import { useEffect, useMemo, useState } from "react";
 import { requestRecipes } from "@/lib/client-api";
 import { storage } from "@/lib/storage";
 import { calcOwnedUsage } from "@/lib/shopping";
-import { isLoggedToday, notifyDaily, toggleDailyLog } from "@/lib/daily";
+import { isLoggedToday, logRecipeToday, notifyDaily, removeDailyLog } from "@/lib/daily";
+import { caloriePartsOf } from "@/lib/calories";
+import CalorieFormula from "@/components/CalorieFormula";
+import PortionPrompt from "@/components/PortionPrompt";
 import { useCountUp } from "@/components/useCountUp";
 import type { GenerateResult, Recipe } from "@/lib/types";
 
@@ -57,6 +60,7 @@ export default function RecipesPage() {
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [regenerating, setRegenerating] = useState(false);
   const [logged, setLogged] = useState<Record<string, boolean>>({});
+  const [pending, setPending] = useState<Recipe | null>(null);
 
   useEffect(() => {
     const saved = storage.getLastResult();
@@ -71,9 +75,22 @@ export default function RecipesPage() {
   }, []);
 
   function toggleLog(recipe: Recipe) {
-    const on = toggleDailyLog(recipe);
+    if (isLoggedToday(recipe.id)) {
+      removeDailyLog(recipe.id);
+      notifyDaily();
+      setLogged((prev) => ({ ...prev, [recipe.id]: false }));
+      return;
+    }
+    setPending(recipe);
+  }
+
+  function confirmLog(servingsById: Record<string, number>) {
+    if (!pending) return;
+    const servings = servingsById[pending.id];
+    const on = logRecipeToday(pending, servings);
     notifyDaily();
-    setLogged((prev) => ({ ...prev, [recipe.id]: on }));
+    setLogged((prev) => ({ ...prev, [pending.id]: on }));
+    setPending(null);
   }
 
   async function regenerate() {
@@ -164,6 +181,10 @@ export default function RecipesPage() {
               {result.recipes.length}개 합계 약 {summary.total} kcal · 평균 약 {summary.avg} kcal
             </span>
           </div>
+          <CalorieFormula
+            className="mb-3 text-xs text-gray-500"
+            parts={caloriePartsOf(result.recipes.map((recipe) => ({ title: recipe.title, calories: recipe.nutrition.calories })))}
+          />
           <div className="space-y-3">
             {result.recipes.map((r, i) => (
               <CalorieBar
@@ -286,6 +307,13 @@ export default function RecipesPage() {
             {regenerating ? "생성 중..." : "다시 생성"}
           </button>
         </div>
+      )}
+      {pending && (
+        <PortionPrompt
+          items={[{ id: pending.id, title: pending.title }]}
+          onConfirm={confirmLog}
+          onCancel={() => setPending(null)}
+        />
       )}
     </div>
   );

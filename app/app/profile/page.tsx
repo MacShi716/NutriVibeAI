@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { CONDITIONS_EVENT, storage } from "@/lib/storage";
 import DailyNutrition from "@/components/DailyNutrition";
 import DataBackup from "@/components/DataBackup";
@@ -371,6 +372,13 @@ export default function ProfilePage() {
 
       <p className="mt-5 text-xs text-gray-400">
         프로필 정보는 이 기기(브라우저)에만 저장되며 서버로 전송되지 않습니다.
+      </p>
+      <p className="mt-3 text-sm text-gray-600">
+        영양제 계획과 식사 전 안내, 쇼핑리스트 알림은{" "}
+        <Link href="/supplements" className="font-medium text-brand-700 underline">
+          영양제·알림
+        </Link>
+        에서 관리할 수 있습니다.
       </p>
       <DataBackup />
     </div>

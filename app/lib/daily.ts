@@ -28,38 +28,64 @@ export function perServingMacros(recipe: Recipe): Pick<DailyEntry, "calories" | 
   };
 }
 
+function scaleMacros(
+  base: Pick<DailyEntry, "calories" | "protein" | "carbs" | "fat">,
+  servings: number
+): Pick<DailyEntry, "calories" | "protein" | "carbs" | "fat"> {
+  const s = servings > 0 ? servings : 0;
+  return {
+    calories: Math.round(base.calories * s),
+    protein: round1(base.protein * s),
+    carbs: round1(base.carbs * s),
+    fat: round1(base.fat * s),
+  };
+}
+
 export function isLoggedToday(id: string): boolean {
   return storage.getDailyLog().entries.some((entry) => entry.id === id);
 }
 
-export function toggleDailyLog(recipe: Recipe): boolean {
+/** 이미 담긴 항목을 오늘 기록에서 뺀다. */
+export function removeDailyLog(id: string): boolean {
   const log = storage.getDailyLog();
-  const idx = log.entries.findIndex((entry) => entry.id === recipe.id);
-  if (idx >= 0) {
-    log.entries.splice(idx, 1);
-    storage.saveDailyLog(log);
-    return false;
-  }
+  const idx = log.entries.findIndex((entry) => entry.id === id);
+  if (idx < 0) return false;
+  log.entries.splice(idx, 1);
+  storage.saveDailyLog(log);
+  return true;
+}
+
+/**
+ * 인분을 확인한 뒤에만 담는다. servingsLogged가 0 이하면 저장하지 않는다.
+ */
+export function logRecipeToday(recipe: Recipe, servingsLogged: number): boolean {
+  if (!(servingsLogged > 0)) return false;
+  const log = storage.getDailyLog();
+  if (log.entries.some((entry) => entry.id === recipe.id)) return false;
   log.entries.unshift({
     id: recipe.id,
     title: recipe.title,
-    ...perServingMacros(recipe),
+    ...scaleMacros(perServingMacros(recipe), servingsLogged),
     loggedAt: new Date().toISOString(),
+    servingsLogged,
   });
   storage.saveDailyLog(log);
   return true;
 }
 
-export function logRecipesToday(recipes: Recipe[]): number {
+export function logRecipesToday(recipes: Recipe[], servingsById: Record<string, number>): number {
   const log = storage.getDailyLog();
   let added = 0;
   for (const recipe of recipes) {
     if (log.entries.some((entry) => entry.id === recipe.id)) continue;
+    const servings = servingsById[recipe.id];
+    if (!(servings > 0)) continue;
     log.entries.push({
       id: recipe.id,
       title: recipe.title,
-      ...perServingMacros(recipe),
+      ...scaleMacros(perServingMacros(recipe), servings),
       loggedAt: new Date().toISOString(),
+      servingsLogged: servings,
     });
     added += 1;
   }

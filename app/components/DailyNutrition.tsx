@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { DAILY_EVENT, resolveMacroGoals, type MacroGoals } from "@/lib/daily";
 import { PROFILE_EVENT, storage } from "@/lib/storage";
+import CalorieFormula from "@/components/CalorieFormula";
+import { caloriePartsOf } from "@/lib/calories";
 import type { DailyEntry } from "@/lib/types";
 
 function Bar({
@@ -84,6 +86,17 @@ export default function DailyNutrition() {
       ) : (
         <div className="mt-3 space-y-3">
           <Bar label="열량" value={sum.calories} goal={goals.calories} unit="kcal" />
+          <CalorieFormula parts={caloriePartsOf(entries)} />
+          {entries.length > 0 && (
+            <ul className="space-y-1 text-xs text-gray-500">
+              {entries.map((entry) => (
+                <li key={entry.id}>
+                  {entry.title} {entry.calories} kcal
+                  {entry.servingsLogged ? ` · ${entry.servingsLogged}인분` : ""}
+                </li>
+              ))}
+            </ul>
+          )}
           <Bar label="단백질" value={sum.protein} goal={goals.protein} unit="g" />
           <Bar
             label="탄수화물"
