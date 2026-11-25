@@ -37,6 +37,9 @@ jobs:
 
       - name: Static export
         run: npm run build:pages
+        env:
+          # Public relay URL only. Never put API keys in this variable.
+          NEXT_PUBLIC_RELAY_URL: ${{ vars.NEXT_PUBLIC_RELAY_URL }}
 
       - name: Upload GitHub Pages artifact
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -1,5 +1,5 @@
 import { isIsoDate, weekDates } from "./dates";
-import { finalizeRecipes, generateJsonText, type LLMProvider } from "./gemini";
+import { finalizeRecipes, type JsonTextGenerator, type LLMProvider } from "./gemini";
 import { mockRecipes } from "./mock";
 import { orderIngredientsForGeneration } from "./pantry";
 import { splitIngredients } from "./shopping";
@@ -225,6 +225,10 @@ export async function createWeeklyPlan(input: {
   pinned: PinnedMeal[];
   /** false면 브라우저 데모처럼 원격 모델을 호출하지 않고 내장 레시피만 쓴다. */
   allowRemote?: boolean;
+  /** 중계가 이미 만든 주간 JSON 텍스트. 있으면 원격 호출을 생략한다. */
+  aiText?: string | null;
+  aiProvider?: LLMProvider;
+  generateJsonText?: JsonTextGenerator;
 }): Promise<WeeklyPlan> {
   if (!isIsoDate(input.startDate)) {
     throw new Error("시작 날짜가 올바르지 않습니다.");
@@ -249,23 +253,36 @@ export async function createWeeklyPlan(input: {
   let generated = new Map<string, Recipe>();
   const warnings: string[] = [];
 
-  if (input.allowRemote !== false && open.length > 0 && splitIngredients(generation.ingredients).length > 0) {
-    const ai = await generateJsonText(buildWeekPrompt(generation, open));
-    provider = ai.provider;
-    usedMock = ai.usedMock;
-    if (ai.text) {
-      try {
-        generated = parseWeek(ai.text, generation, warnings);
-        if (generated.size === 0) {
-          usedMock = true;
-          provider = "mock";
-        }
-      } catch (err) {
-        console.error("[nutrivibe] 주간 식단 JSON 파싱 실패", err instanceof Error ? err.message : "");
-        generated = new Map();
+  const applyAiText = (text: string, from: LLMProvider) => {
+    provider = from;
+    usedMock = false;
+    try {
+      generated = parseWeek(text, generation, warnings);
+      if (generated.size === 0) {
         usedMock = true;
         provider = "mock";
       }
+    } catch (err) {
+      console.error("[nutrivibe] 주간 식단 JSON 파싱 실패", err instanceof Error ? err.message : "");
+      generated = new Map();
+      usedMock = true;
+      provider = "mock";
+    }
+  };
+
+  if (input.aiText) {
+    applyAiText(input.aiText, input.aiProvider ?? "zhipu");
+  } else if (
+    input.generateJsonText &&
+    input.allowRemote !== false &&
+    open.length > 0 &&
+    splitIngredients(generation.ingredients).length > 0
+  ) {
+    const ai = await input.generateJsonText(buildWeekPrompt(generation, open));
+    if (ai.text) applyAiText(ai.text, ai.provider);
+    else {
+      provider = ai.provider;
+      usedMock = ai.usedMock;
     }
   } else if (splitIngredients(generation.ingredients).length === 0) {
     warnings.push("보유 식재료가 없어 식단을 구성하지 못했습니다. 재료를 입력한 뒤 다시 만들어 주세요.");
@@ -312,6 +329,9 @@ export async function swapWeeklyMeal(input: {
   avoidTitles: string[];
   /** false면 원격 모델을 호출하지 않고 내장 레시피만 고른다. */
   allowRemote?: boolean;
+  aiRecipe?: Recipe | null;
+  aiProvider?: LLMProvider;
+  generateJsonText?: JsonTextGenerator;
 }): Promise<{ recipe: Recipe | null; usedMock: boolean; provider: LLMProvider }> {
   const generation = orderIngredientsForGeneration(input.conditions, input.expiringIngredients);
   const avoid = new Map(input.avoidTitles.map((title) => [title, 1]));
@@ -334,7 +354,14 @@ export async function swapWeeklyMeal(input: {
     .filter((line) => line !== "")
     .join("\n");
 
-  const ai = input.allowRemote === false ? null : await generateJsonText(prompt);
+  if (input.aiRecipe) {
+    const recipe = recipeFromUnknown(input.aiRecipe, `swap-${Date.now()}`, generation);
+    if (recipe && !avoid.has(recipe.title)) {
+      return { recipe, usedMock: false, provider: input.aiProvider ?? "zhipu" };
+    }
+  }
+
+  const ai = input.allowRemote === false || input.aiRecipe !== undefined || !input.generateJsonText ? null : await input.generateJsonText(prompt);
   if (ai?.text) {
     const start = ai.text.indexOf("{");
     const end = ai.text.lastIndexOf("}");

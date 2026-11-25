@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { parseConditions } from "@/lib/conditions";
 import { isIsoDate } from "@/lib/dates";
 import { createWeeklyPlan, swapWeeklyMeal, type PinnedMeal } from "@/lib/mealplan";
+import { generateJsonText } from "@/lib/zhipu-server";
 import type { MealSlot, Recipe } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -65,6 +66,7 @@ export async function POST(req: NextRequest) {
         expiringIngredients: check.expiringIngredients,
         slot: record.slot,
         avoidTitles,
+        generateJsonText,
       });
       if (!swapped.recipe) {
         return NextResponse.json({ error: "다른 레시피를 찾지 못했습니다." }, { status: 404 });
@@ -81,6 +83,7 @@ export async function POST(req: NextRequest) {
       expiringIngredients: check.expiringIngredients,
       startDate,
       pinned: readPinned(record.pinned),
+      generateJsonText,
     });
     return NextResponse.json({ plan });
   } catch (err) {

@@ -31,7 +31,12 @@ async function runBuild() {
     const child = spawn(process.execPath, [nextBin, "build"], {
       cwd: appRoot,
       stdio: "inherit",
-      env: { ...process.env, GITHUB_PAGES: "true", NEXT_PUBLIC_STATIC_HOST: "true" },
+      env: {
+        ...process.env,
+        GITHUB_PAGES: "true",
+        NEXT_PUBLIC_STATIC_HOST: "true",
+        // Relay URL comes from the environment (GitHub Actions variable). Do not hard-code one.
+      },
     });
     child.on("error", reject);
     child.on("close", (code) => resolve(code ?? 1));
