@@ -86,10 +86,11 @@ npm run dev                          # http://localhost:3000
 其他命令:
 
 ```powershell
-npm run build      # 生产构建(先停掉 dev)
-npm start          # 启动生产服务
-npm run lint       # ESLint
-npx tsc --noEmit   # 类型检查
+npm run build        # 生产构建(含 API Route, Vercel 备份用; 先停掉 dev)
+npm run build:pages  # GitHub Pages 静态导出, 产物在 app/out
+npm start            # 启动生产服务
+npm run lint         # ESLint
+npx tsc --noEmit     # 类型检查
 ```
 
 注意事项:
@@ -152,10 +153,24 @@ python nutrivibe_build\verify_report.py     # 校验页数 / 孤悬标题 / 关�
 
 生成的 PDF / DOCX / `docx_preview.pdf` 已被 `.gitignore` 排除,不会提交。修改报告正文就是修改 `build_report.py` 中的 `CONTENT` 列表。
 
+## GitHub Pages 与 Vercel
+
+公开测试地址为 GitHub Pages: `https://macshi716.github.io/NutriVibeAI/`。仓库保持私有时, Pages 需要仓库设置里启用,且账号需支持私有仓库 Pages(GitHub Pro 及以上)。路径: **Settings → Pages → Build and deployment → Source: GitHub Actions**。工作流是 `.github/workflows/pages.yml`,向 `main` 推送后构建并部署。Vercel 项目保留作带 API 的备份,不要改成静态导出。
+
+`GITHUB_PAGES=true` 时 `next.config.mjs` 使用 `output: 'export'`、`basePath` / `assetPrefix` `/NutriVibeAI` 和 `trailingSlash`。同一次构建设置 `NEXT_PUBLIC_STATIC_HOST=true`,页面不再请求不存在的 `/api/*`,而是直接走与服务器无 key 时相同的内置演示逻辑。`output: 'export'` 不能编译 Route Handler,所以 `npm run build:pages` 会在构建期间把 `app/app/api` 临时移走,构建结束后放回。API 源码仍在仓库里,Vercel 继续用 `npm run build`(不设置上述变量,因此仍调用 API)。
+
+| 能力 | github.io(无服务器) | 带 API 的服务器(Vercel 备份) |
+|---|---|---|
+| 页面、韩语界面、localStorage、同步码 / JSON 备份、蛋白质目标、保质期提示、购物清单、收藏、游戏化 | 可用 | 可用 |
+| 菜谱生成、再生成、周计划与换菜 | 仅演示模式:浏览器内调用与服务器相同的内置菜谱库(`lib/mock.ts`),不请求 Groq/Gemini | Groq 优先,失败再试 Gemini,再失败才演示模式 |
+| 照片识材 | 仅演示模式:显示与无 API key 时相同的示例食材,不上传识别 | 有 `GROQ_API_KEY` 或 `VISION_API_KEY` 时识别照片;没有 key 时同样是示例食材 |
+
+静态站点没有动态路由,菜谱详情是 `/recipes/view/?id=...`,数据仍来自当前浏览器的 localStorage。
+
 ## 已知限制
 
-- 默认没有配置真实 API key 时运行于演示模式;真实 LLM 输出质量取决于模型和配额(Groq 免费层可能 429 限流)。
-- 尚未部署到 Vercel。
+- 默认没有配置真实 API key 时运行于演示模式;真实 LLM 输出质量取决于模型和配额(Groq 免费层可能 429 限流)。GitHub Pages 上始终是演示模式。
+- Vercel 仍可作为带 API Route 的备份部署;公开测试站是 GitHub Pages。
 - 营养数据为内部 68 种食材参考值,不是医疗级数据;菜谱与营养信息仅供参考。
 - 无账号与云端同步,数据仅存于当前浏览器的 localStorage。
 - 无食材图片识别、一周食谱、支付、IoT 等功能(MVP 范围外)。

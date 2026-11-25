@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { requestRecipes } from "@/lib/client-api";
 import { storage } from "@/lib/storage";
 import type { HistoryEntry } from "@/lib/storage";
 import type { Recipe, UserConditions } from "@/lib/types";
@@ -29,14 +30,9 @@ export default function FavoritesPage() {
     if (!conditions || regeneratingId !== null) return;
     setRegeneratingId(idx);
     try {
-      const res = await fetch("/api/recipes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(conditions),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      storage.saveLastResult(data);
+      const outcome = await requestRecipes(conditions);
+      if (!outcome.ok) throw new Error(outcome.error);
+      storage.saveLastResult(outcome.result);
       router.push("/recipes");
     } catch {
       alert("다시 생성에 실패했습니다. 잠시 후 다시 시도해주세요.");
@@ -63,7 +59,7 @@ export default function FavoritesPage() {
             >
               <div>
                 <Link
-                  href={`/recipes/${r.id}`}
+                  href={`/recipes/view?id=${encodeURIComponent(r.id)}`}
                   className="font-semibold text-gray-900 hover:text-brand-700"
                 >
                   {r.title}

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { translateToKorean } from "@/lib/alias";
+import { requestVision } from "@/lib/client-api";
 
 const MAX_ORIGINAL = 15 * 1024 * 1024;
 const MAX_UPLOAD = 4 * 1024 * 1024;
@@ -48,13 +49,12 @@ export default function PhotoIngredients({ onAdd }: { onAdd: (names: string[]) =
       }
       const body = new FormData();
       body.append("image", shrunk, "photo.jpg");
-      const res = await fetch("/api/vision", { method: "POST", body });
-      const data = (await res.json()) as { ingredients?: string[]; demo?: boolean; error?: string };
-      if (!res.ok) {
-        setError(data.error ?? "사진 인식에 실패했습니다.");
+      const data = await requestVision(body);
+      if (!data.ok) {
+        setError(data.error);
         return;
       }
-      const names = (data.ingredients ?? []).map((name) => translateToKorean(name)).filter(Boolean);
+      const names = data.ingredients.map((name) => translateToKorean(name)).filter(Boolean);
       setItems(Array.from(new Set(names)));
       setDemo(Boolean(data.demo));
       if (names.length === 0) setError("사진에서 식재료를 찾지 못했습니다.");

@@ -209,6 +209,8 @@ export async function createWeeklyPlan(input: {
   expiringIngredients: string[];
   startDate: string;
   pinned: PinnedMeal[];
+  /** false면 브라우저 데모처럼 원격 모델을 호출하지 않고 내장 레시피만 쓴다. */
+  allowRemote?: boolean;
 }): Promise<WeeklyPlan> {
   if (!isIsoDate(input.startDate)) {
     throw new Error("시작 날짜가 올바르지 않습니다.");
@@ -233,7 +235,7 @@ export async function createWeeklyPlan(input: {
   let generated = new Map<string, Recipe>();
   const warnings: string[] = [];
 
-  if (open.length > 0 && splitIngredients(generation.ingredients).length > 0) {
+  if (input.allowRemote !== false && open.length > 0 && splitIngredients(generation.ingredients).length > 0) {
     const ai = await generateJsonText(buildWeekPrompt(generation, open));
     provider = ai.provider;
     usedMock = ai.usedMock;
@@ -294,6 +296,8 @@ export async function swapWeeklyMeal(input: {
   expiringIngredients: string[];
   slot: MealSlot;
   avoidTitles: string[];
+  /** false면 원격 모델을 호출하지 않고 내장 레시피만 고른다. */
+  allowRemote?: boolean;
 }): Promise<{ recipe: Recipe | null; usedMock: boolean; provider: LLMProvider }> {
   const generation = orderIngredientsForGeneration(input.conditions, input.expiringIngredients);
   const avoid = new Map(input.avoidTitles.map((title) => [title, 1]));
@@ -316,8 +320,8 @@ export async function swapWeeklyMeal(input: {
     .filter((line) => line !== "")
     .join("\n");
 
-  const ai = await generateJsonText(prompt);
-  if (ai.text) {
+  const ai = input.allowRemote === false ? null : await generateJsonText(prompt);
+  if (ai?.text) {
     const start = ai.text.indexOf("{");
     const end = ai.text.lastIndexOf("}");
     if (start >= 0 && end > start) {

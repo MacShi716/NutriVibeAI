@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { requestRecipes } from "@/lib/client-api";
 import { storage } from "@/lib/storage";
 import { calcOwnedUsage } from "@/lib/shopping";
 import { isLoggedToday, notifyDaily, toggleDailyLog } from "@/lib/daily";
@@ -79,13 +80,9 @@ export default function RecipesPage() {
     if (!result || regenerating) return;
     setRegenerating(true);
     try {
-      const res = await fetch("/api/recipes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(result.conditions),
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const next = (await res.json()) as GenerateResult;
+      const outcome = await requestRecipes(result.conditions);
+      if (!outcome.ok) throw new Error(outcome.error);
+      const next = outcome.result;
       storage.saveLastResult(next);
       setResult(next);
     } catch {
@@ -235,7 +232,7 @@ export default function RecipesPage() {
               className="anim-fade-up rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
               style={{ animationDelay: `${i * 120}ms` }}
             >
-              <Link href={`/recipes/${r.id}`} className="group block">
+              <Link href={`/recipes/view?id=${encodeURIComponent(r.id)}`} className="group block">
                 <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700">
                   {r.title}
                 </h2>
