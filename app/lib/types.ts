@@ -32,6 +32,8 @@ export type UserConditions = {
   goalCalories?: number | null; // 프로필 기반 목표 열량 (선택, 참고용)
   goalProtein?: number | null; // 하루 단백질 목표(g), 선택
   prioritizeExpiring?: boolean; // 유통기한이 가까운 재료를 먼저 쓰도록 생성
+  /** UI language used when generating; ko if omitted (older saved results). */
+  locale?: "ko" | "zh" | "en";
 };
 
 export type GenerateResult = {
@@ -41,6 +43,7 @@ export type GenerateResult = {
   usedMock: boolean;
   provider?: "zhipu" | "mock"; // 실제 사용된 LLM 제공방 (선택)
   generatedAt: string;
+  locale?: "ko" | "zh" | "en";
 };
 
 /** 사용자 개인 신체 프로필 (localStorage 저장, 참고용) */
@@ -82,6 +85,7 @@ export type WeeklyPlan = {
   usedMock: boolean;
   provider?: "zhipu" | "mock";
   generatedAt: string;
+  locale?: "ko" | "zh" | "en";
 };
 
 /** 보유 식재료의 구매일·유통기한 (없으면 null) */

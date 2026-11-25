@@ -15,6 +15,7 @@ import {
   type GameStats,
 } from "@/lib/gamification";
 import { TEMPLATES } from "@/lib/mock";
+import { randomLibraryPreview } from "@/lib/recipe-library";
 import { TOTAL_INGREDIENTS } from "@/lib/nutrition";
 
 type RollResult = {
@@ -25,7 +26,7 @@ type RollResult = {
 };
 
 export default function GamePage() {
-  const { t } = useUi();
+  const { t, locale } = useUi();
   const [state, setState] = useState<GameStats | null>(null);
   const [spin, setSpin] = useState(false);
   const [roll, setRoll] = useState<RollResult | null>(null);
@@ -54,13 +55,18 @@ export default function GamePage() {
     setSpin(true);
     setRoll(null);
     setTimeout(() => {
-      const picked = TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)];
-      setRoll({
-        title: picked.title,
-        desc: picked.desc,
-        cookMinutes: picked.cookMinutes,
-        ingredients: picked.build(2).map((i) => `${i.name} ${i.amount}`),
-      });
+      const fromLocale = randomLibraryPreview(locale, 2);
+      if (fromLocale) {
+        setRoll(fromLocale);
+      } else {
+        const picked = TEMPLATES[Math.floor(Math.random() * TEMPLATES.length)];
+        setRoll({
+          title: picked.title,
+          desc: picked.desc,
+          cookMinutes: picked.cookMinutes,
+          ingredients: picked.build(2).map((i) => `${i.name} ${i.amount}`),
+        });
+      }
       setSpin(false);
       trackEvent({ type: "roll" });
       setState(getGameState());

@@ -1,0 +1,2982 @@
+[
+  {
+    "id": "en-001",
+    "matches": [
+      "Boneless chicken breasts",
+      "cream of chicken soup (10 ounces)"
+    ],
+    "main": "Boneless chicken breasts",
+    "category": "meal",
+    "title": "2-Step Chicken",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: 2-Step Chicken.",
+    "ingredients": [
+      {
+        "name": "vegetable oil",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "Boneless chicken breasts",
+        "amount": "2"
+      },
+      {
+        "name": "cream of chicken soup (10 ounces)",
+        "amount": "1 can"
+      },
+      {
+        "name": "water",
+        "amount": "1/2 cup"
+      }
+    ],
+    "steps": [
+      "Heat oil in a skillet at a medium-high setting.",
+      "Add chicken and cook for ten minutes.",
+      "Remove chicken from pan and set aside.",
+      "Stir the soup and water together in the skillet and heat it to a boil.",
+      "Return the chicken to the skillet. Reduce the heat to low and simmer for an additional 10 minutes, or until the chicken reaches an internal temperature of 165°F."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/2-step-chicken",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-002",
+    "matches": [
+      "chicken breast (whole, skinless, boneless)",
+      "diced tomatoes (14 1/2 oz., with juice)",
+      "chili sauce"
+    ],
+    "main": "chicken breast (whole, skinless, boneless)",
+    "category": "meal",
+    "title": "20-Minute Chicken Creole",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: 20-Minute Chicken Creole.",
+    "ingredients": [
+      {
+        "name": "vegetable oil",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "chicken breast (whole, skinless, boneless)",
+        "amount": "2"
+      },
+      {
+        "name": "diced tomatoes (14 1/2 oz., with juice)",
+        "amount": "1 can"
+      },
+      {
+        "name": "chili sauce",
+        "amount": "1 cup"
+      },
+      {
+        "name": "green pepper (chopped, large)",
+        "amount": "1"
+      },
+      {
+        "name": "celery stalk (chopped)",
+        "amount": "2"
+      },
+      {
+        "name": "onion (chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "garlic clove (minced)",
+        "amount": "2"
+      },
+      {
+        "name": "dried basil",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "parsley (dried)",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "cayenne pepper",
+        "amount": "1/4 teaspoon"
+      },
+      {
+        "name": "salt",
+        "amount": "1/4 teaspoon"
+      }
+    ],
+    "steps": [
+      "Heat pan over medium-high heat (350 degrees in an electric skillet). Add vegetable oil and chicken and cook until the chicken reaches an internal temperature of 165°F (3-5 minutes).",
+      "Reduce heat to medium (300 degrees in electric skillet).",
+      "Add tomatoes with juice, chili sauce, green pepper, celery, onion, garlic, basil, parsley, cayenne pepper, and salt.",
+      "Bring to a boil; reduce heat to low and simmer, covered for 10-15 minutes.",
+      "Serve over hot, cooked rice or whole wheat pasta.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 20,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/20-minute-chicken-creole",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-003",
+    "matches": [
+      "beans, low-sodium undrained (pinto, kidney, red, or black 15.5 ounces)",
+      "corn, drained (15 ounces, or 10-ounce package of frozen corn)",
+      "crushed tomatoes, undrained (15 ounces)"
+    ],
+    "main": "beans, low-sodium undrained (pinto, kidney, red, or black 15.5 ounces)",
+    "category": "meal",
+    "title": "3-Can Chili",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: 3-Can Chili.",
+    "ingredients": [
+      {
+        "name": "beans, low-sodium undrained (pinto, kidney, red, or black 15.5 ounces)",
+        "amount": "1 can"
+      },
+      {
+        "name": "corn, drained (15 ounces, or 10-ounce package of frozen corn)",
+        "amount": "1 can"
+      },
+      {
+        "name": "crushed tomatoes, undrained (15 ounces)",
+        "amount": "1 can"
+      },
+      {
+        "name": "chili powder (to taste)",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "1. Place the contents of all 3 cans into a pan.",
+      "2. Add chili powder to taste.",
+      "3. Stir to mix.",
+      "4. Continue to stir over medium heat until heated thoroughly.",
+      "5. Refrigerate leftovers."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/3-can-chili",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-004",
+    "matches": [
+      "onion (medium, chopped)",
+      "broccoli (chopped)",
+      "carrot (shredded)"
+    ],
+    "main": "onion (medium, chopped)",
+    "category": "meal",
+    "title": "5 A Day Bulgur Wheat",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: 5 A Day Bulgur Wheat.",
+    "ingredients": [
+      {
+        "name": "onion (medium, chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "broccoli (chopped)",
+        "amount": "1 cup"
+      },
+      {
+        "name": "carrot (shredded)",
+        "amount": "1 cup"
+      },
+      {
+        "name": "green pepper (small, chopped, - may use red or yellow pepper)",
+        "amount": "1"
+      },
+      {
+        "name": "fresh parsley (chopped, or 2 Tablespoons dried)",
+        "amount": "1/3 cup"
+      },
+      {
+        "name": "canola oil",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "bulgur (dry)",
+        "amount": "1 1/2 cups"
+      },
+      {
+        "name": "chicken broth (low-sodium)",
+        "amount": "2 cups"
+      },
+      {
+        "name": "chickpeas or garbanzo beans (canned, drained)",
+        "amount": "8 ounces"
+      }
+    ],
+    "steps": [
+      "Wash and chop fresh onion, broccoli, carrots, pepper and parsley (if using fresh parsley).",
+      "Heat canola oil in a large skillet. Add onions and cook until soft.",
+      "Add bulgur and stir to coat. Add 2 cups chicken broth to the skillet, bring to a boil.",
+      "Lower the heat, add remaining vegetables and chickpeas. Cook for 10 minutes or until the liquid is absorbed.",
+      "Add parsley and stir. Serve warm or cold."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/5-day-bulgur-wheat",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-005",
+    "matches": [
+      "cucumbers",
+      "oranges",
+      "lemon or lime (the juice)"
+    ],
+    "main": "cucumbers",
+    "category": "side",
+    "title": "A Simple Mexican Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: A Simple Mexican Salad.",
+    "ingredients": [
+      {
+        "name": "cucumbers",
+        "amount": "2"
+      },
+      {
+        "name": "oranges",
+        "amount": "2"
+      },
+      {
+        "name": "lemon or lime (the juice)",
+        "amount": "1"
+      },
+      {
+        "name": "chili powder",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "salt",
+        "amount": "1/2 teaspoon"
+      }
+    ],
+    "steps": [
+      "1. Wash the cucumbers, oranges and lemon or lime under cold running water.",
+      "2. Slice the cucumbers. Peel and cut the oranges into small pieces.",
+      "3. Place cucumber slices and orange pieces in a medium size bowl. Add chili powder, lemon or lime juice and salt."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/simple-mexican-salad",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-006",
+    "matches": [
+      "pineapple chunks (in juice, 20 oz., drained)",
+      "mandarin orange (drained)",
+      "banana (peeled and sliced)"
+    ],
+    "main": "pineapple chunks (in juice, 20 oz., drained)",
+    "category": "meal",
+    "title": "Ambrosia",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Ambrosia.",
+    "ingredients": [
+      {
+        "name": "pineapple chunks (in juice, 20 oz., drained)",
+        "amount": "1 can"
+      },
+      {
+        "name": "mandarin orange (drained)",
+        "amount": "1 1/3 cups"
+      },
+      {
+        "name": "banana (peeled and sliced)",
+        "amount": "1"
+      },
+      {
+        "name": "grape (seedless)",
+        "amount": "1 1/2 cups"
+      },
+      {
+        "name": "marshmallows (miniature)",
+        "amount": "3/4 cup"
+      },
+      {
+        "name": "coconut (flaked)",
+        "amount": "1/3 cup"
+      },
+      {
+        "name": "vanilla yogurt, low-fat (8 ounces)",
+        "amount": "1 cup"
+      }
+    ],
+    "steps": [
+      "Drain pineapple and oranges. Use juice as beverage.",
+      "Combine fruit with marshmallows and coconut.",
+      "Fold in yogurt."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/ambrosia",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-007",
+    "matches": [
+      "egg whites (1 1/2 cups)",
+      "cream of tartar",
+      "vanilla extract"
+    ],
+    "main": "egg whites (1 1/2 cups)",
+    "category": "dessert",
+    "title": "Angel Food Cake",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Angel Food Cake.",
+    "ingredients": [
+      {
+        "name": "egg whites (1 1/2 cups)",
+        "amount": "12"
+      },
+      {
+        "name": "cream of tartar",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "sugar",
+        "amount": "1 1/2 cups"
+      },
+      {
+        "name": "vanilla extract",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "salt",
+        "amount": "1/4 teaspoon"
+      },
+      {
+        "name": "flour (sifted)",
+        "amount": "1 cup"
+      }
+    ],
+    "steps": [
+      "1. Preheat the oven to 325°F. In a large mixing bowl, beat the egg whites until they are foamy.",
+      "2. Add the cream of tartar and beat until stiff, but not dry. Gradually beat in the sugar",
+      "3. Add the vanilla and salt and then gently fold in the flour.",
+      "4. Pour the mix into an angel food tubular pan and bake for 1 hour and 15 minutes, or until the top is nicely browned."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/angel-food-cake",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-008",
+    "matches": [
+      "angel food cake mix (3 tablespoons)",
+      "yogurt, low-fat vanilla (2 Tablespoons)",
+      "raspberries (about 3 )"
+    ],
+    "main": "angel food cake mix (3 tablespoons)",
+    "category": "meal",
+    "title": "Angel Food Pastry with Fresh Berries and Whipped Cream",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Angel Food Pastry with Fresh Berries and Whipped Cream.",
+    "ingredients": [
+      {
+        "name": "angel food cake mix (3 tablespoons)",
+        "amount": "1 ounce"
+      },
+      {
+        "name": "yogurt, low-fat vanilla (2 Tablespoons)",
+        "amount": "1/8 cup"
+      },
+      {
+        "name": "raspberries (about 3 )",
+        "amount": "3 cups"
+      },
+      {
+        "name": "strawberries, sliced",
+        "amount": "2"
+      },
+      {
+        "name": "lite whipped topping (can use 1-2 Tablespoons)",
+        "amount": "1 1/2 tablespoons"
+      }
+    ],
+    "steps": [
+      "Scoop 3 Tablespoons of angel food cake mix into a microwave-safe cup or mug.",
+      "Add 2 Tablespoons of vanilla yogurt and stir.",
+      "Place in the center of the microwave oven and microwave for 1 minute.",
+      "Take out of microwave and let cool for 1 minute.",
+      "Using a knife, cut around the sides of the cup to loosen the cake and \"dump\" it on a plate.",
+      "Dole 1 Tablespoon of whipped topping on top of the cake.",
+      "Sprinkle raspberries around the angel cake and add sliced strawberries to top."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/angel-food-pastry-fresh-berries-and-whipped",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-009",
+    "matches": [
+      "chicken breast (cooked, diced)",
+      "celery (chopped)",
+      "onion (chopped)"
+    ],
+    "main": "chicken breast (cooked, diced)",
+    "category": "side",
+    "title": "Any Days a Picnic Chicken Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Any Days a Picnic Chicken Salad.",
+    "ingredients": [
+      {
+        "name": "chicken breast (cooked, diced)",
+        "amount": "2 1/2 cups"
+      },
+      {
+        "name": "celery (chopped)",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "onion (chopped)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "packages pickle relish (2/3 tablespoon)",
+        "amount": "3"
+      },
+      {
+        "name": "mayonnaise (light)",
+        "amount": "1/2 cup"
+      }
+    ],
+    "steps": [
+      ".1. Wash hands with soap and water.",
+      "2. Combine all ingredients.",
+      "3. Refrigerate until ready to serve.",
+      "4. Use within 1-2 days. Chicken salad does not freeze well.",
+      "How to use",
+      "- Make chicken salad sandwiches.",
+      "- Make a pasta salad by mixing with 2 cups cooked pasta.",
+      "- Kids will love this salad served in a tomato or a cucumber boat."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/any-days-picnic-chicken-salad",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-010",
+    "matches": [
+      "mini baguette or Italian bread (split lengthwise, or 2 split English muffins)",
+      "pizza sauce",
+      "mozzarella or cheddar cheese (part-skim, shredded)"
+    ],
+    "main": "mini baguette or Italian bread (split lengthwise, or 2 split English muffins)",
+    "category": "meal",
+    "title": "Anytime Pizza",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Anytime Pizza.",
+    "ingredients": [
+      {
+        "name": "mini baguette or Italian bread (split lengthwise, or 2 split English muffins)",
+        "amount": "1/4"
+      },
+      {
+        "name": "pizza sauce",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "mozzarella or cheddar cheese (part-skim, shredded)",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "green pepper (chopped)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "mushrooms (fresh or canned, sliced)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "vegetable toppings (other, as desired, optional)",
+        "amount": "to taste"
+      },
+      {
+        "name": "Italian seasoning (optional)",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "1. Toast the bread or English muffin until slightly brown.",
+      "2. Top bread or muffin with pizza sauce, vegetables and low-fat cheese.",
+      "3. Sprinkle with Italian seasonings as desired.",
+      "4. Return bread to toaster oven (or regular oven preheated to 350 degrees).",
+      "5. Heat until cheese melts."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/anytime-pizza",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-011",
+    "matches": [
+      "red apples (such as Cameo Apples)",
+      "celery stalks (diced)",
+      "chicken breasts (skinless, cooked, diced, about 2 cups)"
+    ],
+    "main": "red apples (such as Cameo Apples)",
+    "category": "side",
+    "title": "Apple & Chicken Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple & Chicken Salad.",
+    "ingredients": [
+      {
+        "name": "red apples (such as Cameo Apples)",
+        "amount": "2"
+      },
+      {
+        "name": "celery stalks (diced)",
+        "amount": "2"
+      },
+      {
+        "name": "chicken breasts (skinless, cooked, diced, about 2 cups)",
+        "amount": "2"
+      },
+      {
+        "name": "plain non-fat Greek yogurt",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "raisins",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "mayonnaise",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "salt",
+        "amount": "1/4 teaspoon"
+      },
+      {
+        "name": "ground black pepper",
+        "amount": "1/8 teaspoon"
+      },
+      {
+        "name": "lettuce leaves (Bibb, Romaine, green or red leaf)",
+        "amount": "16"
+      }
+    ],
+    "steps": [
+      "Cut apples in quarters; remove core and chop.",
+      "In a medium size bowl, mix all ingredients, except lettuce.",
+      "To serve, arrange lettuce on serving plates top with apple and chicken salad."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/myplate-cnpp/apple-chicken-salad",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-012",
+    "matches": [
+      "lettuce mix",
+      "ripe bananas",
+      "1/2 medium apples, sliced (14 oz. of sliced apples)"
+    ],
+    "main": "lettuce mix",
+    "category": "side",
+    "title": "Apple Banana Salad with Peanuts",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Banana Salad with Peanuts.",
+    "ingredients": [
+      {
+        "name": "lettuce mix",
+        "amount": "12 ounces"
+      },
+      {
+        "name": "ripe bananas",
+        "amount": "2"
+      },
+      {
+        "name": "1/2 medium apples, sliced (14 oz. of sliced apples)",
+        "amount": "2"
+      },
+      {
+        "name": "unsalted dry roasted peanuts",
+        "amount": "3/4 cup"
+      }
+    ],
+    "steps": [
+      "Whisk together dressing ingredients.",
+      "Slice bananas.",
+      "In a large salad bowl, toss mixed greens, banana and apple slices, peanuts, and dressing."
+    ],
+    "cookMinutes": 15,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/myplate-cnpp/apple-banana-salad-peanuts",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-013",
+    "matches": [
+      "butter",
+      "eggs",
+      "flour (sifted)"
+    ],
+    "main": "butter",
+    "category": "dessert",
+    "title": "Apple Cake",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Cake.",
+    "ingredients": [
+      {
+        "name": "butter",
+        "amount": "10 tablespoons"
+      },
+      {
+        "name": "sugar",
+        "amount": "3/4 cup"
+      },
+      {
+        "name": "eggs",
+        "amount": "3"
+      },
+      {
+        "name": "flour (sifted)",
+        "amount": "1 3/4 cups"
+      },
+      {
+        "name": "baking powder",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "lemon rind (grated)",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "apples (medium, pared, cored, sliced)",
+        "amount": "2"
+      },
+      {
+        "name": "sugar",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "apricot jam (1/2 cup)",
+        "amount": "8 tablespoons"
+      }
+    ],
+    "steps": [
+      "1. Beat butter with sugar until creamy.",
+      "2. Add eggs one at a time, beating until well blended.",
+      "3. Add flour, baking powder, and lemon rind, beat 4 minutes.",
+      "4. Pour into greased 9-inch spring-form pan.",
+      "5. Arrange the apples on the batter, sprinkle with 2 teaspoons sugar.",
+      "6. Bake 1 hour at 350 degrees.",
+      "7. Remove from pan, brush apples with jam, cool."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/apple-cake",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-014",
+    "matches": [
+      "pork (lean, cut into chunks)",
+      "apples (with skin, cored and quarterd)",
+      "carrots (large, peeled and cut into chunks)"
+    ],
+    "main": "pork (lean, cut into chunks)",
+    "category": "meal",
+    "title": "Apple Carrot Soup",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Carrot Soup.",
+    "ingredients": [
+      {
+        "name": "pork (lean, cut into chunks)",
+        "amount": "1 pound"
+      },
+      {
+        "name": "apples (with skin, cored and quarterd)",
+        "amount": "4"
+      },
+      {
+        "name": "carrots (large, peeled and cut into chunks)",
+        "amount": "4"
+      },
+      {
+        "name": "orange peel (dried, 1 teaspoon, optional)",
+        "amount": "1"
+      },
+      {
+        "name": "ginger",
+        "amount": "4 slices"
+      },
+      {
+        "name": "salt",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "water",
+        "amount": "20 cups"
+      }
+    ],
+    "steps": [
+      "1. In a large pot over high heat, combine all ingredients, bring to a boil.",
+      "2. Reduce heat to medium and simmer until soup reduces to about 8 cups of liquid, about 3 to 4 hours.",
+      "3. Skim fat from surface and serve.",
+      "4. Store leftover soup covered in refrigerator for up to 3 days."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/apple-carrot-soup",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-015",
+    "matches": [
+      "egg",
+      "flour",
+      "cinnamon"
+    ],
+    "main": "egg",
+    "category": "dessert",
+    "title": "Apple Chunk Cake",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Chunk Cake.",
+    "ingredients": [
+      {
+        "name": "sugar",
+        "amount": "1 1/4 cups"
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "egg",
+        "amount": "2"
+      },
+      {
+        "name": "flour",
+        "amount": "2 cups"
+      },
+      {
+        "name": "salt",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "cinnamon",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "baking soda",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "apple (diced, chunks)",
+        "amount": "2 cups"
+      },
+      {
+        "name": "applesauce (unsweetened)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "apple (sliced, to place on cake)",
+        "amount": "2 cups"
+      }
+    ],
+    "steps": [
+      "Preheat oven to 350° F.",
+      "Wash hands with soap and water.",
+      "In a large bowl, mix sugar, oil and eggs together. Beat well.",
+      "In a separate bowl, combine flour, salt, cinnamon, and baking soda. Add to egg batter and mix well.",
+      "Add apple chunks and applesauce to the batter. Stir to combine.",
+      "Coat an 8x8 inch baking pan with vegetable oil spray, and pour in batter.",
+      "Bake until done, about 1 hour.",
+      "Place apple slices on top of apple cake and serve."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/apple-chunk-cake",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-016",
+    "matches": [
+      "apple (medium)",
+      "flour",
+      "cinnamon"
+    ],
+    "main": "apple (medium)",
+    "category": "dessert",
+    "title": "Apple Cinnamon Bars",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Cinnamon Bars.",
+    "ingredients": [
+      {
+        "name": "apple (medium)",
+        "amount": "4"
+      },
+      {
+        "name": "flour",
+        "amount": "1 cup"
+      },
+      {
+        "name": "salt",
+        "amount": "1/4 teaspoon"
+      },
+      {
+        "name": "baking soda",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "cinnamon",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "brown sugar",
+        "amount": "1 cup"
+      },
+      {
+        "name": "oats (uncooked)",
+        "amount": "1 cup"
+      },
+      {
+        "name": "shortening",
+        "amount": "1 cup"
+      }
+    ],
+    "steps": [
+      "Preheat the oven to 350 degrees.",
+      "Put the flour, salt, baking soda, cinnamon, brown sugar, and oats in the mixing bowl. Stir together.",
+      "Add the shortening to the bowl. Use the 2 table knives to mix the ingredients and cut them into crumbs.",
+      "Lightly grease the bottom and sides of the baking dish with a little bit of shortening.",
+      "Spread half of the crumb mixture in the greased baking dish.",
+      "Remove the core from the apples and slice them. Put the apple slices into the baking dish.",
+      "Top the apples with the rest of the crumb mixture.",
+      "Bake in the oven for 40 – 45 minutes.",
+      "Cut into squares. It will fall apart easily."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/apple-cinnamon-bars",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-017",
+    "matches": [
+      "apple (tart, cored, peeled, and chopped)",
+      "raisins (dark)",
+      "pecans (chopped)"
+    ],
+    "main": "apple (tart, cored, peeled, and chopped)",
+    "category": "dessert",
+    "title": "Apple Coffee Cake",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Coffee Cake.",
+    "ingredients": [
+      {
+        "name": "apple (tart, cored, peeled, and chopped)",
+        "amount": "5 cups"
+      },
+      {
+        "name": "sugar",
+        "amount": "1 cup"
+      },
+      {
+        "name": "raisins (dark)",
+        "amount": "1 cup"
+      },
+      {
+        "name": "pecans (chopped)",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "vanilla",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "egg (beaten)",
+        "amount": "1"
+      },
+      {
+        "name": "all-purpose flour (sifted)",
+        "amount": "2 1/2 cups"
+      },
+      {
+        "name": "baking soda",
+        "amount": "1 1/2 teaspoons"
+      },
+      {
+        "name": "cinnamon (ground)",
+        "amount": "2 teaspoons"
+      }
+    ],
+    "steps": [
+      "Preheat oven to 350°F.",
+      "Lightly oil a 13x9x2 inch pan.",
+      "In a large mixing bowl, combine apples with sugar, raisins, and pecans; mix well. Let stand 30 minutes.",
+      "Stir in oil, vanilla, and egg. Sift together flour, soda, and cinnamon; stir into apple mixture about 1/3 at a time, just enough to moisten dry ingredients.",
+      "Turn batter into pan. Bake 35-40 minutes. Cool cake slightly before serving."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/apple-coffee-cake",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-018",
+    "matches": [
+      "cabbage",
+      "carrot (medium, grated)",
+      "apple (chopped)"
+    ],
+    "main": "cabbage",
+    "category": "side",
+    "title": "Apple Coleslaw",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Coleslaw.",
+    "ingredients": [
+      {
+        "name": "cabbage",
+        "amount": "2 cups"
+      },
+      {
+        "name": "carrot (medium, grated)",
+        "amount": "1"
+      },
+      {
+        "name": "green pepper (chopped)",
+        "amount": "1/2"
+      },
+      {
+        "name": "apple (chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "yogurt, low-fat",
+        "amount": "5 tablespoons"
+      },
+      {
+        "name": "mayonnaise, low-fat",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "lemon juice",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "dill weed",
+        "amount": "1/4 teaspoon"
+      }
+    ],
+    "steps": [
+      "1. Wash your hands with soap and water.",
+      "2. Wash the cabbage. Cut it into fine shreds, until you have 2 cups of cabbage.",
+      "3. Peel the carrot. Grate it with a grater.",
+      "4. Chop half a green pepper into small pieces.",
+      "5. Remove the core, and chop the apple.",
+      "6. Put the cabbage, carrot, green pepper, and apple in a large mixing bowl. Stir together.",
+      "7. Put the yogurt, mayonnaise, lemon juice, and dill weed in a small bowl. Stir together to make a dressing.",
+      "8. Pour the dressing over the salad. Toss to mix."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/apple-coleslaw",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-019",
+    "matches": [
+      "boneless, skinless chicken breast (cut to 1/2\" cubes)",
+      "medium onion (chopped)",
+      "garlic (minced)"
+    ],
+    "main": "boneless, skinless chicken breast (cut to 1/2\" cubes)",
+    "category": "meal",
+    "title": "Apple Corn Chili",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apple Corn Chili.",
+    "ingredients": [
+      {
+        "name": "olive oil (divided)",
+        "amount": "2 tablespoons"
+      },
+      {
+        "name": "boneless, skinless chicken breast (cut to 1/2\" cubes)",
+        "amount": "8 ounces"
+      },
+      {
+        "name": "medium onion (chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "garlic (minced)",
+        "amount": "2 cloves"
+      },
+      {
+        "name": "15.2 oz can yellow corn (no-salt-added, drained)",
+        "amount": "1"
+      },
+      {
+        "name": "red apples, such as Braeburn, Empire, or Fuji (chopped, skin on)",
+        "amount": "2"
+      },
+      {
+        "name": "ground cumin",
+        "amount": "1/2 tablespoon"
+      },
+      {
+        "name": "cayenne pepper (if desired)",
+        "amount": "1/8 teaspoon"
+      },
+      {
+        "name": "15 oz. can black beans (no-salt-added, drained and rinsed)",
+        "amount": "1 can"
+      },
+      {
+        "name": "can diced green chiles (drained)",
+        "amount": "4 1/2 ounces"
+      },
+      {
+        "name": "chicken bouillon (sodium-free)",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "water",
+        "amount": "2 cups"
+      }
+    ],
+    "steps": [
+      "In a stockpot, heat 1 tbsp. olive oil; add chicken and brown (about 5 minutes). Remove chicken from pan.",
+      "Heat remaining olive oil in same pot; add onions and garlic and sauté until soft.",
+      "Add corn and sauté until golden brown. Add apple, cumin, and cayenne pepper (if desired); cook about 3-4 minutes. Let cool about 5 minutes.",
+      "Set aside about 1 cup of mixture. Purée remainder in food processor or blender, adding a portion of water, if needed, and return to pot.",
+      "Add browned chicken, black beans, chiles, bouillon, and water. Bring to boil and simmer about 15 minutes. Chicken should be cooked to 165 ºF.",
+      "To serve, ladle soup in bowls and top with non-puréed portion of apple corn mixture."
+    ],
+    "cookMinutes": 45,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/myplate-cnpp/apple-corn-chili",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-020",
+    "matches": [
+      "tomatillos",
+      "yellow onion (peeled and finely chopped)",
+      "serrano or other chiles (finely chopped)"
+    ],
+    "main": "tomatillos",
+    "category": "meal",
+    "title": "Pan Roasted Tilapia with Tomatillo Salsa",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Pan Roasted Tilapia with Tomatillo Salsa.",
+    "ingredients": [
+      {
+        "name": "tomatillos",
+        "amount": "1 pound"
+      },
+      {
+        "name": "yellow onion (peeled and finely chopped)",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "serrano or other chiles (finely chopped)",
+        "amount": "2"
+      },
+      {
+        "name": "garlic (peeled and minced)",
+        "amount": "3 cloves"
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "3 teaspoons"
+      },
+      {
+        "name": "Kosher salt",
+        "amount": "1/4 teaspoon"
+      },
+      {
+        "name": "Fresh lime juice (about 1/2 lime)",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "fresh cilantro leaves (chopped)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "tilapia fillets (patted dry with a paper towel, any inexpensive white fish can be used)",
+        "amount": "4"
+      }
+    ],
+    "steps": [
+      "Preheat the oven to 450 degrees",
+      "To make the tomatillo salsa: (Canned tomatillo salsa can be used instead of fresh)",
+      "To prepare the tomatillos, peel back the husk from the smooth green tomatillo skin. Rinse the tomatillos with warm water and cut into quarters.",
+      "Place the husked tomatillos, onion, chilies, garlic, and 1 teaspoon oil in the baking pan, stir well and transfer to the oven. Roast about 20 minutes until the tomatillos are soft and dark green. Set aside to cool.",
+      "Transfer the mixture to the blender; add the salt, lime juice, and cilantro and puree.",
+      "To cook the tilapia:",
+      "Place the skillet on the stove over high heat and when it is hot, carefully add 2 teaspoons oil.",
+      "Put the tilapia fillets in the pan, waiting about 30 seconds between additions. Cook about 5–6 minutes, until golden brown on both sides.",
+      "Transfer the tilapia to the serving plate and top with generous amounts of salsa. Serve right away."
+    ],
+    "cookMinutes": 40,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/myplate-cnpp/pan-roasted-tilapia-tomatillo-salsa",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-021",
+    "matches": [
+      "onion (medium, chopped)",
+      "chicken broth, low-sodium",
+      "chicken or turkey (cooked, diced and boned)"
+    ],
+    "main": "onion (medium, chopped)",
+    "category": "meal",
+    "title": "Brunswick Stew",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Brunswick Stew.",
+    "ingredients": [
+      {
+        "name": "vegetable oil",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "onion (medium, chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "chicken broth, low-sodium",
+        "amount": "2 cups"
+      },
+      {
+        "name": "chicken or turkey (cooked, diced and boned)",
+        "amount": "2 cups"
+      },
+      {
+        "name": "tomatoes, canned or cooked (low sodium)",
+        "amount": "2 cups"
+      },
+      {
+        "name": "lima beans, canned or cooked",
+        "amount": "2 cups"
+      },
+      {
+        "name": "whole kernel corn, canned or cooked",
+        "amount": "2 cups"
+      }
+    ],
+    "steps": [
+      "1. Heat oil in a large pan. Add onion and cook in oil until tender.",
+      "2. Add all remaining ingredients. Bring to a simmer for 30 minutes at medium-low.",
+      "3. Makes 8 servings of about 1 cup each."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/brunswick-stew",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-022",
+    "matches": [
+      "pita pockets (medium, whole wheat)",
+      "peanut butter (reduced fat, chunky)",
+      "apple (cored and thinly sliced)"
+    ],
+    "main": "pita pockets (medium, whole wheat)",
+    "category": "meal",
+    "title": "Peachy Peanut Butter Pita Pockets",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Peachy Peanut Butter Pita Pockets.",
+    "ingredients": [
+      {
+        "name": "pita pockets (medium, whole wheat)",
+        "amount": "2"
+      },
+      {
+        "name": "peanut butter (reduced fat, chunky)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "apple (cored and thinly sliced)",
+        "amount": "1/2"
+      },
+      {
+        "name": "banana (thinly sliced)",
+        "amount": "1/2"
+      },
+      {
+        "name": "peach (fresh, thinly sliced)",
+        "amount": "1/2"
+      }
+    ],
+    "steps": [
+      "1. Cut pitas in half to make 4 pockets and warm in the microwave for about 10 seconds to make them more flexible.",
+      "2. Carefully open each pocket and spread a thin layer of peanut butter on the inside walls.",
+      "3. Fill with a combination of apple, banana, and peach slices. Serve at room temperature."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/peachy-peanut-butter-pita-pockets",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-023",
+    "matches": [
+      "6-ounce bone in chicken thighs (skin removed)",
+      "small yellow onion (peeled and chopped)",
+      "garlic (peeled and minced)"
+    ],
+    "main": "6-ounce bone in chicken thighs (skin removed)",
+    "category": "meal",
+    "title": "Braised Chicken Thighs with Spinach",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Braised Chicken Thighs with Spinach.",
+    "ingredients": [
+      {
+        "name": "6-ounce bone in chicken thighs (skin removed)",
+        "amount": "4"
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "salt",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "black pepper",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "small yellow onion (peeled and chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "garlic (peeled and minced)",
+        "amount": "3 cloves"
+      },
+      {
+        "name": "dried thyme",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "dried rosemary",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "water",
+        "amount": "1 cup"
+      },
+      {
+        "name": "package 10-ounce frozen spinach (or 1 bunch fresh spinach)",
+        "amount": "1"
+      }
+    ],
+    "steps": [
+      "Heat skillet over medium-high heat. Add 1 teaspoon oil. Add chicken, top side down. Cook about 8 minutes on each side, or until deeply browned. Remove the chicken to a dinner plate and set aside.",
+      "Reheat skillet over medium heat. Add the onion, garlic, thyme, and rosemary. Cook about 5 minutes, until the onion is soft and golden. Return the chicken to the pan.",
+      "Add the water, and cover. Continue cooking for about 30 minutes.",
+      "Add frozen spinach and cook for about 10 minutes. Or, add the fresh spinach and cook about 2 minutes, until it wilts. Serve right away."
+    ],
+    "cookMinutes": 70,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/myplate-cnpp/braised-chicken-thighs-spinach",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-024",
+    "matches": [
+      "fresh parsley, chopped (optional, or 2 Tablespoons dried parsley)",
+      "beef bouillon (or 2 cubes beef bouillon)",
+      "lentils (dry)"
+    ],
+    "main": "fresh parsley, chopped (optional, or 2 Tablespoons dried parsley)",
+    "category": "meal",
+    "title": "Slow Cooker Lentil Soup",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Slow Cooker Lentil Soup.",
+    "ingredients": [
+      {
+        "name": "water",
+        "amount": "6 cups"
+      },
+      {
+        "name": "fresh parsley, chopped (optional, or 2 Tablespoons dried parsley)",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "beef bouillon (or 2 cubes beef bouillon)",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "lentils (dry)",
+        "amount": "1 1/2 cups"
+      },
+      {
+        "name": "carrot (medium, sliced)",
+        "amount": "2"
+      },
+      {
+        "name": "onion (medium, chopped)",
+        "amount": "1"
+      },
+      {
+        "name": "celery stalk (sliced)",
+        "amount": "2"
+      }
+    ],
+    "steps": [
+      "1. Mix all ingredients together in slow cooker.",
+      "2. Cook on LOW for 8 to 10 hours or HIGH for 4 to 5 hours.",
+      "3. Serve hot with crackers or bread."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "USDA MyPlate / SNAP-Ed",
+      "url": "https://www.myplate.gov/recipes/supplemental-nutrition-assistance-program-snap/slow-cooker-lentil-soup",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-025",
+    "matches": [
+      "cornstarch",
+      "berries, fresh or frozen (blackberries, raspberries, blueberries, sliced strawberries, or a mixture)"
+    ],
+    "main": "cornstarch",
+    "category": "side",
+    "title": "Any Berry Sauce",
+    "description": "Use blackberries, raspberries, blueberries, strawberries, or a mixture to make this Any Berry Sauce. It's low fat, low sodium, vegeterian, and is great with pancakes or oatmeal.",
+    "ingredients": [
+      {
+        "name": "cold water",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "cornstarch",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "sugar",
+        "amount": "1/3 cup"
+      },
+      {
+        "name": "berries, fresh or frozen (blackberries, raspberries, blueberries, sliced strawberries, or a mixture)",
+        "amount": "4 cups"
+      }
+    ],
+    "steps": [
+      "In a medium saucepan, mix together sugar, cornstarch, water, and 2 cups of berries. Mash berries if desired.",
+      "Heat over medium heat, stirring frequently, until sauce starts to thicken.",
+      "Remove from heat and stir in remaining berries. Mash if desired.",
+      "Serve over pancakes, waffles, oatmeal, or yogurt.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 15,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/any-berry-sauce/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-026",
+    "matches": [
+      "eggs",
+      "nonfat or 1% milk",
+      "cinnamon"
+    ],
+    "main": "eggs",
+    "category": "side",
+    "title": "Applesauce French Toast",
+    "description": "This applesauce French toast recipe is a healthy twist on a breakfast classic. Unsweetened applesauce gives it a moist, chewy texture that kids will love.",
+    "ingredients": [
+      {
+        "name": "eggs",
+        "amount": "2"
+      },
+      {
+        "name": "nonfat or 1% milk",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "cinnamon",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "sugar",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "vanilla",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "unsweetened applesauce",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "whole-wheat bread",
+        "amount": "6 slices"
+      }
+    ],
+    "steps": [
+      "Wash hands with soap and water.",
+      "In a large mixing bowl, combine eggs, milk, cinnamon, sugar, vanilla and applesauce. Mix well.",
+      "Soak bread one slice at a time until mixture is slightly absorbed.",
+      "Lightly grease a skillet or griddle. Cook over medium heat until golden brown on both sides.",
+      "Serve hot.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 10,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/applesauce-french-toast/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-027",
+    "matches": [
+      "baking apple (try Golden Delicious, Granny Smith, Jonathan, or Braeburn)",
+      "cinnamon to taste",
+      "dried cranberries"
+    ],
+    "main": "baking apple (try Golden Delicious, Granny Smith, Jonathan, or Braeburn)",
+    "category": "meal",
+    "title": "Baked Apple and Cranberries",
+    "description": "Baked Apple and Cranberries is the perfect warm winter dish for breakfast or dessert. Try it with Golden Delicious, Granny Smith, Jonathan, or Braeburn apples.",
+    "ingredients": [
+      {
+        "name": "baking apple (try Golden Delicious, Granny Smith, Jonathan, or Braeburn)",
+        "amount": "1"
+      },
+      {
+        "name": "cinnamon to taste",
+        "amount": "to taste"
+      },
+      {
+        "name": "dried cranberries",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "brown sugar",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "margarine or butter",
+        "amount": "1/2 teaspoon"
+      }
+    ],
+    "steps": [
+      "Wash apple and remove core (seed area), leaving the bottom to hold in the filling.",
+      "Peel a small band of skin from around the top of the apple.",
+      "Place the apple in a microwave safe container.",
+      "Sprinkle cinnamon around the top of the apple and into the hole.",
+      "Fill the center of the apple with cranberries, pressing down if needed.",
+      "Top the cranberries with the brown sugar and margarine or butter.",
+      "Cover loosely with wax paper.",
+      "Microwave on high for about 2 1/2 minutes or until apple is soft when poked through the center hole with a fork. Cool slightly.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 5,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/baked-apple-and-cranberries/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-028",
+    "matches": [
+      "small banana",
+      "oat, corn, or granola cereal",
+      "low-fat vanilla or strawberry yogurt"
+    ],
+    "main": "small banana",
+    "category": "meal",
+    "title": "Breakfast Banana Split",
+    "description": "Bananas, pineapple, yogurt, and granola, what a healthy way to start your day! Treat yourself and your kids with this healthy breakfast treat.",
+    "ingredients": [
+      {
+        "name": "small banana",
+        "amount": "1"
+      },
+      {
+        "name": "oat, corn, or granola cereal",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "low-fat vanilla or strawberry yogurt",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "honey, optional (skip for children under the age of one)",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "canned pineapple tidbits or chunks",
+        "amount": "1/2 cup"
+      }
+    ],
+    "steps": [
+      "Peel and split banana lengthwise. Place half in two separate cereal bowls.",
+      "Sprinkle granola over banana, reserving some for topping.",
+      "Spoon yogurt on top and drizzle with honey.",
+      "Decorate with reserved granola and pineapple.",
+      "Serve immediately.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 5,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/breakfast-banana-split/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-029",
+    "matches": [
+      "eggs",
+      "nonfat or 1% milk",
+      "vanilla"
+    ],
+    "main": "eggs",
+    "category": "dessert",
+    "title": "Cherry Puff Pancake",
+    "description": "This cherry puff pancake is a simple take on European strudel. Cherries bring tart, sweet flavor and almonds add crunchy texture to this breakfast treat.",
+    "ingredients": [
+      {
+        "name": "eggs",
+        "amount": "3"
+      },
+      {
+        "name": "nonfat or 1% milk",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "vanilla",
+        "amount": "1 teaspoon"
+      },
+      {
+        "name": "all-purpose flour",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "sugar",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "dash of cinnamon",
+        "amount": "1"
+      },
+      {
+        "name": "margarine or butter",
+        "amount": "2 tablespoons"
+      },
+      {
+        "name": "halved, pitted sweet cherries, fresh or frozen, thawed and drained",
+        "amount": "2 cups"
+      },
+      {
+        "name": "sliced almonds (optional)",
+        "amount": "1/4 cup"
+      }
+    ],
+    "steps": [
+      "Wash hands with soap and water.",
+      "Preheat oven to 450 Â°F.",
+      "In a medium bowl or blender, beat the eggs, milk and vanilla together until well blended.",
+      "Mix the flour, sugar and cinnamon together. Add to the liquid ingredients and mix until there are no lumps.",
+      "Put margarine or butter in a 10- or 11-inch oven proof skillet or a 2 1/2- to 3-quart baking dish. Place the skillet or dish in the hot oven until the margarine or butter is melted and bubbly. Remove from the oven. Quickly spread the cherries across the bottom of the hot skillet or dish.",
+      "Pour the batter over the cherries and sprinkle with almond slices, if using.",
+      "Return to the oven and bake for 15 to 20 minutes until the edges are browned and the puffs in the middle are golden. Cool slightly before cutting into 4 pieces. The center puffs will flatten during cooling.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 15,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/cherry-puff-pancake/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-030",
+    "matches": [
+      "cornmeal",
+      "all-purpose flour",
+      "large eggs"
+    ],
+    "main": "cornmeal",
+    "category": "dessert",
+    "title": "Corn Pancakes",
+    "description": "These light, crispy corn pancakes are a breakfast favorite! Use canned, frozen, or fresh cooked corn.",
+    "ingredients": [
+      {
+        "name": "cornmeal",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "all-purpose flour",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "baking powder",
+        "amount": "1 tablespoon"
+      },
+      {
+        "name": "salt",
+        "amount": "1/2 teaspoon"
+      },
+      {
+        "name": "large eggs",
+        "amount": "2"
+      },
+      {
+        "name": "nonfat or 1% milk",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "cooked corn (canned and drained, frozen, or fresh cooked)",
+        "amount": "2 cups"
+      }
+    ],
+    "steps": [
+      "Wash hands with soap and water.",
+      "In a large bowl, mix corn meal, flour, baking powder and salt.",
+      "In another bowl, mix together the eggs and milk. Add egg and milk mixture and corn to the flour mixture and mix until combined.",
+      "Lightly grease a large skillet or griddle. Heat skillet or griddle over medium heat (300 Â°F in an electric skillet). Pour batter onto hot griddle to make individual pancakes.",
+      "Cook until golden on the bottom. Turn and cook on other side.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 5,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/corn-pancakes/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-031",
+    "matches": [
+      "bread cubes; try whole grain bread",
+      "fruit, sliced or chopped- fresh, frozen or canned",
+      "eggs, slightly beaten"
+    ],
+    "main": "bread cubes; try whole grain bread",
+    "category": "meal",
+    "title": "Fruity French Toast Casserole",
+    "description": "Need help in the kitchen? This Fruity French Toast Casserole recipe is an easy way to get kids cooking.",
+    "ingredients": [
+      {
+        "name": "bread cubes; try whole grain bread",
+        "amount": "8 cups"
+      },
+      {
+        "name": "fruit, sliced or chopped- fresh, frozen or canned",
+        "amount": "2 cups"
+      },
+      {
+        "name": "eggs, slightly beaten",
+        "amount": "4"
+      },
+      {
+        "name": "milk",
+        "amount": "1 cup"
+      },
+      {
+        "name": "vanilla",
+        "amount": "2 teaspoons"
+      },
+      {
+        "name": "sugar",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "margarine or butter, softened",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "sugar",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "flour (all-purpose or whole wheat)",
+        "amount": "1/2 cup"
+      }
+    ],
+    "steps": [
+      "Lightly oil or spray an 8-inches by 8-inches baking dish or 2-quart casserole. Add bread cubes and fruit.",
+      "In a medium bowl, blend eggs, milk, vanilla, and sugar. Pour over bread cubes and fruit. Stir gently to wet all bread with egg mixture.",
+      "Cover and refrigerate until all liquid is absorbed (30 mins), or overnight.",
+      "Just before baking, remove casserole from refrigerator. Preheat oven to 350 Â°F.",
+      "Make the topping: In a small bowl, combine the softened margarine, sugar, and flour with a fork until crumbly.",
+      "Uncover the casserole and sprinkle topping over fruit. Bake until completely set, and starting to brown, (160 Â°F in the center), about 35-40 minutes. A longer baking time is needed when dish is chilled overnight. Serve warm.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 45,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/fruity-french-toast-casserole/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-032",
+    "matches": [
+      "orange juice",
+      "pineapple juice",
+      "low-fat plain or vanilla yogurt"
+    ],
+    "main": "orange juice",
+    "category": "snack",
+    "title": "Green Pineapple Power Smoothie",
+    "description": "This pineapple green power smoothie is a refreshing blend of pineapple, banana, spinach, and yogurt. A delicious way to add more leafy greens to your diet!",
+    "ingredients": [
+      {
+        "name": "orange juice",
+        "amount": "1 cup"
+      },
+      {
+        "name": "pineapple juice",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "low-fat plain or vanilla yogurt",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "banana, peeled and sliced",
+        "amount": "1"
+      },
+      {
+        "name": "fresh spinach leaves",
+        "amount": "2 cups"
+      },
+      {
+        "name": "crushed ice",
+        "amount": "2 cups"
+      }
+    ],
+    "steps": [
+      "Wash hands with soap and water.",
+      "Combine all ingredients in a blender.",
+      "Puree until completely smooth.",
+      "Serve immediately.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 10,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/green-pineapple-power-smoothie/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-033",
+    "matches": [
+      "whole-wheat flour",
+      "quick-cooking oats",
+      "unsalted pecans, chopped"
+    ],
+    "main": "whole-wheat flour",
+    "category": "dessert",
+    "title": "Oatmeal Pecan Waffles (or Pancakes)",
+    "description": "Your children will jump right out of bed for this delicious meal.",
+    "ingredients": [
+      {
+        "name": "whole-wheat flour",
+        "amount": "1 cup"
+      },
+      {
+        "name": "quick-cooking oats",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "baking powder",
+        "amount": "2 tsp"
+      },
+      {
+        "name": "sugar",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "unsalted pecans, chopped",
+        "amount": "1/4 cup"
+      },
+      {
+        "name": "large eggs, separated (for pancakes, see note)",
+        "amount": "2"
+      },
+      {
+        "name": "and 1/2 cup fat-free (skim) milk",
+        "amount": "1"
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "fresh strawberries, rinsed, stems removed, and cut in half (or substitute frozen strawberries, thawed)",
+        "amount": "2 cups"
+      },
+      {
+        "name": "fresh blackberries, rinsed (or substitute frozen blackberries, thawed)",
+        "amount": "1 cup"
+      },
+      {
+        "name": "fresh blueberries, rinsed (or substitute frozen blueberries, thawed)",
+        "amount": "1 cup"
+      },
+      {
+        "name": "powdered sugar",
+        "amount": "1 tsp"
+      }
+    ],
+    "steps": [
+      "Preheat waffle iron.",
+      "Combine flour, oats, baking powder, sugar, and pecans in a large bowl.",
+      "Combine egg yolks, milk, and vegetable oil in a separate bowl, and mix well.",
+      "Add liquid mixture to the dry ingredients, and stir together. Do not overmix; mixture should be a bit lumpy.",
+      "Whip egg whites to medium peaks. Gently fold egg whites into batter (for pancakes, see note below).",
+      "Pour batter into preheated waffle iron, and cook until the waffle iron light signals it's done or steam stops coming out of the iron. (A waffle is perfect when it is crisp and well-browned on the outside with a moist, light, airy and fluffy inside.) (Or make pancakes.)",
+      "Add fresh fruit and a light dusting of powdered sugar to each waffle, and serve."
+    ],
+    "cookMinutes": 30,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/oatmeal-pecan-waffles-or-pancakes/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-034",
+    "matches": [
+      "uncooked old fashioned rolled oats",
+      "low-fat yogurt",
+      "nonfat or 1% milk"
+    ],
+    "main": "uncooked old fashioned rolled oats",
+    "category": "meal",
+    "title": "Overnight Oatmeal",
+    "description": "Overnight oatmeal is a healthy simple breakfast that you can make ahead for busy mornings. Just add oats, yogurt, milk, and you're favorite fruit and refrigerate overnight.",
+    "ingredients": [
+      {
+        "name": "uncooked old fashioned rolled oats",
+        "amount": "1 cup"
+      },
+      {
+        "name": "low-fat yogurt",
+        "amount": "1 cup"
+      },
+      {
+        "name": "nonfat or 1% milk",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "berries, fresh or frozen",
+        "amount": "1/2 cup"
+      },
+      {
+        "name": "chopped apple (about 1/3 of a medium apple [3 inches in diameter])",
+        "amount": "1/2 cup"
+      }
+    ],
+    "steps": [
+      "In a medium bowl, mix oats, yogurt and milk.",
+      "Add the fruit now or add just before eating.",
+      "Cover and refrigerate oatmeal mixture for 6-12 hours.",
+      "Refrigerate leftovers within 2 hours."
+    ],
+    "cookMinutes": 15,
+    "source": {
+      "name": "NIH / NLM MedlinePlus",
+      "url": "https://medlineplus.gov/recipes/overnight-oatmeal/",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-035",
+    "matches": [
+      "large yellow onion, finely chopped",
+      "medium green bell pepper, rinsed and finely chopped",
+      "medium red bell pepper, rinsed and finely chopped"
+    ],
+    "main": "large yellow onion, finely chopped",
+    "category": "meal",
+    "title": "Chicken Picadillo",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Chicken Picadillo.",
+    "ingredients": [
+      {
+        "name": "olive oil",
+        "amount": "2 tsp"
+      },
+      {
+        "name": "large yellow onion, finely chopped",
+        "amount": "1"
+      },
+      {
+        "name": "medium green bell pepper, rinsed and finely chopped",
+        "amount": "1"
+      },
+      {
+        "name": "medium red bell pepper, rinsed and finely chopped",
+        "amount": "1"
+      },
+      {
+        "name": "1½ Tbsp garlic, mashed (about 3 cloves)",
+        "amount": "to taste"
+      },
+      {
+        "name": "boneless, skinless chicken breast, cut into thin strips",
+        "amount": "12 oz"
+      },
+      {
+        "name": "⅓ C no-salt-added tomato sauce",
+        "amount": "to taste"
+      },
+      {
+        "name": "⅓ C low-sodium chicken broth",
+        "amount": "to taste"
+      },
+      {
+        "name": "⅓ C lemon juice",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ tsp ground cumin",
+        "amount": "to taste"
+      },
+      {
+        "name": "bay leaves",
+        "amount": "2"
+      },
+      {
+        "name": "⅓ C water",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ C golden seedless raisins",
+        "amount": "to taste"
+      },
+      {
+        "name": "fresh cilantro, rinsed, dried, and chopped (or substitute 1 tsp dried coriander) 1 Tbsp capers, drained 2 Tbsp green olives, chopped",
+        "amount": "1 tbsp"
+      }
+    ],
+    "steps": [
+      "Heat olive oil in a large sauté pan over medium heat. Add the onion, bell peppers, and garlic, and sauté until vegetables are soft, about 5 minutes.",
+      "Add the chicken, and stir fry for another 5–10 minutes until chicken is no longer pink inside.",
+      "Add the tomato sauce, chicken broth, lemon juice, cumin, bay leaves, water, and raisins to the vegetables and chicken.",
+      "Cover the pan, and reduce the heat. Simmer for 10 minutes.",
+      "Remove the bay leaves, and garnish with fresh cilantro, capers, and green olives, and serve."
+    ],
+    "cookMinutes": 40,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?cId=0&rId=17&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-036",
+    "matches": [
+      "fresh garlic, minced (about 3 cloves) (or 1 tsp dried)",
+      "fresh ginger, minced (or ¼ tsp dried)",
+      "scallions (green onions), rinsed and minced"
+    ],
+    "main": "fresh garlic, minced (about 3 cloves) (or 1 tsp dried)",
+    "category": "meal",
+    "title": "Wiki (Fast) Rice",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Wiki (Fast) Rice.",
+    "ingredients": [
+      {
+        "name": "canola oil",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "fresh garlic, minced (about 3 cloves) (or 1 tsp dried)",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "fresh ginger, minced (or ¼ tsp dried)",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "scallions (green onions), rinsed and minced",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "½ C canned sliced water chestnuts, drained",
+        "amount": "to taste"
+      },
+      {
+        "name": "C cooked mixed vegetables (or ½ bag frozen stir-fry vegetable mix) (Leftover Friendly)",
+        "amount": "2"
+      },
+      {
+        "name": "C cooked brown rice (Leftover Friendly)",
+        "amount": "2"
+      },
+      {
+        "name": "lite soy sauce",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "sesame oil",
+        "amount": "1 tsp"
+      }
+    ],
+    "steps": [
+      "Heat canola oil in a large wok or sauté pan over medium heat. Add garlic, ginger, and scallions, and cook until fragrant, about 1 minute.",
+      "Add water chestnuts, and continue to cook until they begin to soften, another 1–2 minutes.",
+      "Add vegetables, and toss until heated through, about 2–3 minutes (or up to 5 minutes for frozen vegetables).",
+      "Add rice, and continue to cook until hot, about 3–5 minutes.",
+      "Add soy sauce and sesame oil. Toss well, and serve."
+    ],
+    "cookMinutes": 25,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=0&cId=8&rId=156&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-037",
+    "matches": [
+      "C onion, 1 medium, chopped",
+      "garlic, crushed",
+      "½ lb lean ground pork"
+    ],
+    "main": "C onion, 1 medium, chopped",
+    "category": "meal",
+    "title": "Ampalaya (Bitter Melon) With Pork",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Ampalaya (Bitter Melon) With Pork.",
+    "ingredients": [
+      {
+        "name": "olive oil",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "C onion, 1 medium, chopped",
+        "amount": "1"
+      },
+      {
+        "name": "garlic, crushed",
+        "amount": "6 cloves"
+      },
+      {
+        "name": "½ lb lean ground pork",
+        "amount": "to taste"
+      },
+      {
+        "name": "C ampalaya (bitter melon), sliced",
+        "amount": "2"
+      },
+      {
+        "name": "lite soy sauce",
+        "amount": "2 tsp"
+      },
+      {
+        "name": "½ tsp ground black pepper",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Heat olive oil in a large skillet. Lightly sauté onion and garlic.",
+      "Add the ground pork, and cook until almost done.",
+      "Add the sliced ampalaya (bitter melon). Cover and simmer until the bitter melon turns green. Do not overcook.",
+      "Season with lite soy sauce and black pepper, and serve."
+    ],
+    "cookMinutes": 30,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=18&cId=4&rId=263&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-038",
+    "matches": [
+      "fresh garlic, crushed (or 1 Tbsp minced)",
+      "C chopped white onions",
+      "C chopped tomatoes"
+    ],
+    "main": "fresh garlic, crushed (or 1 Tbsp minced)",
+    "category": "meal",
+    "title": "Sautéed Mung Beans (Munggo Guisado)",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Sautéed Mung Beans (Munggo Guisado).",
+    "ingredients": [
+      {
+        "name": "corn oil",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "fresh garlic, crushed (or 1 Tbsp minced)",
+        "amount": "2 cloves"
+      },
+      {
+        "name": "C chopped white onions",
+        "amount": "1"
+      },
+      {
+        "name": "C chopped tomatoes",
+        "amount": "1"
+      },
+      {
+        "name": "C (4 oz) lean pork, thinly sliced",
+        "amount": "1"
+      },
+      {
+        "name": "C water",
+        "amount": "4"
+      },
+      {
+        "name": "3½ C precooked mung beans (from 1¾ C dried beans)",
+        "amount": "to taste"
+      },
+      {
+        "name": "salt",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "ground black pepper",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "C shrimp, peeled and deveined",
+        "amount": "1"
+      },
+      {
+        "name": "C frozen leaf spinach (about ⅔ of a 10-oz package)",
+        "amount": "1"
+      }
+    ],
+    "steps": [
+      "In a large skillet, heat the oil, and sauté the garlic until lightly browned.",
+      "Add onions and tomatoes. Sautée until skin begins to curl.",
+      "Add pork, and sauté until lightly browned.",
+      "Add 4 cups water, and simmer pork for about 15 minutes.",
+      "Add the mung beans, and continue to simmer for 15 minutes.",
+      "Season with salt and black pepper.",
+      "Add the shrimp and frozen leaf spinach, and cook for 4 minutes or until done."
+    ],
+    "cookMinutes": 80,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=18&cId=4&rId=262&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-039",
+    "matches": [
+      "½ cantaloupe",
+      "C fat-free (skim) milk",
+      "1½ C ice"
+    ],
+    "main": "½ cantaloupe",
+    "category": "meal",
+    "title": "Cantaloupe Crush",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Cantaloupe Crush.",
+    "ingredients": [
+      {
+        "name": "½ cantaloupe",
+        "amount": "to taste"
+      },
+      {
+        "name": "C fat-free (skim) milk",
+        "amount": "1"
+      },
+      {
+        "name": "1½ C ice",
+        "amount": "to taste"
+      },
+      {
+        "name": "Sweetener as needed (about 1 to 2 tsp sugar or equivalent of other sweetener)",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Cut cantaloupe into small cubes or thin strips.",
+      "Mix cantaloupe, milk, and ice in a blender until smooth.",
+      "Sweeten to taste. Serve."
+    ],
+    "cookMinutes": 5,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=18&cId=11&rId=264&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-040",
+    "matches": [
+      "package (6 oz) dried apricots, cut into small pieces",
+      "margarine",
+      "egg, slightly beaten"
+    ],
+    "main": "package (6 oz) dried apricots, cut into small pieces",
+    "category": "meal",
+    "title": "Apricot-Orange Bread",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Apricot-Orange Bread.",
+    "ingredients": [
+      {
+        "name": "package (6 oz) dried apricots, cut into small pieces",
+        "amount": "1"
+      },
+      {
+        "name": "C water",
+        "amount": "2"
+      },
+      {
+        "name": "margarine",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "C sugar",
+        "amount": "1"
+      },
+      {
+        "name": "egg, slightly beaten",
+        "amount": "1"
+      },
+      {
+        "name": "freshly grated orange peel",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "3½ C sifted all-purpose flour",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ C nonfat dry milk powder",
+        "amount": "to taste"
+      },
+      {
+        "name": "baking powder",
+        "amount": "2 tsp"
+      },
+      {
+        "name": "baking soda",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "salt",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "½ C orange juice",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ C chopped pecans",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Preheat oven to 350 °F. Lightly oil two 9×5-inch loaf pans.",
+      "Cook apricots in water in a covered medium-sized saucepan for 10 to 15 minutes, or until tender but not mushy. Drain; reserve ¾ cup of the liquid. Set apricots aside to cool.",
+      "Cream together the margarine and sugar. By hand, beat in the egg and orange peel.",
+      "In a separate bowl, sift together the flour, dry milk powder, baking powder, baking soda, and salt. Add to creamed mixture alternately with reserved apricot liquid and orange juice.",
+      "Stir apricot pieces and pecans into batter.",
+      "Turn batter into prepared pans.",
+      "Bake for 40 to 45 minutes, or until bread springs back when lightly touched in center.",
+      "Cool each loaf for 5 minutes in the pan. Remove from pan and completely cool on wire rack before slicing."
+    ],
+    "cookMinutes": 75,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=281&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-041",
+    "matches": [
+      "C mashed ripe bananas",
+      "⅓ C low-fat buttermilk",
+      "¼ C margarine"
+    ],
+    "main": "C mashed ripe bananas",
+    "category": "meal",
+    "title": "Banana-Nut Bread",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Banana-Nut Bread.",
+    "ingredients": [
+      {
+        "name": "C mashed ripe bananas",
+        "amount": "1"
+      },
+      {
+        "name": "⅓ C low-fat buttermilk",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ C packed brown sugar",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ C margarine",
+        "amount": "to taste"
+      },
+      {
+        "name": "egg",
+        "amount": "1"
+      },
+      {
+        "name": "C sifted all-purpose flour",
+        "amount": "2"
+      },
+      {
+        "name": "baking powder",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "½ tsp baking soda",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ tsp salt",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ C chopped pecans",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Preheat oven to 350 °F. Lightly oil a 9×5-inch loaf pan.",
+      "Stir together mashed bananas and buttermilk; set aside.",
+      "Cream brown sugar and margarine together until fluffy. Beat in egg. Add banana mixture; beat well.",
+      "Sift together flour, baking powder, baking soda, and salt; add all at once to liquid ingredients. Stir until well blended.",
+      "Stir in nuts, and turn into the prepared pan.",
+      "Bake for 50 to 55 minutes, or until a toothpick inserted in the center comes out clean. Cool for 5 minutes in the pan.",
+      "Remove from pan and complete cooling on a wire rack before slicing."
+    ],
+    "cookMinutes": 70,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=282&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-042",
+    "matches": [
+      "1½ C sifted all-purpose flour",
+      "¼ tsp baking soda",
+      "1½ tsp ground cinnamon"
+    ],
+    "main": "1½ C sifted all-purpose flour",
+    "category": "meal",
+    "title": "Carrot-Raisin Bread",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Carrot-Raisin Bread.",
+    "ingredients": [
+      {
+        "name": "1½ C sifted all-purpose flour",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ C sugar",
+        "amount": "to taste"
+      },
+      {
+        "name": "baking powder",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "¼ tsp baking soda",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ tsp salt",
+        "amount": "to taste"
+      },
+      {
+        "name": "1½ tsp ground cinnamon",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ tsp ground allspice",
+        "amount": "to taste"
+      },
+      {
+        "name": "egg, beaten",
+        "amount": "1"
+      },
+      {
+        "name": "½ C water",
+        "amount": "to taste"
+      },
+      {
+        "name": "vegetable oil",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "½ tsp vanilla",
+        "amount": "to taste"
+      },
+      {
+        "name": "1½ C finely shredded carrots",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ C chopped pecans",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ C golden raisins",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Preheat oven to 350 °F. Lightly oil a 9×5-inch loaf pan.",
+      "Stir together the dry ingredients in a large mixing bowl. Make a well in the center of the dry mixture.",
+      "In a separate bowl, mix together remaining ingredients; add this mixture all at once to dry ingredients. Stir just enough to moisten and evenly distribute the carrots.",
+      "Turn into the prepared pan. Bake for 50 minutes, or until a toothpick inserted in the center comes out clean.",
+      "Cool for 5 minutes in the pan. Remove from pan and complete cooling on a wire rack before slicing."
+    ],
+    "cookMinutes": 60,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=283&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-043",
+    "matches": [
+      "3¼ C boneless, skinless chicken breast",
+      "¼ C chopped celery",
+      "lemon juice"
+    ],
+    "main": "3¼ C boneless, skinless chicken breast",
+    "category": "side",
+    "title": "Chicken Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Chicken Salad.",
+    "ingredients": [
+      {
+        "name": "3¼ C boneless, skinless chicken breast",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ C chopped celery",
+        "amount": "to taste"
+      },
+      {
+        "name": "lemon juice",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "½ tsp onion powder",
+        "amount": "to taste"
+      },
+      {
+        "name": "⅛ tsp salt",
+        "amount": "to taste"
+      },
+      {
+        "name": "reduced-fat mayonnaise",
+        "amount": "3 tbsp"
+      }
+    ],
+    "steps": [
+      "Bake chicken, cut into cubes, and refrigerate.",
+      "In a large bowl, combine the rest of the ingredients. Add chilled chicken, and mix well."
+    ],
+    "cookMinutes": 30,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=287&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-044",
+    "matches": [
+      "potatoes (about 6 large), boiled in jackets, peeled and cut into ½-inch cubes",
+      "C chopped celery",
+      "½ C sliced green onion"
+    ],
+    "main": "potatoes (about 6 large), boiled in jackets, peeled and cut into ½-inch cubes",
+    "category": "side",
+    "title": "Garden Potato Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Garden Potato Salad.",
+    "ingredients": [
+      {
+        "name": "potatoes (about 6 large), boiled in jackets, peeled and cut into ½-inch cubes",
+        "amount": "3 lb"
+      },
+      {
+        "name": "C chopped celery",
+        "amount": "1"
+      },
+      {
+        "name": "½ C sliced green onion",
+        "amount": "to taste"
+      },
+      {
+        "name": "chopped parsley",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "C low-fat (1 percent) cottage cheese",
+        "amount": "1"
+      },
+      {
+        "name": "¾ C low-fat (1 percent) milk",
+        "amount": "to taste"
+      },
+      {
+        "name": "lemon juice",
+        "amount": "3 tbsp"
+      },
+      {
+        "name": "cider vinegar",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "½ tsp celery seed",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ tsp dill weed",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ tsp dry mustard",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ tsp white pepper",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "In a large bowl, place potatoes, celery, green onion, and parsley.",
+      "Meanwhile, in a blender or food processor, blend cottage cheese, milk, lemon juice, vinegar, celery seed, dill weed, dry mustard, and white pepper until smooth. Chill for 1 hour.",
+      "Pour chilled cottage cheese mixture over vegetables; mix well.",
+      "Chill for at least 30 minutes before serving."
+    ],
+    "cookMinutes": 15,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=276&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-045",
+    "matches": [
+      "small new potatoes (5 C)",
+      "¼ C chopped green onions",
+      "dill weed"
+    ],
+    "main": "small new potatoes (5 C)",
+    "category": "side",
+    "title": "New Potato Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: New Potato Salad.",
+    "ingredients": [
+      {
+        "name": "small new potatoes (5 C)",
+        "amount": "16"
+      },
+      {
+        "name": "olive oil",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "¼ C chopped green onions",
+        "amount": "to taste"
+      },
+      {
+        "name": "¼ tsp ground black pepper",
+        "amount": "to taste"
+      },
+      {
+        "name": "dill weed",
+        "amount": "1 tsp"
+      }
+    ],
+    "steps": [
+      "Thoroughly clean potatoes with a vegetable brush and water.",
+      "Boil potatoes for 20 minutes or until tender.",
+      "Drain, and cool potatoes for 20 minutes.",
+      "Cut potatoes into quarters and mix with olive oil, onions, and spices.",
+      "Refrigerate until ready to serve."
+    ],
+    "cookMinutes": 30,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=278&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-046",
+    "matches": [
+      "(6 oz each) water-packed tuna",
+      "½ C chopped celery",
+      "⅓ C chopped green onions"
+    ],
+    "main": "(6 oz each) water-packed tuna",
+    "category": "side",
+    "title": "Tuna Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Tuna Salad.",
+    "ingredients": [
+      {
+        "name": "(6 oz each) water-packed tuna",
+        "amount": "2 cans"
+      },
+      {
+        "name": "½ C chopped celery",
+        "amount": "to taste"
+      },
+      {
+        "name": "⅓ C chopped green onions",
+        "amount": "to taste"
+      },
+      {
+        "name": "6½ Tbsp low-fat mayonnaise",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Rinse and drain tuna for 5 minutes. Break apart with a fork.",
+      "Add celery, onions, and mayonnaise, and mix well."
+    ],
+    "cookMinutes": 10,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=13&cId=9&rId=267&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-047",
+    "matches": [
+      "½ tsp ground cinnamon",
+      "vanilla extract",
+      "cornstarch"
+    ],
+    "main": "½ tsp ground cinnamon",
+    "category": "dessert",
+    "title": "1-2-3 Peach Cobbler",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: 1-2-3 Peach Cobbler.",
+    "ingredients": [
+      {
+        "name": "½ tsp ground cinnamon",
+        "amount": "to taste"
+      },
+      {
+        "name": "vanilla extract",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "cornstarch",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "C peach nectar",
+        "amount": "1"
+      },
+      {
+        "name": "¼ C pineapple juice or peach juice (if desired, use juice reserved from canned peaches)",
+        "amount": "to taste"
+      },
+      {
+        "name": "(16 oz each) peaches, packed in juice, drained (or 1¾ lb fresh peaches, sliced)",
+        "amount": "2 cans"
+      },
+      {
+        "name": "soft tub margarine",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "C dry pancake mix",
+        "amount": "1"
+      },
+      {
+        "name": "⅔ C all-purpose flour",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ C sugar",
+        "amount": "to taste"
+      },
+      {
+        "name": "⅔ C fat-free evaporated milk",
+        "amount": "to taste"
+      },
+      {
+        "name": "½ tsp ground nutmeg",
+        "amount": "to taste"
+      },
+      {
+        "name": "brown sugar",
+        "amount": "1 tbsp"
+      },
+      {
+        "name": "Nonstick cooking spray, as needed",
+        "amount": "to taste"
+      }
+    ],
+    "steps": [
+      "Preheat oven to 400 °F.",
+      "Combine cinnamon, vanilla, cornstarch, peach nectar, and juice in a saucepan over medium heat. Stir constantly until mixture thickens and bubbles.",
+      "Add sliced peaches to mixture. Reduce heat and simmer for 5 to 10 minutes.",
+      "In another saucepan, melt margarine and set aside.",
+      "Lightly spray an 8-inch-square glass dish with cooking spray. Pour hot peach mixture into dish.",
+      "In a mixing bowl, combine the pancake mix, flour, sugar, and melted margarine. Stir in evaporated milk. Quickly spoon this mixture over the peach mixture.",
+      "Combine nutmeg and brown sugar in a small bowl. Sprinkle mixture on top of batter.",
+      "Bake for 15 to 20 minutes or until golden brown.",
+      "Cool and cut into eight squares."
+    ],
+    "cookMinutes": 40,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=15&cId=12&rId=224&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-048",
+    "matches": [
+      "3¾ C cold fat-free milk, divided",
+      "small packages (4-serving size each) fat-free, sugar-free instant vanilla pudding and pie-filling mix",
+      "C fat-free whipped topping, divided"
+    ],
+    "main": "3¾ C cold fat-free milk, divided",
+    "category": "dessert",
+    "title": "Southern Banana Pudding",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Southern Banana Pudding.",
+    "ingredients": [
+      {
+        "name": "3¾ C cold fat-free milk, divided",
+        "amount": "to taste"
+      },
+      {
+        "name": "small packages (4-serving size each) fat-free, sugar-free instant vanilla pudding and pie-filling mix",
+        "amount": "2"
+      },
+      {
+        "name": "C fat-free whipped topping, divided",
+        "amount": "2"
+      },
+      {
+        "name": "reduced-fat vanilla wafers",
+        "amount": "32"
+      },
+      {
+        "name": "medium bananas, sliced",
+        "amount": "2"
+      }
+    ],
+    "steps": [
+      "Mix 3½ cups of the milk with the pudding mixes. Beat the mixture with a wire whisk for 2 minutes, until it is well blended. Let stand for 5 minutes.",
+      "Fold 1 cup of the whipped topping into the pudding mixture.",
+      "Arrange a layer of wafers on the bottom and sides of a 2-quart serving bowl. Drizzle 2 tablespoons of the remaining milk over the wafers. Add a layer of banana slices, and top with one-third of the pudding.",
+      "Repeat layers, drizzling each wafer layer with remaining milk, and ending with pudding. Spread the remaining whipped topping over the pudding.",
+      "Refrigerate for at least 3 hours before serving."
+    ],
+    "cookMinutes": 5,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=15&cId=12&rId=250&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-049",
+    "matches": [
+      "C nonfat plain yogurt",
+      "medium strawberries",
+      "C pineapple, crushed, canned in juice"
+    ],
+    "main": "C nonfat plain yogurt",
+    "category": "snack",
+    "title": "Summer Breeze Smoothie",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Summer Breeze Smoothie.",
+    "ingredients": [
+      {
+        "name": "C nonfat plain yogurt",
+        "amount": "1"
+      },
+      {
+        "name": "medium strawberries",
+        "amount": "6"
+      },
+      {
+        "name": "C pineapple, crushed, canned in juice",
+        "amount": "1"
+      },
+      {
+        "name": "medium banana",
+        "amount": "1"
+      },
+      {
+        "name": "vanilla extract",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "ice cubes",
+        "amount": "4"
+      }
+    ],
+    "steps": [
+      "Place all ingredients in blender, and puree until smooth.",
+      "Serve in frosted glasses."
+    ],
+    "cookMinutes": 5,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=15&cId=12&rId=223&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-050",
+    "matches": [
+      "sugar-free instant vanilla pudding mix",
+      "C nonfat vanilla yogurt",
+      "(15 oz) pineapple chunks, in juice, drained"
+    ],
+    "main": "sugar-free instant vanilla pudding mix",
+    "category": "side",
+    "title": "Tangy Fruit Salad",
+    "description": "An everyday recipe from a U.S. public-domain cookbook collection: Tangy Fruit Salad.",
+    "ingredients": [
+      {
+        "name": "sugar-free instant vanilla pudding mix",
+        "amount": "2 tbsp"
+      },
+      {
+        "name": "C nonfat vanilla yogurt",
+        "amount": "1"
+      },
+      {
+        "name": "(15 oz) pineapple chunks, in juice, drained",
+        "amount": "1 can"
+      },
+      {
+        "name": "(11 oz) mandarin oranges, in juice, drained",
+        "amount": "1 can"
+      },
+      {
+        "name": "C grapes",
+        "amount": "1"
+      },
+      {
+        "name": "medium bananas, sliced",
+        "amount": "2"
+      }
+    ],
+    "steps": [
+      "Combine pudding mix and yogurt. Mix fruit in a separate bowl.",
+      "Stir fruit into yogurt mixture.",
+      "Refrigerate. Serve when chilled."
+    ],
+    "cookMinutes": 10,
+    "source": {
+      "name": "NHLBI Deliciously Healthy Eating Recipes",
+      "url": "https://healthyeating.nhlbi.nih.gov/recipedetail.aspx?linkId=15&cId=12&rId=251&AspxAutoDetectCookieSupport=1",
+      "license": "U.S. government work, public domain"
+    }
+  },
+  {
+    "id": "en-051",
+    "matches": [
+      "buckwheat flour",
+      "banana",
+      "chocolate"
+    ],
+    "main": "buckwheat flour",
+    "category": "dessert",
+    "title": "Buckwheat Ginger Banana Cake",
+    "description": "A gluten-free ginger banana cake made with buckwheat flour, maple syrup, and dark chocolate.",
+    "ingredients": [
+      {
+        "name": "buckwheat flour",
+        "amount": "1 cup (135 g)"
+      },
+      {
+        "name": "baking powder",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "baking soda",
+        "amount": "1 tsp"
+      },
+      {
+        "name": "maple syrup",
+        "amount": "1/4 cup (60 ml)"
+      },
+      {
+        "name": "unsweetened applesauce",
+        "amount": "1/4 cup (60 ml)"
+      },
+      {
+        "name": "lemon juice",
+        "amount": "1/2 lemon"
+      },
+      {
+        "name": "fresh ginger",
+        "amount": "1 tbsp, grated"
+      },
+      {
+        "name": "banana",
+        "amount": "3 ripe"
+      },
+      {
+        "name": "dark chocolate",
+        "amount": "1/4 cup, chopped"
+      }
+    ],
+    "steps": [
+      "Preheat the oven to 170°C (338°F).",
+      "Mix the buckwheat flour, baking powder, and baking soda in a bowl, and set aside.",
+      "Mix the maple syrup with the applesauce, the lemon juice, and the grated ginger. Mash the bananas with a fork and mix them with the other wet ingredients.",
+      "Combine the dry ingredients with the banana mixture. Be careful not to overmix.",
+      "Add the dark chocolate and gently mix again.",
+      "Line a 20 x 20 cm (8 x 8 inch) pan with parchment and pour in the batter.",
+      "Bake for about 45 minutes, or until a toothpick inserted in the center comes out clean."
+    ],
+    "cookMinutes": 60,
+    "source": {
+      "name": "Wikibooks Cookbook (originally Foodista, Anne Pedersen)",
+      "url": "https://en.wikibooks.org/wiki/Cookbook:Buckwheat_Ginger_Banana_Cake_with_Chocolate",
+      "license": "CC BY (Foodista) / CC BY-SA 4.0 (Wikibooks)"
+    }
+  }
+]

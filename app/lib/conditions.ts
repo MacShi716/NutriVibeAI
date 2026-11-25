@@ -1,3 +1,4 @@
+import { parseLocale } from "@/i18n/locale";
 import { isValidServings, SERVINGS_ERROR } from "./limits";
 import type { UserConditions } from "./types";
 
@@ -56,6 +57,7 @@ export function parseConditions(
       goalCalories: calories.value,
       goalProtein: protein.value,
       prioritizeExpiring: record.prioritizeExpiring === true,
+      locale: parseLocale(typeof record.locale === "string" ? record.locale : undefined),
     },
   };
 }

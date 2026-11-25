@@ -1,6 +1,6 @@
 import { isIsoDate, weekDates } from "./dates";
 import { finalizeRecipes, type JsonTextGenerator, type LLMProvider } from "./gemini";
-import { mockRecipes } from "./mock";
+import { libraryRecipes } from "./recipe-library";
 import { orderIngredientsForGeneration } from "./pantry";
 import { splitIngredients } from "./shopping";
 import { MEAL_SLOTS, mealSlotLabel } from "./slots";
@@ -62,7 +62,7 @@ function pickFromLibrary(
   const pool: Recipe[] = [];
   const seen = new Set<string>();
   for (const ingredients of queries) {
-    const mock = mockRecipes({ ...conditions, ingredients });
+    const mock = libraryRecipes({ ...conditions, ingredients });
     for (const recipe of mock.recipes) {
       if (seen.has(recipe.title)) continue;
       seen.add(recipe.title);
@@ -215,6 +215,7 @@ function emptyPlan(
     usedMock,
     provider,
     generatedAt: new Date().toISOString(),
+    locale: conditions.locale,
   };
 }
 

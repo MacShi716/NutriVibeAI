@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { useUi } from "@/components/UiProvider";
+import { parseLocale } from "@/i18n/locale";
 import CalorieFormula from "@/components/CalorieFormula";
 import PortionPrompt from "@/components/PortionPrompt";
 import { caloriePartsOf } from "@/lib/calories";
@@ -61,7 +62,7 @@ function CalorieBar({
 }
 
 export default function RecipesPage() {
-  const { t } = useUi();
+  const { t, locale } = useUi();
   const [result, setResult] = useState<GenerateResult | null>(null);
   const [regenerating, setRegenerating] = useState(false);
   const [logged, setLogged] = useState<Record<string, boolean>>({});
@@ -70,15 +71,19 @@ export default function RecipesPage() {
 
   useEffect(() => {
     const saved = storage.getLastResult();
-    setResult(saved);
-    if (saved) {
+    const savedLocale = parseLocale(saved?.locale ?? saved?.conditions?.locale);
+    const next = saved && savedLocale === locale ? saved : null;
+    setResult(next);
+    if (next) {
       const flags: Record<string, boolean> = {};
-      saved.recipes.forEach((recipe) => {
+      next.recipes.forEach((recipe) => {
         flags[recipe.id] = isLoggedToday(recipe.id);
       });
       setLogged(flags);
+    } else {
+      setLogged({});
     }
-  }, []);
+  }, [locale]);
 
   function toggleLog(recipe: Recipe) {
     if (isLoggedToday(recipe.id)) {

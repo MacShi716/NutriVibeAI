@@ -1,3 +1,4 @@
+import { readStoredLocale } from "@/i18n/locale";
 import { parseConditions } from "./conditions";
 import { isIsoDate } from "./dates";
 import { finalizeRecipes, recipesFromLibrary } from "./gemini";
@@ -7,6 +8,16 @@ import { orderIngredientsForGeneration } from "./pantry";
 import { storage } from "./storage";
 import type { GenerateResult, MealSlot, Recipe, WeeklyPlan } from "./types";
 import { demoVisionIngredients, ingredientMatchesRestriction } from "./vision-demo";
+
+
+function withLocale(body: unknown): unknown {
+  const locale = typeof window === "undefined" ? "ko" : readStoredLocale();
+  if (typeof body === "object" && body !== null) {
+    const record = body as Record<string, unknown>;
+    return { ...record, locale: typeof record.locale === "string" ? record.locale : locale };
+  }
+  return body;
+}
 
 type ApiFailure = { kind: "unavailable" } | { kind: "error"; message: string };
 
@@ -124,8 +135,9 @@ function remoteError(failure: ApiFailure): string | null {
 }
 
 export async function requestRecipes(
-  body: unknown
+  rawBody: unknown
 ): Promise<{ ok: true; result: GenerateResult } | { ok: false; error: string }> {
+  const body = withLocale(rawBody);
   const remote = await postJson<GenerateResult & { recipes?: Recipe[] }>(
     recipesUrl(),
     withRelayTask(body, "recipes")
@@ -148,6 +160,7 @@ export async function requestRecipes(
           usedMock: remote.data.usedMock === true,
           provider: remote.data.provider === "zhipu" ? "zhipu" : remote.data.usedMock ? "mock" : "zhipu",
           generatedAt: typeof remote.data.generatedAt === "string" ? remote.data.generatedAt : new Date().toISOString(),
+          locale: generation.locale,
         },
       };
     }
@@ -170,6 +183,7 @@ export async function requestRecipes(
       usedMock: true,
       provider: "mock",
       generatedAt: new Date().toISOString(),
+      locale: generation.locale,
     },
   };
 }
@@ -179,18 +193,19 @@ export async function requestWeeklyPlan(input: {
   conditions: unknown;
   pinned: PinnedMeal[];
 }): Promise<{ ok: true; plan: WeeklyPlan } | { ok: false; error: string }> {
+  const conditions = withLocale(input.conditions);
   const payload = HAS_RELAY
-    ? { task: "meal_plan", startDate: input.startDate, conditions: input.conditions, pinned: input.pinned }
+    ? { task: "meal_plan", startDate: input.startDate, conditions, pinned: input.pinned }
     : {
         action: "generate",
         startDate: input.startDate,
-        conditions: input.conditions,
+        conditions,
         pinned: input.pinned,
       };
   const remote = await postJson<{ plan?: WeeklyPlan; text?: string; provider?: string }>(mealPlanUrl(), payload);
   if (remote.ok && remote.data.plan) return { ok: true, plan: remote.data.plan };
   if (remote.ok && typeof remote.data.text === "string" && remote.data.text.trim()) {
-    const check = parseConditions(input.conditions);
+    const check = parseConditions(conditions);
     if (!check.ok) return { ok: false, error: check.error };
     if (!check.data.ingredients.trim()) {
       return { ok: false, error: "보유 식재료를 입력한 뒤 주간 식단을 만들어 주세요." };
@@ -215,7 +230,7 @@ export async function requestWeeklyPlan(input: {
   const message = remoteError(remote.failure);
   if (message) return { ok: false, error: message };
 
-  const check = parseConditions(input.conditions);
+  const check = parseConditions(conditions);
   if (!check.ok) return { ok: false, error: check.error };
   if (!check.data.ingredients.trim()) {
     return { ok: false, error: "보유 식재료를 입력한 뒤 주간 식단을 만들어 주세요." };
@@ -240,17 +255,18 @@ export async function requestMealSwap(input: {
   slot: MealSlot;
   avoidTitles: string[];
 }): Promise<{ ok: true; recipe: Recipe } | { ok: false; error: string }> {
+  const conditions = withLocale(input.conditions);
   const payload = HAS_RELAY
-    ? { task: "swap", conditions: input.conditions, slot: input.slot, avoidTitles: input.avoidTitles }
+    ? { task: "swap", conditions, slot: input.slot, avoidTitles: input.avoidTitles }
     : {
         action: "swap",
-        conditions: input.conditions,
+        conditions,
         slot: input.slot,
         avoidTitles: input.avoidTitles,
       };
   const remote = await postJson<{ recipe?: Recipe; provider?: string }>(mealPlanUrl(), payload);
   if (remote.ok && remote.data.recipe) {
-    const check = parseConditions(input.conditions);
+    const check = parseConditions(conditions);
     if (!check.ok) return { ok: false, error: check.error };
     const swapped = await swapWeeklyMeal({
       conditions: check.data,
@@ -269,7 +285,7 @@ export async function requestMealSwap(input: {
     if (message) return { ok: false, error: message };
   }
 
-  const check = parseConditions(input.conditions);
+  const check = parseConditions(conditions);
   if (!check.ok) return { ok: false, error: check.error };
   const swapped = await swapWeeklyMeal({
     conditions: check.data,

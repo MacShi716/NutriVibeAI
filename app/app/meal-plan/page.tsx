@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUi } from "@/components/UiProvider";
+import { parseLocale } from "@/i18n/locale";
 import { displayRestrictions, format, localizeMessage, slotLabel, weekdayLabel } from "@/i18n/text";
 import { ko } from "@/i18n/messages/ko";
 import { requestMealSwap, requestWeeklyPlan } from "@/lib/client-api";
@@ -48,7 +49,7 @@ function resolveConditions(): UserConditions {
 }
 
 export default function MealPlanPage() {
-  const { t } = useUi();
+  const { t, locale } = useUi();
   const [plan, setPlan] = useState<WeeklyPlan | null>(null);
   const [ready, setReady] = useState(false);
   const [busy, setBusy] = useState("");
@@ -58,9 +59,11 @@ export default function MealPlanPage() {
   const [pendingMeals, setPendingMeals] = useState<Recipe[] | null>(null);
 
   useEffect(() => {
-    setPlan(storage.getWeeklyPlan());
+    const saved = storage.getWeeklyPlan();
+    const savedLocale = parseLocale(saved?.locale ?? saved?.conditions?.locale);
+    setPlan(saved && savedLocale === locale ? saved : null);
     setReady(true);
-  }, []);
+  }, [locale]);
 
   function payload(conditions: UserConditions) {
     return {
