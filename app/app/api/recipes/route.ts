@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { parseConditions } from "@/lib/conditions";
-import { generateRecipes } from "@/lib/gemini";
+import { generateRecipes } from "@/lib/zhipu-server";
 import { orderIngredientsForGeneration } from "@/lib/pantry";
 
 export const runtime = "nodejs";

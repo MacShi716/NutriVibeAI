@@ -6,7 +6,7 @@ import { mockRecipes } from "./mock";
 
 // ============================================================ 프롬프트
 
-function buildPrompt(c: UserConditions): string {
+export function buildPrompt(c: UserConditions): string {
   const goalLine =
     c.goalCalories && c.goalCalories > 0
       ? `- 목표 일일 열량: ${c.goalCalories} kcal (이 끼니는 하루 권장 열량의 약 30% 수준으로 조정)`
@@ -73,7 +73,7 @@ function isRecipeLike(x: unknown): x is Recipe {
   );
 }
 
-function parseRecipes(jsonText: string): Recipe[] {
+export function parseRecipes(jsonText: string): Recipe[] {
   const data = JSON.parse(cleanJsonText(jsonText)) as unknown;
   // {"recipes":[...]}, 최상위 배열 [...], 단일 레시피 객체 {...} 를 모두 허용한다
   let list: unknown[];
@@ -140,164 +140,15 @@ function filterByRestrictions(recipes: Recipe[], restrictionsRaw: string): {
   return { recipes: kept, warnings };
 }
 
-// ============================================================ LLM API 호출 (Groq / Gemini)
+// ============================================================ 제공방 이름
 
-const API_BASE = "https://generativelanguage.googleapis.com/v1beta/models";
-const DEFAULT_MODEL = "gemini-3.8-flash";
+export type LLMProvider = "zhipu" | "mock";
 
-async function callGemini(prompt: string, apiKey: string, model = process.env.GEMINI_MODEL || DEFAULT_MODEL): Promise<string> {
-  const url = `${API_BASE}/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 8192,
-        responseMimeType: "application/json",
-      },
-    }),
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    throw new Error(`Gemini API 오류(${res.status}): ${body.slice(0, 300)}`);
-  }
-  const data = (await res.json()) as {
-    candidates?: { content?: { parts?: { text?: string }[] } }[];
-  };
-  const text = data.candidates?.[0]?.content?.parts
-    ?.map((p) => p.text ?? "")
-    .join("\n");
-  if (!text) {
-    throw new Error("Gemini API 응답에 텍스트가 없습니다.");
-  }
-  return text;
-}
-
-const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-const DEFAULT_GROQ_MODEL = "openai/gpt-oss-120b";
-const GROQ_SYSTEM_PROMPT =
-  'You are a recipe generator. Respond with ONE valid JSON object only, in the form {"recipes":[...]}. No markdown, no text outside the JSON. Write all recipe text in Korean.';
-
-async function callGroq(prompt: string, apiKey: string, model = process.env.GROQ_MODEL || DEFAULT_GROQ_MODEL): Promise<string> {
-  const payload: Record<string, unknown> = {
-    model,
-    messages: [
-      { role: "system", content: GROQ_SYSTEM_PROMPT },
-      { role: "user", content: prompt },
-    ],
-    temperature: 0.7,
-    max_tokens: 8192, // gpt-oss 는 추론 모델이라 reasoning 토큰도 포함되므로 넉넉히 설정
-    response_format: { type: "json_object" },
-  };
-  // reasoning_effort 는 gpt-oss 계열에서만 허용된다 (다른 모델에 보내면 400)
-  // "low" 는 JSON 이 깨져 레시피가 1개만 파싱되는 경우가 잦아 기본값을 "medium" 으로 둔다.
-  if (model.startsWith("openai/gpt-oss")) {
-    const eff = (process.env.GROQ_REASONING_EFFORT ?? "").trim().toLowerCase();
-    payload.reasoning_effort = eff === "low" || eff === "high" ? eff : "medium";
-  }
-
-  const res = await fetch(GROQ_URL, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify(payload),
-    signal: AbortSignal.timeout(60_000),
-  });
-  if (!res.ok) {
-    const body = await res.text().catch(() => "");
-    const kind = res.status === 429 ? "요청 한도 초과 " : "";
-    throw new Error(`Groq API ${kind}오류(${res.status}): ${body.slice(0, 300)}`);
-  }
-  const data = (await res.json()) as {
-    choices?: { message?: { content?: string | null }; finish_reason?: string }[];
-  };
-  const choice = data.choices?.[0];
-  const text = choice?.message?.content;
-  if (!text) {
-    throw new Error(
-      `Groq API 응답에 텍스트가 없습니다.${choice?.finish_reason ? ` (finish_reason=${choice.finish_reason})` : ""}`
-    );
-  }
-  return text;
-}
-
-// ============================================================ 메인 진입점
-
-export type LLMProvider = "groq" | "gemini" | "mock";
-
-/** 사용할 제공방 결정: LLM_PROVIDER 지정 우선, 없으면 GROQ → GEMINI → mock 순 자동 선택 */
-function resolveProvider(groqKey: string, geminiKey: string): LLMProvider {
-  const env = (process.env.LLM_PROVIDER ?? "").trim().toLowerCase();
-  if (env === "groq" || env === "gemini" || env === "mock") return env;
-  if (groqKey) return "groq";
-  if (geminiKey) return "gemini";
-  return "mock";
-}
-
-/** 오류 메시지만 로그에 남기고, 혹시 포함된 API 키는 가린다 */
-function safeErrorMessage(err: unknown, keys: string[]): string {
-  let msg = err instanceof Error ? err.message : String(err);
-  for (const k of keys) if (k) msg = msg.split(k).join("***");
-  return msg;
-}
-
-/**
- * 한 제공방을 호출해 레시피를 파싱한다. Groq 는 응답 JSON 이 깨져 유효 레시피가 2개 미만이면
- * 1회 더 재시도한다(429 한도 초과는 재시도하지 않음). 모두 실패하면 예외를 던진다.
- */
-async function tryProvider(
-  p: "groq" | "gemini",
-  key: string,
-  prompt: string,
-  allKeys: string[]
-): Promise<Recipe[]> {
-  const attempts = p === "groq" ? 2 : 1;
-  let best: Recipe[] = [];
-  let lastErr: unknown = new Error("레시피를 생성하지 못했습니다.");
-  for (let a = 0; a < attempts && best.length < 2; a++) {
-    try {
-      const text = p === "groq" ? await callGroq(prompt, key) : await callGemini(prompt, key);
-      const parsed = parseRecipes(text);
-      if (parsed.length > best.length) best = parsed;
-    } catch (err) {
-      lastErr = err;
-      console.error(`[nutrivibe] ${p} 호출 실패(${a + 1}/${attempts}):`, safeErrorMessage(err, allKeys));
-      if (err instanceof Error && err.message.includes("(429)")) break;
-    }
-  }
-  if (best.length === 0) throw lastErr;
-  return best;
-}
-
-/** 키 없이 mock, 있으면 Groq를 먼저 쓰고 Gemini는 보조로 호출해 JSON 텍스트를 받는다. */
-export async function generateJsonText(prompt: string): Promise<{
+export type JsonTextGenerator = (prompt: string) => Promise<{
   text: string | null;
   provider: LLMProvider;
   usedMock: boolean;
-}> {
-  const groqKey = (process.env.GROQ_API_KEY ?? "").trim();
-  const geminiKey = (process.env.GEMINI_API_KEY ?? "").trim();
-  const primary = resolveProvider(groqKey, geminiKey);
-  const order: ("groq" | "gemini")[] =
-    primary === "mock" ? [] : primary === "groq" ? ["groq", "gemini"] : ["gemini", "groq"];
-  const keyOf = { groq: groqKey, gemini: geminiKey };
-  const allKeys = [groqKey, geminiKey];
-  for (const p of order) {
-    const key = keyOf[p];
-    if (!key) continue;
-    try {
-      const text = p === "groq" ? await callGroq(prompt, key) : await callGemini(prompt, key);
-      return { text, provider: p, usedMock: false };
-    } catch (err) {
-      console.error(`[nutrivibe] ${p} JSON 호출 실패:`, safeErrorMessage(err, allKeys));
-    }
-  }
-  return { text: null, provider: "mock", usedMock: true };
-}
+}>;
 
 /** 제한 재료 제외 후 내부 영양 데이터로 탄수화물·단백질·지방을 다시 계산한다. */
 export function finalizeRecipes(recipes: Recipe[], c: UserConditions): {
@@ -343,56 +194,3 @@ export function recipesFromLibrary(c: UserConditions): { recipes: Recipe[]; warn
   return { recipes: mock.recipes, warnings };
 }
 
-export async function generateRecipes(c: UserConditions): Promise<{
-  recipes: Recipe[];
-  warnings: string[];
-  usedMock: boolean;
-  provider?: LLMProvider;
-}> {
-  const groqKey = (process.env.GROQ_API_KEY ?? "").trim();
-  const geminiKey = (process.env.GEMINI_API_KEY ?? "").trim();
-  const prompt = buildPrompt(c);
-
-  let recipes: Recipe[] = [];
-  let warnings: string[] = [];
-  let usedMock = false;
-  let provider: LLMProvider = "mock";
-
-  const primary = resolveProvider(groqKey, geminiKey);
-  // 시도 순서: 선택된 제공방 → (키가 있다면) 다른 제공방. mock 이 선택되면 시도 없음.
-  const order: ("groq" | "gemini")[] =
-    primary === "mock"
-      ? []
-      : primary === "groq"
-        ? ["groq", "gemini"]
-        : ["gemini", "groq"];
-  const keyOf = { groq: groqKey, gemini: geminiKey };
-
-  const allKeys = [groqKey, geminiKey];
-  for (const p of order) {
-    const key = keyOf[p];
-    if (!key) continue; // 키 없는 제공방은 건너뜀
-    try {
-      recipes = await tryProvider(p, key, prompt, allKeys);
-      provider = p;
-      break;
-    } catch {
-      recipes = [];
-      console.error(`[nutrivibe] ${p} 사용 불가, 다음 제공방 또는 데모 모드로 전환`);
-    }
-  }
-
-  if (recipes.length === 0) {
-    usedMock = true;
-    provider = "mock";
-    const library = recipesFromLibrary(c);
-    recipes = library.recipes;
-    warnings = library.warnings;
-  }
-
-  const finalized = finalizeRecipes(recipes, c);
-  recipes = finalized.recipes;
-  warnings = [...warnings, ...finalized.warnings];
-
-  return { recipes, warnings, usedMock, provider };
-}

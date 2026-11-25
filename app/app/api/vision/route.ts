@@ -6,32 +6,16 @@ export const runtime = "nodejs";
 
 /** 업로드 이미지는 메모리에서만 처리하고 저장하지 않는다. */
 const MAX_BYTES = 4 * 1024 * 1024;
-const DEFAULT_GROQ_VISION_MODEL = "meta-llama/llama-4-scout-17b-16e-instruct";
-const PROMPT =
-  "이 사진에 보이는 식재료만 한국어 일반 명칭으로 나열하세요. " +
-  '반드시 {"ingredients":["재료명"]} 형식의 JSON만 출력하고, 식재료가 없으면 {"ingredients":[]}를 출력하세요.';
-
-type VisionCall = { kind: "openai"; url: string; key: string; model: string } | { kind: "gemini"; key: string; model: string };
-
-/** Groq(OpenAI 호환)를 기본으로 하고, 없으면 Gemini, 둘 다 없으면 데모 모드. */
-function visionConfig(): VisionCall | null {
-  const base = (process.env.VISION_API_BASE ?? "").trim().replace(/\/+$/, "");
-  const key = (process.env.VISION_API_KEY ?? "").trim();
-  const model = (process.env.VISION_MODEL ?? "").trim();
-  if (base && key && model) return { kind: "openai", url: `${base}/chat/completions`, key, model };
-  const groq = (process.env.GROQ_API_KEY ?? "").trim();
-  if (groq) {
-    return {
-      kind: "openai",
-      url: "https://api.groq.com/openai/v1/chat/completions",
-      key: groq,
-      model: model || DEFAULT_GROQ_VISION_MODEL,
-    };
-  }
-  const gemini = (process.env.GEMINI_API_KEY ?? "").trim();
-  if (gemini) return { kind: "gemini", key: gemini, model: (process.env.GEMINI_MODEL ?? "").trim() || "gemini-3.8-flash" };
-  return null;
-}
+const ZHIPU_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
+const VISION_MODEL = "glm-4v-flash";
+const SYSTEM =
+  "당신은 NutriVibe의 식재료 인식 도우미입니다. " +
+  "사진에 실제로 보이는 식재료만 한국어 일반 명칭으로 식별하십시오. " +
+  "의학적 진단이나 식품 안전 판정을 하지 마십시오. " +
+  "사용자가 기피 또는 알레르기로 명시한 재료는 목록에 넣지 마십시오. " +
+  "명시되지 않은 알레르기를 임의로 적용하지 마십시오. " +
+  '반드시 {"ingredients":["재료명"]} 형식의 JSON만 출력하십시오. ' +
+  '식재료가 없으면 {"ingredients":[]}를 출력하십시오.';
 
 function parseList(text: string): string[] {
   const matched = text.match(/\{[\s\S]*\}/);
@@ -44,55 +28,46 @@ function parseList(text: string): string[] {
   return Array.from(new Set(names)).slice(0, 20);
 }
 
-async function recognize(cfg: VisionCall, file: File): Promise<string[]> {
+async function recognize(apiKey: string, file: File, restrictions: string): Promise<string[]> {
   const bytes = Buffer.from(await file.arrayBuffer());
   const base64 = bytes.toString("base64");
-  if (cfg.kind === "openai") {
-    const res = await fetch(cfg.url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${cfg.key}` },
-      body: JSON.stringify({
-        model: cfg.model,
-        temperature: 0.2,
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: PROMPT },
-              { type: "image_url", image_url: { url: `data:${file.type};base64,${base64}` } },
-            ],
-          },
-        ],
-      }),
-    });
-    if (!res.ok) throw new Error(`vision (${res.status})`);
-    const json = (await res.json()) as { choices?: { message?: { content?: string } }[] };
-    return parseList(json.choices?.[0]?.message?.content ?? "");
+  const mime = file.type === "image/jpg" ? "image/jpeg" : file.type;
+  let prompt = "이 사진에 보이는 식재료만 한국어 일반 명칭으로 나열하십시오.";
+  if (restrictions.trim()) {
+    prompt += ` 다음 기피 및 알레르기 재료는 목록에 넣지 마십시오: ${restrictions.trim().slice(0, 500)}.`;
   }
-  if (cfg.kind === "gemini") {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(cfg.model)}:generateContent?key=${encodeURIComponent(cfg.key)}`;
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [
-              { text: PROMPT },
-              { inline_data: { mime_type: file.type, data: base64 } },
-            ],
-          },
-        ],
-        generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
-      }),
-    });
-    if (!res.ok) throw new Error(`vision (${res.status})`);
-    const json = (await res.json()) as { candidates?: { content?: { parts?: { text?: string }[] } }[] };
-    const text = json.candidates?.[0]?.content?.parts?.map((part) => part.text ?? "").join("\n") ?? "";
-    return parseList(text);
+  const res = await fetch(ZHIPU_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
+    body: JSON.stringify({
+      model: VISION_MODEL,
+      temperature: 0.2,
+      max_tokens: 1024,
+      messages: [
+        { role: "system", content: SYSTEM },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: prompt },
+            { type: "image_url", image_url: { url: `data:${mime};base64,${base64}` } },
+          ],
+        },
+      ],
+    }),
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (!res.ok) {
+    await res.text().catch(() => "");
+    throw new Error(`vision (${res.status})`);
   }
-  const never: never = cfg;
-  return never;
+  const json = (await res.json()) as {
+    choices?: { message?: { content?: string | Array<{ text?: string }> } }[];
+  };
+  const content = json.choices?.[0]?.message?.content;
+  const text = Array.isArray(content)
+    ? content.map((part) => (typeof part?.text === "string" ? part.text : "")).join("\n")
+    : content ?? "";
+  return parseList(text);
 }
 
 export async function POST(req: NextRequest) {
@@ -114,14 +89,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "이미지 용량은 4MB 이하만 업로드할 수 있습니다." }, { status: 413 });
   }
 
-  const cfg = visionConfig();
-  if (!cfg) {
+  const key = (process.env.ZHIPU_API_KEY ?? "").trim();
+  if (!key) {
     return NextResponse.json({ ingredients: demoVisionIngredients(restrictions), demo: true });
   }
 
   try {
-    const ingredients = await recognize(cfg, file);
-    return NextResponse.json({ ingredients, demo: false });
+    const ingredients = await recognize(key, file, restrictions);
+    return NextResponse.json({ ingredients, demo: false, provider: "zhipu" });
   } catch (err) {
     console.error("[nutrivibe] 사진 인식 실패", err instanceof Error ? err.message : "");
     return NextResponse.json(

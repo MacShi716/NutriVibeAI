@@ -39,7 +39,7 @@ export type GenerateResult = {
   recipes: Recipe[];
   warnings: string[];
   usedMock: boolean;
-  provider?: "groq" | "gemini" | "mock"; // 실제 사용된 LLM 제공방 (선택)
+  provider?: "zhipu" | "mock"; // 실제 사용된 LLM 제공방 (선택)
   generatedAt: string;
 };
 
@@ -80,7 +80,7 @@ export type WeeklyPlan = {
   conditions: UserConditions;
   warnings: string[];
   usedMock: boolean;
-  provider?: "groq" | "gemini" | "mock";
+  provider?: "zhipu" | "mock";
   generatedAt: string;
 };
 

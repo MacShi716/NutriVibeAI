@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { requestRecipes } from "@/lib/client-api";
-import { STATIC_HOST } from "@/lib/host";
+import { USES_REMOTE_AI } from "@/lib/host";
 import { storage, CONDITIONS_EVENT, PROFILE_EVENT } from "@/lib/storage";
 import { estimateDailyCalories, targetCalories } from "@/lib/profile";
 import { isValidServings, SERVINGS_ERROR, SERVINGS_MIN, SERVINGS_MAX } from "@/lib/limits";
@@ -39,7 +39,7 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   const [phase, setPhase] = useState<"form" | "generating" | "done">("form");
   const [error, setError] = useState("");
-  const [showDemoNote, setShowDemoNote] = useState(STATIC_HOST);
+  const [showDemoNote, setShowDemoNote] = useState(!USES_REMOTE_AI);
   const [profileGoals, setProfileGoals] = useState<{ calories: number | null; protein: number | null }>({
     calories: null,
     protein: null,
@@ -66,7 +66,7 @@ export default function HomePage() {
     const saved = storage.getConditions();
     hadSavedConditions.current = saved != null;
     setForm(saved ?? EMPTY);
-    if (!STATIC_HOST) setShowDemoNote(storage.getLastResult()?.usedMock === true);
+    setShowDemoNote(storage.getLastResult()?.usedMock === true || (!USES_REMOTE_AI && storage.getLastResult() == null));
     setMounted(true);
   }, []);
 
@@ -405,7 +405,7 @@ export default function HomePage() {
           data-testid="generate-recipes"
           className="w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
         >
-          {STATIC_HOST ? "내장 레시피로 추천받기" : "AI 레시피 생성하기"}
+          {USES_REMOTE_AI ? "AI 레시피 생성하기" : "내장 레시피로 추천받기"}
         </button>
         <Link href="/meal-plan" className="block text-center text-sm font-medium text-brand-700 hover:underline">
           이 재료로 주간 식단표 만들기

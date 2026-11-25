@@ -7,7 +7,7 @@
 ## 功能
 
 - **菜谱生成**:首页表单(食材 / 偏好 / 忌口·过敏 / 人数 1~12 / 烹饪时间 5~180 分钟 / 目标热量)→ `POST /api/recipes`
-- **三种生成模式**:Groq / Gemini / 演示模式(mock),失败自动回退(见下文)
+- **两种生成模式**:智谱 GLM(经专用中转) / 演示模式(mock),失败自动回退(见下文)
 - **演示菜谱库**:71 个韩国家常菜模板 + 匹配引擎(配料表必须包含输入食材;贪心覆盖所有输入食材;无匹配时显示道歉卡和 Naver/Google 搜索链接)
 - **中→韩食材别名**:输入中文食材名也能匹配(110+ 条映射)
 - **忌口/过敏过滤**:规则过滤 + 危险提示
@@ -30,7 +30,7 @@
 |---|---|
 | 前端 | Next.js 14(App Router)、React 18、TypeScript、Tailwind CSS |
 | 后端 | Next.js API Route(`app/app/api/recipes/route.ts`) |
-| LLM | Groq(OpenAI 兼容接口,默认 `openai/gpt-oss-120b`)、Google Gemini(默认 `gemini-3.8-flash`) |
+| LLM | 智谱 GLM。菜谱/周计划用 `glm-4-flash-250414`(失败时 `glm-4-flash`),识材用 `glm-4v-flash`。公开站经专用中转调用,密钥不进前端 |
 | 存储 | 浏览器 localStorage |
 | 数据 | `app/data/nutrition-data.json`(68 种食材) |
 | 质量 | ESLint(`next lint`)、TypeScript(`tsc --noEmit`),当前均 0 错误 |
@@ -60,7 +60,7 @@ NutriVibeAI/
 │   │   └── game/page.tsx             # 游戏中心
 │   ├── components/                   # GameToast / VisitTracker / GenerationSteps / useCountUp
 │   ├── lib/
-│   │   ├── gemini.ts                 # LLM 调用(Groq + Gemini)、Prompt、JSON 解析、过滤、generateRecipes()
+│   │   ├── gemini.ts                 # LLM 调用(智谱)、Prompt、JSON 解析、过滤、generateRecipes()
 │   │   ├── mock.ts                   # 71 个菜谱模板 + mockRecipes() 匹配引擎
 │   │   ├── alias.ts                  # 中→韩食材别名
 │   │   ├── nutrition.ts              # 食材量解析、营养计算
@@ -70,6 +70,7 @@ NutriVibeAI/
 │   │   ├── storage.ts                # localStorage 封装
 │   │   └── types.ts                  # 公共类型
 │   └── data/nutrition-data.json      # 营养参考数据
+├── nutrivibeai-zhipu-relay/           # 智谱专用中转(密钥只放服务端环境变量)
 └── nutrivibe_build/                  # 韩语报告生成工具链
     ├── build_report.py               # 同源生成 PDF + DOCX(正文在脚本内 CONTENT 列表)
     ├── make_figures.py               # 生成 fig1_flow.png / fig2_arch.png
@@ -107,26 +108,25 @@ npx tsc --noEmit     # 类型检查
 
 ## 环境变量(`app/.env.local.example`)
 
-把 `app/.env.local.example` 复制为 `app/.env.local` 后填写。这些变量只在服务端(API Route)读取,不会发送到浏览器。`.env.local` 已被 `.gitignore` 排除,**不要提交**。
+把 `app/.env.local.example` 复制为 `app/.env.local` 后填写。`.env.local` 已被 `.gitignore` 排除,**不要提交**。密钥只能放在中转函数或 Vercel 控制台的服务端环境变量里,不要放进仓库、Pages 产物,也不要使用 `NEXT_PUBLIC_` / `VITE_` 前缀携带密钥。
 
 | 变量 | 必需 | 说明 |
 |---|---|---|
-| `GROQ_API_KEY` | 否 | Groq API key(推荐,免费层无需绑卡) |
-| `GROQ_MODEL` | 否 | Groq 模型,默认 `openai/gpt-oss-120b` |
-| `GROQ_REASONING_EFFORT` | 否 | `low` / `medium` / `high`,默认 `medium`(仅 `openai/gpt-oss-*` 生效) |
-| `GEMINI_API_KEY` | 否 | Google Gemini API key |
-| `GEMINI_MODEL` | 否 | Gemini 模型,默认 `gemini-3.8-flash` |
-| `LLM_PROVIDER` | 否 | 强制指定 `groq` / `gemini` / `mock`;留空自动选择 |
+| `NEXT_PUBLIC_RELAY_URL` | 否 | 浏览器可访问的专用中转地址,不含密钥。GitHub Pages 构建从仓库 Actions variable 读入。留空则公开站回退演示模式。 |
+| `ZHIPU_API_KEY` | 否 | 智谱 API 密钥。只写在中转的服务端环境变量,或 Vercel 控制台(API 备份)。 |
+| `LLM_PROVIDER` | 否 | 强制指定 `zhipu` / `mock`;留空则有服务端密钥时用智谱,否则演示模式。 |
 
-## 三种模式:Groq / Gemini / 演示(mock)
+专用中转源码在 `nutrivibeai-zhipu-relay/`。推荐部署到阿里云函数计算香港区域,函数名 `nutrivibeai-zhipu-relay`。不要复用其他项目的中转地址。
 
-- **自动选择**(未设置 `LLM_PROVIDER`):有 `GROQ_API_KEY` → Groq;否则有 `GEMINI_API_KEY` → Gemini;都没有 → 演示模式。
-- **失败回退**:选定的提供方失败(429 限流、403、返回格式错误等)→ 若另一个提供方有 key 则尝试它 → 仍失败则回退演示模式,页面显示演示模式横幅。
-- **Groq 细节**:`openai/gpt-oss-*` 默认 `reasoning_effort=medium`(low 时 JSON 易损坏,high 消耗 token 多);有效菜谱少于 2 个时自动重试 1 次(429 不重试)。
+## 两种模式:智谱 / 演示(mock)
+
+- **公开 GitHub Pages 站**:浏览器用 `NEXT_PUBLIC_RELAY_URL` 向专用中转 POST。中转用服务端 `ZHIPU_API_KEY` 调用智谱。中转未配置或失败时,回退到内置菜谱库,页面显示演示说明。
+- **本地 / Vercel 备份**:未设置中转地址时,调用同域 `/api/*`。API 路由读取控制台里的 `ZHIPU_API_KEY`(不要写进前端变量)。没有密钥或调用失败同样回退演示模式。公开主站不要只依赖 vercel.app。
+- **模型**:菜谱与周计划使用 `glm-4-flash-250414`,失败时再试 `glm-4-flash`;照片识材只使用 `glm-4v-flash`,不用纯文本模型认图。
 - **演示模式**:使用 `lib/mock.ts` 的内置菜谱库和匹配引擎,无需任何 key,离线可用。
 - 无论哪种模式,营养值都用 `nutrition-data.json` 重算,并统一经过忌口/过敏过滤。
-- `/api/recipes` 响应:`{ conditions, recipes, warnings, usedMock, generatedAt, provider }`,其中 `provider` 为实际使用的 `groq` / `gemini` / `mock`。
-- 服务端日志只记录提供方名称和错误信息,不记录 key。
+- `/api/recipes` 或中转成功时的 `provider` 为 `zhipu` 或 `mock`。
+- 服务端日志不记录密钥,也不把上游完整报错返回给浏览器。
 
 ## 报告工具链(`nutrivibe_build/`)
 
@@ -163,19 +163,19 @@ python nutrivibe_build\verify_report.py     # 校验页数 / 孤悬标题 / 关�
 
 公开测试地址为 GitHub Pages: `https://macshi716.github.io/NutriVibeAI/`。仓库保持私有时, Pages 需要仓库设置里启用,且账号需支持私有仓库 Pages(GitHub Pro 及以上)。路径: **Settings → Pages → Build and deployment → Source: GitHub Actions**。工作流是 `.github/workflows/pages.yml`,向 `main` 推送后构建并部署。Vercel 项目保留作带 API 的备份,不要改成静态导出。
 
-`GITHUB_PAGES=true` 时 `next.config.mjs` 使用 `output: 'export'`、`basePath` / `assetPrefix` `/NutriVibeAI` 和 `trailingSlash`。同一次构建设置 `NEXT_PUBLIC_STATIC_HOST=true`,页面不再请求不存在的 `/api/*`,而是直接走与服务器无 key 时相同的内置演示逻辑。`output: 'export'` 不能编译 Route Handler,所以 `npm run build:pages` 会在构建期间把 `app/app/api` 临时移走,构建结束后放回。API 源码仍在仓库里,Vercel 继续用 `npm run build`(不设置上述变量,因此仍调用 API)。
+`GITHUB_PAGES=true` 时 `next.config.mjs` 使用 `output: 'export'`、`basePath` / `assetPrefix` `/NutriVibeAI` 和 `trailingSlash`。同一次构建设置 `NEXT_PUBLIC_STATIC_HOST=true`,页面不会请求不存在的同域 `/api/*`。若同时设置了 `NEXT_PUBLIC_RELAY_URL`,浏览器用该地址 POST 到专用中转;中转未配置或失败时再回退内置演示逻辑。`output: 'export'` 不能编译 Route Handler,所以 `npm run build:pages` 会在构建期间把 `app/app/api` 临时移走,构建结束后放回。API 源码仍在仓库里,Vercel 继续用 `npm run build`(不强制静态托管,因此可走 API 备份)。
 
-| 能力 | github.io(无服务器) | 带 API 的服务器(Vercel 备份) |
+| 能力 | github.io(静态站 + 可选中转) | 带 API 的服务器(Vercel 备份) |
 |---|---|---|
 | 页面、韩语界面、localStorage、同步码 / JSON 备份、蛋白质目标、保质期提示、购物清单、收藏、游戏化 | 可用 | 可用 |
-| 菜谱生成、再生成、周计划与换菜 | 仅演示模式:浏览器内调用与服务器相同的内置菜谱库(`lib/mock.ts`),不请求 Groq/Gemini | Groq 优先,失败再试 Gemini,再失败才演示模式 |
-| 照片识材 | 仅演示模式:显示与无 API key 时相同的示例食材,不上传识别 | 有 `GROQ_API_KEY` 或 `VISION_API_KEY` 时识别照片;没有 key 时同样是示例食材 |
+| 菜谱生成、再生成、周计划与换菜 | 有中转地址则 POST 到中转(智谱);否则或失败时用内置菜谱库(`lib/mock.ts`) | 服务端 `ZHIPU_API_KEY` 调用智谱,失败则演示模式 |
+| 照片识材 | 有中转则把图片 POST 到中转(`glm-4v-flash`);否则或失败时显示示例食材 | 有服务端密钥时识别照片;没有密钥时同样是示例食材 |
 
 静态站点没有动态路由,菜谱详情是 `/recipes/view/?id=...`,数据仍来自当前浏览器的 localStorage。
 
 ## 已知限制
 
-- 默认没有配置真实 API key 时运行于演示模式;真实 LLM 输出质量取决于模型和配额(Groq 免费层可能 429 限流)。GitHub Pages 上始终是演示模式。
+- 默认没有配置中转地址或服务端密钥时运行于演示模式;真实 LLM 输出质量取决于模型和配额。GitHub Pages 在中转未就绪时回退演示模式,不会在前端保存密钥。
 - Vercel 仍可作为带 API Route 的备份部署;公开测试站是 GitHub Pages。
 - 营养数据为内部 68 种食材参考值,不是医疗级数据;菜谱与营养信息仅供参考。
 - 无账号与云端同步,数据仅存于当前浏览器的 localStorage。
