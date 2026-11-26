@@ -232,7 +232,7 @@ export default function MealPlanPage() {
           type="button"
           disabled={busy !== ""}
           onClick={() => void generate(false)}
-          className={`rounded-lg bg-brand-600 font-bold text-white hover:bg-brand-700 disabled:opacity-50 ${
+          className={`nv-btn rounded-lg bg-brand-600 font-bold text-white hover:bg-brand-700 disabled:opacity-50 ${
             plan ? "px-4 py-2 text-sm" : "px-5 py-3 text-base"
           }`}
         >
@@ -242,26 +242,26 @@ export default function MealPlanPage() {
           type="button"
           disabled={busy !== "" || !plan}
           onClick={() => void generate(true)}
-          className="rounded-lg border border-brand-600 px-4 py-2 text-sm font-bold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
+          className="nv-btn-secondary rounded-lg border border-brand-600 px-4 py-2 text-sm font-bold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
         >
           {busy === "regen" ? t.mealPlan.regenerating : t.mealPlan.regen}
         </button>
       </div>
 
       {error && (
-        <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        <p className="nv-error mb-4">
           {localizeMessage(error, t)}
         </p>
       )}
 
       {!plan && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-gray-600 sm:p-8">
+        <div className="nv-card nv-empty p-6 text-sm text-gray-600 sm:p-8">
           <p>{t.mealPlan.empty}</p>
           <button
             type="button"
             disabled={busy !== ""}
             onClick={() => void generate(false)}
-            className="mt-4 w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-50 sm:w-auto"
+            className="nv-btn mt-4 w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700 disabled:opacity-50 sm:w-auto"
           >
             {busy === "generate" ? t.mealPlan.generating : t.mealPlan.generate}
           </button>
@@ -306,7 +306,7 @@ export default function MealPlanPage() {
             ) : null}
           </div>
 
-          <div className="mb-4 rounded-2xl border border-brand-100 bg-brand-50 p-4" data-testid="plan-next-steps">
+          <div className="nv-card nv-card--accent mb-4 p-4" data-testid="plan-next-steps">
             <p className="text-sm font-semibold text-gray-900">
               {justMade ? t.mealPlan.nextMade : t.mealPlan.nextExisting}
             </p>
@@ -314,14 +314,14 @@ export default function MealPlanPage() {
               <button
                 type="button"
                 onClick={logToday}
-                className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
+                className="nv-btn flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
               >
                 {t.mealPlan.logToday}
               </button>
               <button
                 type="button"
                 onClick={applyShopping}
-                className="flex-1 rounded-lg border border-brand-600 bg-white px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
+                className="nv-btn-secondary flex-1 rounded-lg border border-brand-600 bg-white px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
               >
                 {t.mealPlan.mergeShopping}
               </button>
@@ -338,9 +338,9 @@ export default function MealPlanPage() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <div className="nv-stagger grid grid-cols-1 gap-3 sm:grid-cols-2">
             {plan.days.map((day) => (
-              <section key={day.date} className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm">
+              <section key={day.date} className="nv-card nv-card-hover p-4">
                 <h2 className="text-sm font-bold text-gray-900">
                   {day.date.slice(5)} ({weekdayLabel(t, weekdayIndex(day.date))})
                   {day.date === todayKey() ? <span className="ml-2 text-xs text-brand-600">{t.mealPlan.today}</span> : null}
@@ -349,7 +349,7 @@ export default function MealPlanPage() {
                   {day.meals.map((meal) => {
                     const key = `${day.date}:${meal.slot}`;
                     return (
-                      <li key={meal.slot} className="rounded-lg bg-gray-50 px-3 py-2">
+                      <li key={meal.slot} className="nv-inset px-3 py-2">
                         <div className="flex items-start justify-between gap-2">
                           <div>
                             <p className="text-[11px] font-semibold text-gray-500">{slotLabel(t, meal.slot)}</p>
@@ -370,7 +370,7 @@ export default function MealPlanPage() {
                         <div className="mt-2 flex gap-2">
                           <button
                             type="button"
-                            className="rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                            className="nv-press rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100 disabled:opacity-50"
                             disabled={busy !== ""}
                             onClick={() => void swap(day.date, meal.slot)}
                           >
@@ -378,7 +378,7 @@ export default function MealPlanPage() {
                           </button>
                           <button
                             type="button"
-                            className="rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+                            className="nv-press rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
                             onClick={() => togglePin(day.date, meal.slot)}
                           >
                             {meal.pinned ? t.mealPlan.unpin : t.mealPlan.pin}
@@ -396,14 +396,14 @@ export default function MealPlanPage() {
             <button
               type="button"
               onClick={applyShopping}
-              className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
+              className="nv-btn flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
             >
               {t.mealPlan.applyWeek}
             </button>
             <button
               type="button"
               onClick={logToday}
-              className="flex-1 rounded-lg border border-brand-600 px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
+              className="nv-btn-secondary flex-1 rounded-lg border border-brand-600 px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
             >
               {t.mealPlan.logRecord}
             </button>

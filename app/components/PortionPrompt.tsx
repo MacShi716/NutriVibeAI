@@ -61,14 +61,14 @@ export default function PortionPrompt({
       aria-labelledby="portion-prompt-title"
       data-testid="portion-prompt"
     >
-      <div className="nv-chrome w-full max-w-md rounded-2xl border p-5 shadow-lg">
+      <div className="nv-card nv-card--compact w-full max-w-md p-5">
         <h2 id="portion-prompt-title" className="text-base font-bold text-gray-900">
           {t.portion.title}
         </h2>
         <p className="mt-1 text-sm text-gray-600">{t.portion.body}</p>
         <ul className="mt-4 space-y-3">
           {items.map((item) => (
-            <li key={item.id} className="rounded-lg bg-gray-50 px-3 py-3">
+            <li key={item.id} className="nv-inset px-3 py-3">
               <p className="text-sm font-medium text-gray-800">{item.title}</p>
               <div className="mt-2 flex flex-wrap gap-2">
                 {SERVING_CHIPS.map((count) => (
@@ -77,7 +77,7 @@ export default function PortionPrompt({
                     type="button"
                     aria-pressed={values[item.id] === String(count)}
                     onClick={() => setValue(item.id, String(count))}
-                    className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                    className={`nv-chip px-3 py-1 text-xs font-medium ${
                       values[item.id] === String(count)
                         ? "border-brand-600 bg-brand-50 text-brand-700"
                         : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
@@ -90,7 +90,7 @@ export default function PortionPrompt({
                   type="button"
                   aria-pressed={values[item.id] === "0.5"}
                   onClick={() => setValue(item.id, "0.5")}
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                  className={`nv-chip px-3 py-1 text-xs font-medium ${
                     values[item.id] === "0.5"
                       ? "border-brand-600 bg-brand-50 text-brand-700"
                       : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
@@ -116,19 +116,19 @@ export default function PortionPrompt({
             </li>
           ))}
         </ul>
-        {error && <p className="mt-3 text-xs text-red-600">{error}</p>}
+        {error && <p className="nv-error mt-3">{error}</p>}
         <div className="mt-4 flex gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+            className="nv-btn-secondary flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
           >
             {t.common.cancel}
           </button>
           <button
             type="button"
             onClick={confirm}
-            className="flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-bold text-white hover:bg-brand-700"
+            className="nv-btn flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-bold text-white hover:bg-brand-700"
           >
             {t.portion.confirm}
           </button>

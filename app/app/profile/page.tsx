@@ -123,7 +123,7 @@ export default function ProfilePage() {
       <h1 className="text-xl font-bold text-gray-900">{t.profile.title}</h1>
       <p className="mt-1 text-sm text-gray-600">{t.profile.intro}</p>
 
-      <div className="mt-5 rounded-2xl border border-gray-200 bg-white p-5">
+      <div className="nv-card mt-5 p-5">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label className={labelCls}>{t.profile.height}</label>
@@ -232,13 +232,13 @@ export default function ProfilePage() {
         <div className="mt-4 flex flex-wrap gap-2">
           <button
             onClick={save}
-            className="rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-700"
+            className="nv-btn rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-brand-700"
           >
             {t.profile.save}
           </button>
           <button
             onClick={reset}
-            className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50"
+            className="nv-btn-secondary rounded-lg border border-gray-300 px-5 py-2.5 text-sm text-gray-600 hover:bg-gray-50"
           >
             {t.profile.reset}
           </button>
@@ -247,7 +247,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <section id="restrictions" className="mt-5 scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-5">
+      <section id="restrictions" className="nv-card mt-5 scroll-mt-24 p-5">
         <h2 className="text-base font-bold text-gray-900">{t.profile.restrictionsTitle}</h2>
         <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.profile.restrictionsNote}</p>
         <div className="mt-3">
@@ -256,7 +256,7 @@ export default function ProfilePage() {
       </section>
 
       {bmi && (
-        <div className="mt-5 rounded-2xl border border-gray-200 bg-white p-5">
+        <div className="nv-card mt-5 p-5">
           <h2 className="text-base font-bold text-gray-900">{t.profile.bmiTitle}</h2>
           <div className="mt-3 flex items-center gap-6">
             <div className="text-center">
@@ -277,19 +277,19 @@ export default function ProfilePage() {
       )}
 
       {estimate && form.activityLevel && (
-        <div className="mt-5 rounded-2xl border border-gray-200 bg-white p-5">
+        <div className="nv-card mt-5 p-5">
           <h2 className="text-base font-bold text-gray-900">{t.profile.calorieTitle}</h2>
           <p className="mt-1 text-xs text-gray-500">{t.profile.calorieNote}</p>
           <div className="mt-3 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-lg bg-gray-50 px-2 py-3">
+            <div className="nv-tile px-2 py-3">
               <div className="text-xs text-gray-500">{t.profile.bmr}</div>
               <div className="mt-1 font-bold text-gray-900">{estimate.bmr} kcal</div>
             </div>
-            <div className="rounded-lg bg-gray-50 px-2 py-3">
+            <div className="nv-tile px-2 py-3">
               <div className="text-xs text-gray-500">{t.profile.tdee}</div>
               <div className="mt-1 font-bold text-gray-900">{estimate.tdee} kcal</div>
             </div>
-            <div className="rounded-lg bg-gray-50 px-2 py-3">
+            <div className="nv-tile px-2 py-3">
               <div className="text-xs text-gray-500">{t.profile.activityLabel}</div>
               <div className="mt-1 font-bold text-gray-900">{activityLabel(t, form.activityLevel)}</div>
             </div>
@@ -308,7 +308,7 @@ export default function ProfilePage() {
                 <button
                   key={k}
                   onClick={() => setGoal(k)}
-                  className={`rounded-lg border px-4 py-2 text-sm font-medium ${
+                  className={`nv-press rounded-lg border px-4 py-2 text-sm font-medium ${
                     goal === k
                       ? "border-brand-600 bg-brand-600 text-white"
                       : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"

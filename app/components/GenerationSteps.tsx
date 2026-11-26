@@ -25,7 +25,7 @@ export default function GenerationSteps({ done }: { done: boolean }) {
   }, [steps.length]);
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6">
+    <div className="nv-card p-6">
       <div className="mb-4 flex items-center gap-2">
         <span className="h-4 w-4 rounded-full border-2 border-brand-600 border-t-transparent anim-pulse-soft" />
         <h2 className="text-base font-bold text-gray-900">{t.generation.title}</h2>
@@ -62,6 +62,13 @@ export default function GenerationSteps({ done }: { done: boolean }) {
           );
         })}
       </ul>
+      {!done && (
+        <div className="nv-skel-block" aria-hidden="true">
+          <div className="nv-skel nv-skel-tile" />
+          <div className="nv-skel nv-skel-tile" />
+          <div className="nv-skel nv-skel-tile" />
+        </div>
+      )}
       {step >= steps.length && (
         <p className="mt-4 text-sm font-semibold text-brand-700 anim-pop">{t.generation.ready}</p>
       )}

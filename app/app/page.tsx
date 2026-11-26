@@ -199,7 +199,11 @@ export default function HomePage() {
   }
 
   return (
-    <div className="anim-fade-up mx-auto max-w-2xl">
+    <div className="anim-fade-up nv-home mx-auto max-w-2xl">
+      <div className="nv-hero-atmos" aria-hidden="true">
+        <div className="nv-aurora" />
+      </div>
+
       <div className="mb-6">
         <DailyNutrition />
       </div>
@@ -232,7 +236,7 @@ export default function HomePage() {
       <form
         onSubmit={handleSubmit}
         noValidate
-        className="space-y-5 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm"
+        className="nv-card space-y-5 p-6"
       >
         {mounted && (goalCal || profileGoals.protein) && (
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-brand-100 bg-brand-50 px-4 py-3 text-sm">
@@ -356,7 +360,7 @@ export default function HomePage() {
                   aria-pressed={form.servings === count}
                   data-testid={`servings-chip-${count}`}
                   onClick={() => update("servings", count)}
-                  className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                  className={`nv-chip px-3 py-1 text-xs font-medium ${
                     form.servings === count
                       ? "border-brand-600 bg-brand-50 text-brand-700"
                       : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
@@ -389,7 +393,7 @@ export default function HomePage() {
         </div>
 
         {error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          <div className="nv-error">
             {localizeMessage(error, t)}
           </div>
         )}
@@ -397,11 +401,11 @@ export default function HomePage() {
         <button
           type="submit"
           data-testid="generate-recipes"
-          className="w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
+          className="nv-btn w-full rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-brand-700"
         >
           {USES_REMOTE_AI ? t.home.generateAi : t.home.generateDemo}
         </button>
-        <Link href="/meal-plan" className="block text-center text-sm font-medium text-brand-700 hover:underline">
+        <Link href="/meal-plan" className="nv-press block text-center text-sm font-medium text-brand-700 hover:underline">
           {t.home.weeklyCta}
         </Link>
       </form>

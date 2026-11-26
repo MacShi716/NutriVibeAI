@@ -52,10 +52,10 @@ export default function DataBackup() {
     }
   }
 
-  const btn = "rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50";
+  const btn = "nv-btn-secondary rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50";
 
   return (
-    <div id="backup" className="mt-6 scroll-mt-24 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm" data-testid="data-backup">
+    <div id="backup" className="nv-card mt-6 scroll-mt-24 p-6" data-testid="data-backup">
       <h2 className="text-lg font-bold text-gray-900">{t.backup.title}</h2>
       <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.backup.intro}</p>
       <ol className="mt-3 list-decimal space-y-1 pl-4 text-xs leading-relaxed text-gray-600">
@@ -101,7 +101,7 @@ export default function DataBackup() {
           value={code}
           rows={3}
           aria-label={t.backup.codeLabel}
-          className="mt-3 w-full rounded-lg border border-gray-200 bg-gray-50 p-2 font-mono text-[10px] text-gray-600"
+          className="nv-inset mt-3 w-full rounded-lg p-2 font-mono text-[10px] text-gray-600"
         />
       )}
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">

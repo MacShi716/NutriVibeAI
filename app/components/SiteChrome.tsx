@@ -49,11 +49,11 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
     <>
       <VisitTracker />
       <GameToast />
-      <header className="nv-chrome border-b">
+      <header className="nv-chrome nv-header border-b">
         <div className="mx-auto max-w-4xl px-4 py-3">
           <div className="flex items-center justify-between gap-3">
             <Link href="/" className="flex shrink-0 items-center gap-2">
-              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-600 text-sm font-bold text-white">
+              <span className="nv-logo flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold text-white">
                 NV
               </span>
               <span className="text-lg font-bold text-brand-700">NutriVibe AI</span>
@@ -65,7 +65,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
               <summary className="cursor-pointer list-none rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 [&::-webkit-details-marker]:hidden">
                 {t.nav.menu}
               </summary>
-              <nav className="nv-chrome absolute right-0 z-20 mt-2 w-44 rounded-lg border p-3 text-sm font-medium shadow-sm">
+              <nav className="nv-chrome nv-card nv-card--compact absolute right-0 z-20 mt-2 w-44 border p-3 text-sm font-medium">
                 <div className="flex flex-col gap-1">
                   <NavLinks stacked />
                 </div>
@@ -81,7 +81,7 @@ export default function SiteChrome({ children }: { children: React.ReactNode }) 
       <ExpiryBanner />
       <ReminderHost />
       <main className="mx-auto max-w-4xl px-4 py-8">{children}</main>
-      <footer className="nv-chrome border-t py-6 text-center text-xs">
+      <footer className="nv-chrome nv-footer border-t py-6 text-center text-xs">
         <p>{t.footer.tagline}</p>
         <p className="mt-1">
           {t.footer.localBefore}{" "}

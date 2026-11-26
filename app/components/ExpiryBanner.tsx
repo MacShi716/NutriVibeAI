@@ -71,7 +71,7 @@ export default function ExpiryBanner() {
             <button
               type="button"
               data-testid="expiry-priority"
-              className="rounded-md border border-amber-300 bg-white px-2 py-1 font-medium text-amber-800 hover:bg-amber-100 disabled:opacity-70"
+              className="nv-press rounded-md border border-amber-300 bg-white px-2 py-1 font-medium text-amber-800 hover:bg-amber-100 disabled:opacity-70"
               onClick={enablePriority}
               disabled={priorityOn}
             >

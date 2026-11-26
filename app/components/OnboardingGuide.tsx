@@ -31,13 +31,13 @@ export default function OnboardingGuide() {
 
   return (
     <section
-      className="mb-5 rounded-2xl border border-brand-100 bg-white p-4 shadow-sm"
+      className="nv-card nv-card--accent mb-5 p-4"
       data-testid="onboarding"
       aria-label={t.onboarding.label}
     >
       <div className="flex items-start justify-between gap-3">
         <h2 className="text-sm font-bold text-gray-900">{t.onboarding.title}</h2>
-        <button type="button" onClick={close} className="shrink-0 text-xs font-medium text-gray-500 underline">
+        <button type="button" onClick={close} className="nv-press shrink-0 text-xs font-medium text-gray-500 underline">
           {t.common.close}
         </button>
       </div>

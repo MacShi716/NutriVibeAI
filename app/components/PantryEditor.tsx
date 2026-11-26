@@ -71,7 +71,7 @@ export default function PantryEditor({
           const state = expiryState(item.expiresOn);
           const badge = expiryText(state, t.expiry);
           return (
-            <li key={`${item.name}-${index}`} className="rounded-lg bg-gray-50 px-3 py-2">
+            <li key={`${item.name}-${index}`} className="nv-inset px-3 py-2">
               <div className="flex items-center justify-between gap-2">
                 <span className="text-sm font-medium text-gray-800">{item.name}</span>
                 {badge && (

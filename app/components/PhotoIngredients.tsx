@@ -101,7 +101,7 @@ export default function PhotoIngredients({
   }
 
   const btn =
-    "cursor-pointer rounded-lg border border-brand-100 bg-brand-50 px-3 py-2 text-xs font-medium text-brand-700 hover:bg-brand-100";
+    "nv-btn-secondary cursor-pointer rounded-lg border border-brand-100 bg-brand-50 px-3 py-2 text-xs font-medium text-brand-700 hover:bg-brand-100";
 
   return (
     <div className="rounded-lg border border-dashed border-gray-300 p-3" data-testid="photo-ingredients">
@@ -148,7 +148,7 @@ export default function PhotoIngredients({
             {items.map((item, index) => (
               <div
                 key={`chip-${index}`}
-                className="flex flex-wrap items-center gap-2 rounded-lg bg-gray-100 px-2 py-2 text-xs text-gray-700"
+                className="nv-inset flex flex-wrap items-center gap-2 px-2 py-2 text-xs text-gray-700"
               >
                 <input
                   aria-label={format(t.photo.recognized, { n: index + 1 })}
@@ -177,14 +177,14 @@ export default function PhotoIngredients({
           <div className="mt-2 flex flex-wrap gap-2">
             <button
               type="button"
-              className="rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
+              className="nv-btn rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
               onClick={() => commit(false)}
             >
               {t.photo.add}
             </button>
             <button
               type="button"
-              className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
+              className="nv-btn-secondary rounded-lg border border-gray-300 bg-white px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
               onClick={() => commit(true)}
             >
               {t.photo.addNameOnly}

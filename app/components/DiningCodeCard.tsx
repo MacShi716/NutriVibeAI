@@ -18,7 +18,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
 
   return (
     <section
-      className={compact ? "rounded-xl border border-gray-200 bg-white p-4" : "rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"}
+      className={compact ? "nv-card nv-card--compact p-4" : "nv-card nv-card-hover p-5"}
       data-testid="diningcode-entry"
     >
       <h2 className="text-sm font-bold text-gray-900">{t.dining.title}</h2>
@@ -36,7 +36,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
           className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800 focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
         />
       </label>
-      <div className="mt-2 flex flex-wrap gap-2">
+      <div className="nv-stagger mt-2 flex flex-wrap gap-2">
         {DININGCODE_SUGGESTIONS.map((word) => (
           <button
             key={word}
@@ -45,7 +45,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
               setQuery(labels[word]);
               setSearchQuery(word);
             }}
-            className="rounded-full border border-gray-300 bg-white px-3 py-1 text-xs text-gray-600 hover:bg-gray-50"
+            className="nv-chip px-3 py-1 text-xs text-gray-600"
           >
             {labels[word]}
           </button>
@@ -56,7 +56,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
           href={url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
+          className="nv-btn inline-flex rounded-lg bg-brand-600 px-3 py-2 text-xs font-bold text-white hover:bg-brand-700"
         >
           {query.trim() ? t.dining.search : t.dining.home}
         </a>
@@ -64,7 +64,7 @@ export default function DiningCodeCard({ compact }: { compact?: boolean }) {
           href={DININGCODE_HOME}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
+          className="nv-btn-secondary inline-flex rounded-lg border border-gray-300 px-3 py-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
         >
           {t.dining.nearby}
         </a>

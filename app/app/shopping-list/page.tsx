@@ -93,20 +93,20 @@ export default function ShoppingListPage() {
         </Link>
       </div>
 
-      {error && <p className="mb-3 text-sm text-red-600">{localizeMessage(error, t)}</p>}
+      {error && <p className="nv-error mb-3">{localizeMessage(error, t)}</p>}
 
       {items.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white p-10 text-center">
+        <div className="nv-card nv-empty p-10">
           <p className="text-gray-600">{t.shopping.empty}</p>
           <div className="mt-4 flex flex-col items-center gap-2">
             <Link
               href="/meal-plan"
               data-testid="shopping-merge-weekly"
-              className="inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
+              className="nv-btn inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
             >
               {t.shopping.mergeWeekly}
             </Link>
-            <Link href="/" className="text-sm font-medium text-brand-700 underline">
+            <Link href="/" className="nv-press text-sm font-medium text-brand-700 underline">
               {t.common.enterConditions}
             </Link>
           </div>
@@ -119,14 +119,14 @@ export default function ShoppingListPage() {
 
           <div className="space-y-4">
             {groups.map((g) => (
-              <div key={g.key} className="rounded-2xl border border-gray-200 bg-white p-4">
+              <div key={g.key} className="nv-card p-4">
                 <h2 className="mb-2 text-sm font-bold text-gray-700">{categoryLabel(t, g.key, g.label)}</h2>
-                <ul className="space-y-1">
+                <ul className="nv-stagger space-y-1">
                   {g.items.map((item) => {
                     const expiryMark = ingredientExpiryMark(item.name, pantry);
                     return (
                       <li key={item.name}>
-                        <label className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5 hover:bg-gray-50">
+                        <label className="nv-row flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1.5">
                           <input
                             type="checkbox"
                             checked={item.checked}
@@ -155,13 +155,13 @@ export default function ShoppingListPage() {
           <div className="mt-4 flex gap-3">
             <button
               onClick={saveAll}
-              className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
+              className="nv-btn flex-1 rounded-lg bg-brand-600 px-4 py-3 text-sm font-bold text-white hover:bg-brand-700"
             >
               {t.shopping.save}
             </button>
             <button
               onClick={copyText}
-              className="flex-1 rounded-lg border border-brand-600 px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
+              className="nv-btn-secondary flex-1 rounded-lg border border-brand-600 px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50"
             >
               {copied ? t.shopping.copied : t.shopping.copy}
             </button>
@@ -169,7 +169,7 @@ export default function ShoppingListPage() {
           <div className="mt-3">
             <button
               onClick={addFavoritesToShopping}
-              className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:border-brand-400 hover:text-brand-700"
+              className="nv-btn-secondary w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-semibold text-gray-600 transition hover:border-brand-400 hover:text-brand-700"
             >
               {mergedFav ? t.shopping.merged : t.shopping.mergeFav}
             </button>

@@ -77,12 +77,12 @@ export default function GamePage() {
     <div className="mx-auto max-w-4xl">
       <div className="mb-5 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">{t.game.title}</h1>
-        <Link href="/" className="text-sm text-brand-600 hover:underline">
+        <Link href="/" className="nv-press text-sm text-brand-600 hover:underline">
           {t.common.enterConditions}
         </Link>
       </div>
 
-      <div className="mb-5 rounded-2xl border border-brand-100 bg-gradient-to-r from-brand-50 to-amber-50 p-6">
+      <div className="nv-card nv-card--accent mb-5 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
             <div className="text-xs font-semibold text-brand-600">{format(t.game.level, { level, title })}</div>
@@ -110,11 +110,11 @@ export default function GamePage() {
         </div>
       </div>
 
-      <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
+      <section className="nv-card mb-5 p-5">
         <h2 className="text-base font-bold text-gray-900">
           {t.game.missions} <span className="text-xs font-normal text-gray-400">{t.game.missionsHint}</span>
         </h2>
-        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        <div className="nv-stagger mt-3 grid gap-3 sm:grid-cols-3">
           {missions.map((m) => {
             const done = state.missions.done.includes(m.id);
             return (
@@ -135,7 +135,7 @@ export default function GamePage() {
         </div>
       </section>
 
-      <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
+      <section className="nv-card mb-5 p-5">
         <h2 className="text-base font-bold text-gray-900">
           {t.game.roulette} <span className="text-xs font-normal text-gray-400">{t.game.rouletteHint}</span>
         </h2>
@@ -144,7 +144,7 @@ export default function GamePage() {
           <button
             onClick={doRoll}
             disabled={spin}
-            className={`flex h-28 w-28 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-amber-500 text-4xl font-black text-white shadow-lg transition hover:scale-105 disabled:opacity-70 ${
+            className={`nv-btn flex h-28 w-28 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-amber-500 text-4xl font-black text-white shadow-lg transition hover:scale-105 disabled:opacity-70 ${
               spin ? "anim-spin" : ""
             }`}
           >
@@ -170,14 +170,14 @@ export default function GamePage() {
         </div>
       </section>
 
-      <section className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
+      <section className="nv-card mb-5 p-5">
         <h2 className="text-base font-bold text-gray-900">
           {t.game.achievements}{" "}
           <span className="text-xs font-normal text-gray-400">
             {format(t.game.unlocked, { have: state.achievements.length, total: ACHIEVEMENTS.length })}
           </span>
         </h2>
-        <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
+        <div className="nv-stagger mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
           {ACHIEVEMENTS.map((a) => {
             const got = state.achievements.includes(a.id);
             const copy = achievementCopy(t, a.id);
@@ -199,7 +199,7 @@ export default function GamePage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-gray-200 bg-white p-5">
+      <section className="nv-card p-5">
         <h2 className="text-base font-bold text-gray-900">
           {t.game.dexTitle}{" "}
           <span className="text-xs font-normal text-gray-400">

@@ -80,7 +80,7 @@ export default function GameToast() {
   return (
     <div className="pointer-events-none fixed bottom-5 right-5 z-50 flex w-72 flex-col gap-2">
       {toasts.map((item) => (
-        <div key={item.id} className="anim-toast-in rounded-xl border border-brand-100 bg-white px-4 py-3 shadow-lg">
+        <div key={item.id} className="nv-card nv-card--accent anim-toast-in nv-card--compact px-4 py-3">
           <div className="flex items-center gap-2">
             <span className="text-xl">{item.icon}</span>
             <div className="min-w-0">

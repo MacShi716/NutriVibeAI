@@ -111,12 +111,12 @@ export default function SupplementPlanner() {
   if (!ready) return null;
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" data-testid="supplement-planner">
+    <section className="nv-card p-5" data-testid="supplement-planner">
       <h2 className="text-sm font-bold text-gray-900">{t.supplements.title}</h2>
       <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.supplements.intro}</p>
 
       {items.length === 0 ? (
-        <p className="mt-3 rounded-lg bg-gray-50 px-3 py-3 text-sm text-gray-600">
+        <p className="nv-empty nv-inset mt-3 px-3 py-3 text-sm text-gray-600">
           {t.supplements.empty}
         </p>
       ) : (
@@ -124,7 +124,7 @@ export default function SupplementPlanner() {
           {items.map((item) => {
             const taken = takenToday(item.id, log);
             return (
-              <li key={item.id} className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-3">
+              <li key={item.id} className="nv-inset px-3 py-3">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
                     <p className="text-sm font-semibold text-gray-900">{item.name}</p>
@@ -161,7 +161,7 @@ export default function SupplementPlanner() {
                         type="button"
                         aria-pressed={on}
                         onClick={() => setTakenToday(item.id, on && taken === n ? n - 1 : n)}
-                        className={`rounded-full border px-3 py-1 text-xs font-medium ${
+                        className={`nv-chip px-3 py-1 text-xs font-medium ${
                           on
                             ? "border-brand-600 bg-brand-50 text-brand-700"
                             : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
@@ -237,20 +237,20 @@ export default function SupplementPlanner() {
             className="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-800"
           />
         </label>
-        {error && <p className="text-xs text-red-600">{localizeMessage(error, t)}</p>}
+        {error && <p className="nv-error text-xs">{localizeMessage(error, t)}</p>}
         <div className="flex gap-2">
           {editingId && (
             <button
               type="button"
               onClick={resetForm}
-              className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+              className="nv-btn-secondary flex-1 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
             >
               {t.common.cancel}
             </button>
           )}
           <button
             type="submit"
-            className="flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-bold text-white hover:bg-brand-700"
+            className="nv-btn flex-1 rounded-lg bg-brand-600 px-3 py-2 text-sm font-bold text-white hover:bg-brand-700"
           >
             {editingId ? t.supplements.saveEdit : t.supplements.add}
           </button>

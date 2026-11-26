@@ -37,7 +37,7 @@ export default function IngredientAdder({
   }
 
   return (
-    <div className="mt-2 rounded-lg border border-gray-200 bg-gray-50 p-3" data-testid="ingredient-adder">
+    <div className="nv-inset mt-2 p-3" data-testid="ingredient-adder">
       <p className="text-xs font-medium text-gray-700">{t.ingredient.title}</p>
       <div className="mt-2 grid gap-2 sm:grid-cols-[1fr_8rem_auto]">
         <label className="text-[11px] text-gray-500">
@@ -68,7 +68,7 @@ export default function IngredientAdder({
         <button
           type="button"
           onClick={() => submit(amount, false)}
-          className="self-end rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-brand-700"
+          className="nv-btn self-end rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-brand-700"
         >
           {t.ingredient.add}
         </button>
@@ -79,14 +79,14 @@ export default function IngredientAdder({
           <button
             type="button"
             onClick={() => submit(amount, false)}
-            className="rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-brand-700"
+            className="nv-btn rounded-lg bg-brand-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-brand-700"
           >
             {t.ingredient.addWithAmount}
           </button>
           <button
             type="button"
             onClick={() => submit("", true)}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+            className="nv-btn-secondary rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
           >
             {t.ingredient.addNameOnly}
           </button>
@@ -96,7 +96,7 @@ export default function IngredientAdder({
               setAsk(false);
               setError("");
             }}
-            className="rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+            className="nv-btn-secondary rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
           >
             {t.common.cancel}
           </button>

@@ -68,11 +68,11 @@ export default function RecipeDetailPage() {
 
   if (!recipe || !detail) {
     return (
-      <div className="mx-auto max-w-2xl rounded-2xl border border-gray-200 bg-white p-10 text-center">
+      <div className="nv-card nv-empty mx-auto max-w-2xl p-10">
         <p className="text-gray-600">{t.detail.missing}</p>
         <Link
           href="/recipes"
-          className="mt-4 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
+          className="nv-btn mt-4 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
         >
           {t.detail.back}
         </Link>
@@ -106,12 +106,12 @@ export default function RecipeDetailPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-4">
-        <Link href="/recipes" className="text-sm text-brand-600 hover:underline">
+        <Link href="/recipes" className="nv-press text-sm text-brand-600 hover:underline">
           {t.detail.backShort}
         </Link>
       </div>
 
-      <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+      <div className="nv-card p-6">
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">{recipe.title}</h1>
@@ -120,7 +120,7 @@ export default function RecipeDetailPage() {
           <div className="flex shrink-0 flex-col gap-2">
             <button
               onClick={toggleFav}
-              className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+              className={`nv-press rounded-lg border px-3 py-2 text-sm font-medium transition ${
                 isFav
                   ? "border-amber-300 bg-amber-50 text-amber-700"
                   : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
@@ -139,7 +139,7 @@ export default function RecipeDetailPage() {
                 }
                 setAskPortion(true);
               }}
-              className="rounded-lg border border-brand-600 bg-white px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
+              className="nv-btn-secondary rounded-lg border border-brand-600 bg-white px-3 py-2 text-sm font-medium text-brand-700 hover:bg-brand-50"
             >
               {logged ? t.detail.logOn : t.detail.logOff}
             </button>
@@ -189,7 +189,7 @@ export default function RecipeDetailPage() {
           {recipe.ingredients.map((ing, i) => (
             <li
               key={i}
-              className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm"
+              className="nv-inset flex items-center justify-between px-3 py-2 text-sm"
             >
               <span>{ing.name}</span>
               <span className="text-gray-500">{ing.amount}</span>
@@ -212,7 +212,7 @@ export default function RecipeDetailPage() {
         <h2 className="mt-6 text-base font-bold text-gray-900">
           {t.detail.tableTitle}
         </h2>
-        <div className="mt-2 overflow-x-auto rounded-lg border border-gray-200">
+        <div className="nv-inset mt-2 overflow-x-auto">
           <table className="w-full min-w-[480px] text-sm">
             <thead>
               <tr className="bg-gray-50 text-left text-xs text-gray-500">
@@ -287,7 +287,7 @@ export default function RecipeDetailPage() {
           ].map(([label, value]) => (
             <div
               key={label}
-              className="rounded-lg bg-gray-50 px-2 py-3 text-sm"
+              className="nv-tile px-2 py-3 text-sm"
             >
               <div className="text-xs text-gray-500">{label}</div>
               <div className="mt-0.5 font-bold text-gray-700">{value}</div>
@@ -304,7 +304,7 @@ export default function RecipeDetailPage() {
         <div className="mt-6 flex gap-3">
           <Link
             href="/shopping-list"
-            className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-brand-700"
+            className="nv-btn flex-1 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-brand-700"
           >
             {t.detail.shopping}
           </Link>

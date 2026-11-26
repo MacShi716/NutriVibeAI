@@ -131,11 +131,11 @@ export default function RecipesPage() {
 
   if (!result) {
     return (
-      <div className="anim-fade-up mx-auto max-w-2xl rounded-2xl border border-gray-200 bg-white p-10 text-center">
+      <div className="anim-fade-up nv-card nv-empty mx-auto max-w-2xl p-10">
         <p className="text-gray-600">{t.recipes.empty}</p>
         <Link
           href="/"
-          className="mt-4 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
+          className="nv-btn mt-4 inline-block rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
         >
           {t.common.enterConditions}
         </Link>
@@ -150,7 +150,7 @@ export default function RecipesPage() {
     <div className="anim-fade-up mx-auto max-w-3xl">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-xl font-bold text-gray-900">{t.recipes.title}</h1>
-        <Link href="/" className="text-sm text-brand-600 hover:underline">
+        <Link href="/" className="nv-press text-sm text-brand-600 hover:underline">
           {t.recipes.edit}
         </Link>
       </div>
@@ -187,10 +187,10 @@ export default function RecipesPage() {
       </div>
 
       {summary && (
-        <div className="mb-5 rounded-2xl border border-gray-200 bg-white p-5">
-          <div className="mb-3 flex items-baseline justify-between">
+        <div className="nv-card mb-5 p-5">
+          <div className="mb-3 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
             <h2 className="text-sm font-bold text-gray-900">{t.recipes.summary}</h2>
-            <span className="text-xs text-gray-500">
+            <span className="text-right text-xs text-gray-500">
               {format(t.recipes.summaryMeta, { count: result.recipes.length, total: summary.total, avg: summary.avg })}
             </span>
           </div>
@@ -207,8 +207,8 @@ export default function RecipesPage() {
       )}
 
       {result.recipes.length === 0 && (
-        <div className="anim-fade-up mb-5 rounded-2xl border border-gray-200 bg-white p-8 text-center">
-          <div className="text-3xl">😥</div>
+        <div className="anim-fade-up nv-card nv-empty mb-5 p-8">
+          <div className="nv-empty-mark" aria-hidden="true">😥</div>
           <h2 className="mt-2 text-lg font-bold text-gray-900">{t.recipes.noMatchTitle}</h2>
           <p className="mt-2 text-sm text-gray-600">
             {format(t.recipes.noMatchBody, { list: result.conditions.ingredients || t.recipes.missingIngredients })}
@@ -218,7 +218,7 @@ export default function RecipesPage() {
               href={`https://search.naver.com/search.naver?query=${encodeURIComponent(`${searchList} ${t.recipes.searchRecipe}`)}`}
               target="_blank"
               rel="noreferrer"
-              className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
+              className="nv-btn rounded-lg bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700"
             >
               {format(t.recipes.searchNaver, { list: searchList })}
             </a>
@@ -226,25 +226,24 @@ export default function RecipesPage() {
               href={`https://www.google.com/search?q=${encodeURIComponent(`${searchList} ${t.recipes.searchRecipe}`)}`}
               target="_blank"
               rel="noreferrer"
-              className="rounded-lg border border-brand-600 px-4 py-2 text-sm font-bold text-brand-700 hover:bg-brand-50"
+              className="nv-btn-secondary rounded-lg border border-brand-600 px-4 py-2 text-sm font-bold text-brand-700 hover:bg-brand-50"
             >
               {t.recipes.searchGoogle}
             </a>
           </div>
-          <Link href="/" className="mt-4 inline-block text-sm text-brand-600 hover:underline">
+          <Link href="/" className="nv-press mt-4 inline-block text-sm text-brand-600 hover:underline">
             {t.recipes.editAgain}
           </Link>
         </div>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2">
-        {result.recipes.map((r, i) => {
+      <div className="nv-stagger grid gap-4 sm:grid-cols-2">
+        {result.recipes.map((r) => {
           const usage = calcOwnedUsage(r.ingredients, result.conditions.ingredients);
           return (
             <article
               key={r.id}
-              className="anim-fade-up rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
-              style={{ animationDelay: `${i * 120}ms` }}
+              className="nv-card nv-card-hover p-5"
             >
               <Link href={`/recipes/view?id=${encodeURIComponent(r.id)}`} className="group block">
                 <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700">{r.title}</h2>
@@ -268,7 +267,7 @@ export default function RecipesPage() {
               <button
                 type="button"
                 onClick={() => toggleLog(r)}
-                className="mt-3 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                className="nv-btn-secondary mt-3 rounded-lg border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
               >
                 {logged[r.id] ? t.recipes.logOn : t.recipes.logOff}
               </button>
@@ -278,20 +277,20 @@ export default function RecipesPage() {
         })}
       </div>
 
-      {error && <p className="mt-4 text-sm text-red-600">{localizeMessage(error, t)}</p>}
+      {error && <p className="nv-error mt-4">{localizeMessage(error, t)}</p>}
 
       {result.recipes.length > 0 && (
         <div className="mt-6 flex gap-3">
           <Link
             href="/shopping-list"
-            className="flex-1 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-brand-700"
+            className="nv-btn flex-1 rounded-lg bg-brand-600 px-4 py-3 text-center text-sm font-bold text-white hover:bg-brand-700"
           >
             {t.recipes.shopping}
           </Link>
           <button
             onClick={regenerate}
             disabled={regenerating}
-            className="flex-1 rounded-lg border border-brand-600 px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
+            className="nv-btn-secondary flex-1 rounded-lg border border-brand-600 px-4 py-3 text-sm font-bold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
           >
             {regenerating ? t.common.generating : t.recipes.regenerate}
           </button>

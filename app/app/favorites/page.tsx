@@ -51,19 +51,19 @@ export default function FavoritesPage() {
   return (
     <div className="mx-auto max-w-3xl">
       <h1 className="text-xl font-bold text-gray-900">{t.favorites.title}</h1>
-      {error && <p className="mt-3 text-sm text-red-600">{localizeMessage(error, t)}</p>}
+      {error && <p className="nv-error mt-3">{localizeMessage(error, t)}</p>}
 
       <h2 className="mb-3 mt-6 text-base font-bold text-gray-900">{t.favorites.favHeading}</h2>
       {favs.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-gray-500">
+        <div className="nv-card nv-empty p-6 text-sm text-gray-500">
           {t.favorites.favEmpty}
         </div>
       ) : (
-        <ul className="space-y-2">
+        <ul className="nv-stagger space-y-2">
           {favs.map((r) => (
             <li
               key={r.id}
-              className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3"
+              className="nv-card nv-card-hover nv-card--compact flex items-center justify-between px-4 py-3"
             >
               <div>
                 <Link
@@ -78,7 +78,7 @@ export default function FavoritesPage() {
               </div>
               <button
                 onClick={() => removeFav(r.id)}
-                className="rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
+                className="nv-btn-secondary rounded-lg border border-gray-300 px-3 py-1.5 text-xs text-gray-600 hover:bg-gray-50"
               >
                 {t.common.remove}
               </button>
@@ -89,13 +89,13 @@ export default function FavoritesPage() {
 
       <h2 className="mb-3 mt-8 text-base font-bold text-gray-900">{t.favorites.history}</h2>
       {history.length === 0 ? (
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-gray-500">
+        <div className="nv-card nv-empty p-6 text-sm text-gray-500">
           {t.favorites.historyEmpty}
         </div>
       ) : (
-        <ul className="space-y-2">
+        <ul className="nv-stagger space-y-2">
           {history.map((h, i) => (
-            <li key={i} className="flex items-center justify-between rounded-xl border border-gray-200 bg-white px-4 py-3">
+            <li key={i} className="nv-card nv-card-hover nv-card--compact flex items-center justify-between px-4 py-3">
               <div>
                 <p className="text-sm font-semibold text-gray-900">{h.title}</p>
                 <p className="text-xs text-gray-500">
@@ -119,7 +119,7 @@ export default function FavoritesPage() {
                   <button
                     onClick={() => regenerate(i, h.conditions)}
                     disabled={regeneratingId !== null}
-                    className="rounded-lg border border-brand-600 px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
+                    className="nv-btn-secondary rounded-lg border border-brand-600 px-3 py-1.5 text-xs font-semibold text-brand-700 hover:bg-brand-50 disabled:opacity-50"
                   >
                     {regeneratingId === i ? t.favorites.generating : t.favorites.regenerate}
                   </button>

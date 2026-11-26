@@ -77,13 +77,13 @@ export default function DailyNutrition() {
   );
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" data-testid="daily-nutrition">
+    <section className="nv-card p-5" data-testid="daily-nutrition">
       <div className="flex items-baseline justify-between gap-2">
         <h2 className="text-sm font-bold text-gray-900">{t.daily.title}</h2>
         <span className="text-xs text-gray-400">{format(t.daily.meals, { n: entries.length })}</span>
       </div>
       {entries.length === 0 && goals.calories == null && goals.protein == null ? (
-        <p className="mt-2 text-xs text-gray-500">{t.daily.empty}</p>
+        <p className="nv-empty nv-inset mt-3 px-3 py-3 text-xs text-gray-500">{t.daily.empty}</p>
       ) : (
         <div className="mt-3 space-y-3">
           <Bar label={t.daily.calories} value={sum.calories} goal={goals.calories} unit="kcal" />

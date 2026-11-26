@@ -62,7 +62,7 @@ export default function ReminderSettingsPanel() {
   ];
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm" data-testid="reminder-settings">
+    <section className="nv-card p-5" data-testid="reminder-settings">
       <h2 className="text-sm font-bold text-gray-900">{t.reminders.settingsTitle}</h2>
       <p className="mt-1 text-xs leading-relaxed text-gray-500">{t.reminders.settingsBody}</p>
       <ul className="mt-3 space-y-2">

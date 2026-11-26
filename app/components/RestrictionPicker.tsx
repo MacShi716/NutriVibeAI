@@ -32,7 +32,7 @@ export default function RestrictionPicker({
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2" role="group" aria-label={t.restrictions.group}>
+      <div className="nv-stagger flex flex-wrap gap-2" role="group" aria-label={t.restrictions.group}>
         {RESTRICTION_PRESETS.map((name) => {
           const on = parsed.presets.includes(name);
           return (
@@ -42,7 +42,7 @@ export default function RestrictionPicker({
               aria-pressed={on}
               data-testid={`restriction-chip-${name}`}
               onClick={() => toggle(name)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium ${
+              className={`nv-chip px-3 py-1 text-xs font-medium ${
                 on
                   ? "border-brand-600 bg-brand-50 text-brand-700"
                   : "border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
