@@ -78,7 +78,7 @@ NutriVibe AI 专用的智谱(Zhipu)中转。GitHub Pages 是静态站,密钥不�
 
 ```bash
 cd nutrivibeai-zhipu-relay
-python3 -m unittest test_relay.py
+python3 -m unittest discover -s . -p 'test_*.py'
 # 只有在本地自行配置密钥后才做真实调用
 # python3 local_server.py   # http://127.0.0.1:8787
 ```
@@ -91,4 +91,25 @@ python3 -m unittest test_relay.py
 4. 在函数环境变量中只添加 `ZHIPU_API_KEY`,值从保险库写入。
 5. 记下实际地址 `https://nutrivibeai-zhipu-relay-<suffix>.cn-hongkong.fcapp.run`,把它设为 NutriVibeAI 仓库的 Actions variable `NEXT_PUBLIC_RELAY_URL`,然后重新部署 Pages。
 
-Vercel API 路由只作备份。若启用备份,密钥同样只写在 Vercel 控制台环境变量里。公开 github.io 主站不要只依赖 vercel.app。
+## Vercel Hobby 备份
+
+阿里云函数计算仍是推荐部署,处理入口保持 `index.handler`。同一目录另有 Vercel Hobby 能构建的 HTTP 入口 `api/index.py`:标准库 `BaseHTTPRequestHandler` 子类 `handler`。它只把 HTTP 请求转成现有函数计算事件,再调用 `index.handler`。CORS、限流、任务和错误码都不在适配器里重写。
+
+不要把仓库根目录的 Next.js 应用部署到这个项目,也不要把它的 Framework 设成 Next.js、FastAPI、Flask 或 Django。Framework 留空时,Vercel 把 `api/index.py` 建成一个 Python 函数。已有 Hobby 项目是 `nutrivibeai-zhipu-relay`(`prj_pDK3cpLSZmOaPh7fX72hVpdEswuZ`)。
+
+部署时只使用本目录:
+
+1. 在项目设置里把 Root Directory 设为 `nutrivibeai-zhipu-relay`,或在本目录执行 CLI(已登录 Vercel 账号时):
+
+```bash
+cd nutrivibeai-zhipu-relay
+npx vercel link --project nutrivibeai-zhipu-relay --yes
+npx vercel deploy --prod
+```
+
+2. 运行时是 Python 3.12(`.python-version`),无第三方依赖。`vercel.json` 只把该函数的 `maxDuration` 设为 120 秒,低于 Hobby 的 300 秒上限。不要加多区域、自定义内存、Edge Runtime 或其他付费项。
+3. 函数创建成功后,只在该 Vercel 项目的服务端环境变量里添加 `ZHIPU_API_KEY`。不要写入 Git、PR 或 `NEXT_PUBLIC_*`。
+4. 生产请求路径是 `POST /api`。`Content-Type: application/json`,请求体与上文的 `recipes`、`meal_plan`、`swap`、`vision` 相同。前端变量 `NEXT_PUBLIC_RELAY_URL` 应写成 `https://<该次部署分配的主机>/api`,并且去掉末尾斜杠。主机名以 Vercel 控制台显示的为准;在第一次成功部署之前没有可调用的生产地址。
+5. 浏览器预检是 `OPTIONS /api`。允许的 Origin 仍只有 `https://macshi716.github.io` 和 localhost / `127.0.0.1`。
+
+Hobby 与函数计算的平台差异:Vercel 请求体上限是 4.5 MB,所有套餐相同。函数计算侧仍按 6 MB 请求体和 4 MB 图片校验。经 Vercel 发送的照片,base64 JSON 需要小于 4.5 MB,否则平台会在函数运行前拒绝。公开 github.io 主站不要只依赖 vercel.app。
