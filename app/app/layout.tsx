@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./golden-ratio.css";
 import "./globals.css";
 import SiteChrome from "@/components/SiteChrome";
 import { UiProvider } from "@/components/UiProvider";

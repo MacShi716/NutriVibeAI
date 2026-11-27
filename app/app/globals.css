@@ -2170,3 +2170,64 @@ html[data-theme="dark"] .nv-dish__note {
     background-image: none;
   }
 }
+
+/* ---------- Golden ratio (additive; do not touch .theme-switch*) ---------- */
+.nv-header .mx-auto {
+  padding-top: var(--gr-space-sm);
+  padding-bottom: var(--gr-space-sm);
+}
+
+.nv-header .mx-auto > .mt-3 {
+  margin-top: var(--gr-space-sm);
+  column-gap: var(--gr-space-lg);
+  row-gap: var(--gr-space-sm);
+}
+
+main.mx-auto {
+  padding-top: var(--gr-space-lg);
+  padding-bottom: var(--gr-space-xl);
+}
+
+.nv-footer {
+  padding-top: var(--gr-space-lg);
+  padding-bottom: var(--gr-space-lg);
+}
+
+.nv-home h1,
+.anim-fade-up h1,
+main h1 {
+  font-size: var(--gr-fs-lg);
+  line-height: var(--gr-lh-tight);
+}
+
+.nv-home .leading-relaxed {
+  line-height: var(--gr-lh-loose);
+}
+
+.nv-hero-atmos {
+  height: min(33.48rem, 61.8vh);
+}
+
+.nv-dish--card .nv-dish__scene,
+.nv-dish--hero .nv-dish__scene {
+  height: auto;
+  aspect-ratio: var(--gr-ratio);
+}
+
+.nv-dish--compact .nv-dish__scene,
+.nv-dish__vessel,
+.nv-chip,
+.nv-logo,
+.theme-switch,
+.theme-switch__track,
+.theme-switch__thumb {
+  aspect-ratio: auto;
+}
+
+@media (max-width: 640px) {
+  .nv-dish--card .nv-dish__scene,
+  .nv-dish--hero .nv-dish__scene {
+    height: auto;
+    aspect-ratio: var(--gr-ratio);
+  }
+}
