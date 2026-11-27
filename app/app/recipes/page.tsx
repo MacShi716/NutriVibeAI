@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useUi } from "@/components/UiProvider";
 import { parseLocale } from "@/i18n/locale";
 import CalorieFormula from "@/components/CalorieFormula";
+import DishVisual from "@/components/DishVisual";
 import PortionPrompt from "@/components/PortionPrompt";
 import { caloriePartsOf } from "@/lib/calories";
 import { useCountUp } from "@/components/useCountUp";
@@ -243,9 +244,10 @@ export default function RecipesPage() {
           return (
             <article
               key={r.id}
-              className="nv-card nv-card-hover p-5"
+              className="nv-card nv-card-hover overflow-hidden"
             >
-              <Link href={`/recipes/view?id=${encodeURIComponent(r.id)}`} className="group block">
+              <Link href={`/recipes/view?id=${encodeURIComponent(r.id)}`} className="group block p-5">
+                <DishVisual recipe={r} variant="card" className="mb-3" />
                 <h2 className="text-lg font-bold text-gray-900 group-hover:text-brand-700">{r.title}</h2>
                 <p className="mt-1 line-clamp-2 text-sm text-gray-600">{r.description}</p>
                 <div className="mt-3 flex flex-wrap gap-2 text-xs">

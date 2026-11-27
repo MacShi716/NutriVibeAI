@@ -8,7 +8,7 @@
     "build:pages": "node scripts/export-static.mjs",
     "start": "next start",
     "lint": "next lint",
-    "test": "node --import tsx --test i18n/i18n.test.ts lib/recipe-library.test.ts"
+    "test": "node --import tsx --test i18n/i18n.test.ts lib/recipe-library.test.ts lib/dish-visual.test.ts"
   },
   "dependencies": {
     "next": "14.2.15",

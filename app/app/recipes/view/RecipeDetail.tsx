@@ -14,6 +14,7 @@ import { trackEvent } from "@/lib/gamification";
 import { caloriePartsOf } from "@/lib/calories";
 import { isLoggedToday, logRecipeToday, notifyDaily, removeDailyLog } from "@/lib/daily";
 import CalorieFormula from "@/components/CalorieFormula";
+import DishVisual from "@/components/DishVisual";
 import PortionPrompt from "@/components/PortionPrompt";
 import type { Recipe } from "@/lib/types";
 
@@ -182,6 +183,10 @@ export default function RecipeDetailPage() {
               {format(t.detail.owned, { pct: usage.pct, used: usage.used, total: usage.total })}
             </span>
           )}
+        </div>
+
+        <div className="mt-5">
+          <DishVisual recipe={recipe} variant="hero" />
         </div>
 
         <h2 className="mt-6 text-base font-bold text-gray-900">{t.detail.ingredients}</h2>

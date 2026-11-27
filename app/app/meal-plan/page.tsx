@@ -8,6 +8,7 @@ import { displayRestrictions, format, localizeMessage, slotLabel, weekdayLabel }
 import { ko } from "@/i18n/messages/ko";
 import { requestMealSwap, requestWeeklyPlan } from "@/lib/client-api";
 import DiningCodeCard from "@/components/DiningCodeCard";
+import DishVisual from "@/components/DishVisual";
 import PortionPrompt from "@/components/PortionPrompt";
 import { isLoggedToday, logRecipesToday, notifyDaily } from "@/lib/daily";
 import { todayKey, weekdayIndex } from "@/lib/dates";
@@ -349,40 +350,45 @@ export default function MealPlanPage() {
                   {day.meals.map((meal) => {
                     const key = `${day.date}:${meal.slot}`;
                     return (
-                      <li key={meal.slot} className="nv-inset px-3 py-2">
-                        <div className="flex items-start justify-between gap-2">
-                          <div>
-                            <p className="text-[11px] font-semibold text-gray-500">{slotLabel(t, meal.slot)}</p>
-                            <p className="text-sm font-bold text-gray-900">{meal.recipe?.title ?? t.mealPlan.noRecipe}</p>
-                            {meal.recipe && (
-                              <p className="mt-0.5 text-[11px] text-gray-500">
-                                {format(t.mealPlan.macros, {
-                                  cal: meal.recipe.nutrition.calories,
-                                  protein: meal.recipe.nutrition.protein,
-                                  carbs: meal.recipe.nutrition.carbs,
-                                  fat: meal.recipe.nutrition.fat,
-                                })}
-                              </p>
-                            )}
+                      <li key={meal.slot} className="nv-inset p-2.5">
+                        <div className="flex items-start gap-2.5">
+                          {meal.recipe && <DishVisual recipe={meal.recipe} variant="compact" />}
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0">
+                                <p className="text-[11px] font-semibold text-gray-500">{slotLabel(t, meal.slot)}</p>
+                                <p className="text-sm font-bold text-gray-900">{meal.recipe?.title ?? t.mealPlan.noRecipe}</p>
+                                {meal.recipe && (
+                                  <p className="mt-0.5 text-[11px] text-gray-500">
+                                    {format(t.mealPlan.macros, {
+                                      cal: meal.recipe.nutrition.calories,
+                                      protein: meal.recipe.nutrition.protein,
+                                      carbs: meal.recipe.nutrition.carbs,
+                                      fat: meal.recipe.nutrition.fat,
+                                    })}
+                                  </p>
+                                )}
+                              </div>
+                              {meal.pinned && <span className="shrink-0 text-[11px] font-semibold text-brand-700">{t.mealPlan.pinned}</span>}
+                            </div>
+                            <div className="mt-2 flex gap-2">
+                              <button
+                                type="button"
+                                className="nv-press rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100 disabled:opacity-50"
+                                disabled={busy !== ""}
+                                onClick={() => void swap(day.date, meal.slot)}
+                              >
+                                {busy === key ? t.mealPlan.swapping : t.mealPlan.swap}
+                              </button>
+                              <button
+                                type="button"
+                                className="nv-press rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
+                                onClick={() => togglePin(day.date, meal.slot)}
+                              >
+                                {meal.pinned ? t.mealPlan.unpin : t.mealPlan.pin}
+                              </button>
+                            </div>
                           </div>
-                          {meal.pinned && <span className="text-[11px] font-semibold text-brand-700">{t.mealPlan.pinned}</span>}
-                        </div>
-                        <div className="mt-2 flex gap-2">
-                          <button
-                            type="button"
-                            className="nv-press rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-                            disabled={busy !== ""}
-                            onClick={() => void swap(day.date, meal.slot)}
-                          >
-                            {busy === key ? t.mealPlan.swapping : t.mealPlan.swap}
-                          </button>
-                          <button
-                            type="button"
-                            className="nv-press rounded-md border border-gray-300 bg-white px-2 py-1 text-[11px] text-gray-700 hover:bg-gray-100"
-                            onClick={() => togglePin(day.date, meal.slot)}
-                          >
-                            {meal.pinned ? t.mealPlan.unpin : t.mealPlan.pin}
-                          </button>
                         </div>
                       </li>
                     );
