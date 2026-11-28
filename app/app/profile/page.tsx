@@ -225,7 +225,7 @@ export default function ProfilePage() {
               placeholder="80"
               data-testid="protein-goal"
             />
-            <p className="mt-1 text-[11px] text-gray-400">{t.profile.proteinNote}</p>
+            <p className="mt-1 text-[length:var(--gr-fs-sm)] text-gray-400">{t.profile.proteinNote}</p>
           </div>
         </div>
 

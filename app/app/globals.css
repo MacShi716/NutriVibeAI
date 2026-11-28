@@ -2191,6 +2191,8 @@ main.mx-auto {
 .nv-footer {
   padding-top: var(--gr-space-lg);
   padding-bottom: var(--gr-space-lg);
+  padding-left: var(--gr-space-md);
+  padding-right: var(--gr-space-md);
 }
 
 .nv-home h1,
@@ -2230,4 +2232,31 @@ main h1 {
     height: auto;
     aspect-ratio: var(--gr-ratio);
   }
+}
+
+/* ---------- Light-theme contrast fixes (additive) ---------- */
+/* Dark .text-gray-400 stays #8b95a3 (about 5.5:1); its two-class selector
+   still wins over this single-class light override. */
+.text-gray-400 {
+  color: #5c6370; /* ~5.99:1 on #fefefe, ~5.78:1 on #f9fafb (was #9ca3af, ~2.4–2.5:1) */
+}
+
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+  color: #5c6370;
+  opacity: 1;
+}
+
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder,
+html[data-theme="dark"] select::placeholder {
+  color: #8b95a3;
+  opacity: 1;
+}
+
+/* Amber risk hint on the home screen: light theme only, so the dark theme
+   keeps its existing amber. #b45309 = amber-700, ~4.98:1 on #fefefe. */
+html:not([data-theme="dark"]) .text-amber-600 {
+  color: #b45309;
 }
